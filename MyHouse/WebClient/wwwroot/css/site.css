@@ -85,3 +85,24 @@ a, .btn-link {
     cursor: pointer;
     margin-top: 1rem;
 }
+
+.animate-text{
+    
+    animation-name: Fade-in;
+    animation-duration: 1s;
+    
+}
+.rz-g{
+ justify-content: center;   
+}
+
+@keyframes Fade-in{
+    
+    from{
+        opacity: 0;
+    }
+    to{
+        opacity: 1;
+    }
+}
+

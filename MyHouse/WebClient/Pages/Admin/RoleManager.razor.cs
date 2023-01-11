@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Blazorise;
 using Contract.Identity.RoleManager;
 using Contract.Identity.UserManager;
+using Core.Enum;
 using Microsoft.AspNetCore.Components;
 
 
@@ -42,36 +43,39 @@ namespace WebClient.Pages.Admin
 
         private async Task CreateRole()
         {
-            try
+            await InvokeAsync(async () =>
             {
                 await _roleManagerService.CreateAsync(input: NewRole);
                 HideNewModal();
                 await GetRoles();
-            }
-            catch (Exception e)
-            {
-                
-            }
-
+            }, ActionType.Create, true);
         }
 
         private async Task UpdateRole()
         {
-            await _roleManagerService.UpdateAsync(EditRole, EditRoleId);
+            await InvokeAsync(async () =>
+            {
+                await _roleManagerService.UpdateAsync(EditRole, EditRoleId);
                 HideEditModal();
                 await GetRoles();
+            },ActionType.Update,true);
+            
         }
 
         private async Task DeleteRole(Guid id)
         {
-            await _roleManagerService.DeleteAsync(id);
+            await InvokeAsync(async () =>
+            {
+                await _roleManagerService.DeleteAsync(id);
                 HideEditModal();
                 await GetRoles();
+            },ActionType.Delete,true);
+            
         }
 
         private async Task ShowConfirmMessage(Guid id)
         {
-            if ( await _messageService.Confirm( "Are you sure you want to confirm?", "Confirmation" ) )
+            if (await _messageService.Confirm("Are you sure you want to confirm?", "Confirmation"))
             {
                 await DeleteRole(id);
             }

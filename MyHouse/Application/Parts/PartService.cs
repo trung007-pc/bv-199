@@ -26,6 +26,11 @@ namespace Application.Parts
         public async Task<PartDto> CreateAsync(CreateUpdatePartDto input)
         {
             var part = ObjectMapper.Map<CreateUpdatePartDto, Part>(input);
+
+            var exist = _partRepository.GetQueryable().Any(x => x.Name == input.Name);
+            
+            if(exist) throw new GlobalException(HttpMessage.DuplicateName, HttpStatusCode.BadRequest);
+            
             await _partRepository.AddAsync(part);
             return ObjectMapper.Map<Part,PartDto>(part);
         }
@@ -52,13 +57,13 @@ namespace Application.Parts
                 throw new GlobalException(HttpMessage.NotFound, HttpStatusCode.BadRequest);
             }
             
-            part.IsDeletion = true;
+            part.IsDeleted = true;
             _partRepository.Update(part);
         }
 
         public async Task<List<PartDto>> GetListAsync()
         {
-            var parts = await _partRepository.GetListAsync(x=>x.IsDeletion == false);
+            var parts = await _partRepository.GetListAsync(x=>x.IsDeleted == false);
             var partsDto = ObjectMapper.Map<List<Part>,List<PartDto>>(parts);
             AttachIndex(partsDto);
             return partsDto;
@@ -66,7 +71,7 @@ namespace Application.Parts
 
         public async Task<List<PartDto>> GetListAsync(PartFilter input)
         {
-          var parts =  await _partRepository.GetQueryable().Where(x => x.IsDeletion == false)
+          var parts =  await _partRepository.GetQueryable().Where(x => x.IsDeleted == false)
                 .WhereIf(!input.TextFilter.IsNullOrWhiteSpace(), x => x.Name.Contains(input.TextFilter))
                 .WhereIf(input.IsActive != null, x => x.IsActive == input.IsActive).ToListAsync();
 

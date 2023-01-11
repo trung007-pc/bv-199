@@ -1,17 +1,22 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
+using BlazorDateRangePicker;
 using Blazorise;
 using Contract;
 using Core.Enum;
+using Core.Extension;
+using FluentDateTimeOffset;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Radzen;
+using Radzen.Blazor;
 using WebClient.Exceptions;
 
 namespace WebClient.Shared
@@ -95,9 +100,80 @@ namespace WebClient.Shared
                     _navigationManager.NavigateTo("server-error",true);
                 }
                 
+                if (exceptionType == typeof(Exception))
+                {
+                    _navigationManager.NavigateTo("server-error",true);
+                }
+                
             }
 
             return false;
+
+        }
+
+
+        protected async Task<Dictionary<string, DateRange>> GetDateRangePickers()
+        {
+            
+            var now = new DateTimeOffset(DateTime.Now.Date);
+            
+          var ranges =  new Dictionary<string, DateRange>()
+          {
+              {
+                  DateRangeType.Today.GetDescriptionOrName(),
+                  new DateRange()
+                  {
+                      Start = now,
+                      End = now.Add(new TimeSpan(23,59,59))
+                  }
+              },
+              {
+                  DateRangeType.Yesterday.GetDescriptionOrName(),
+                  new DateRange()
+                  {
+                      Start = now.AddDays(-1).Add(new TimeSpan(23,59,59)),
+                      End = now
+                  }
+              },
+              {
+                  DateRangeType.Last7Days.GetDescriptionOrName(),
+                  new DateRange()
+                  {
+                      Start = now.AddDays(-7).Add(new TimeSpan(23,59,59)),
+                      End = now
+                  }
+              },
+              {
+                  DateRangeType.Last30Days.GetDescriptionOrName(),
+                  new DateRange()
+                  {
+                      Start = now.AddDays(-30).Add(new TimeSpan(23,59,59)),
+                      End = now
+                  }
+              },
+              {
+                  DateRangeType.ThisMonth.GetDescriptionOrName(),
+                  new DateRange()
+                  {
+                      Start = now.FirstDayOfMonth(),
+                      End = now.LastDayOfMonth()
+                  }
+              },
+              {
+                  DateRangeType.LastMonth.GetDescriptionOrName(),
+                  new DateRange()
+                  {
+                      Start = now.AddMonths(-1).FirstDayOfMonth(),
+                      End = now.AddMonths(-1).LastDayOfMonth()
+                  }
+              }
+              
+          };
+
+          
+          
+
+          return ranges;
 
         }
         

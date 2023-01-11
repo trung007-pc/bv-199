@@ -47,6 +47,7 @@ namespace WebClient.Pages.Admin
         {
             if (firstRender)
             {
+                await GetDateRangePickers();
                 await GetList();
                 StateHasChanged();
             }
@@ -74,7 +75,6 @@ namespace WebClient.Pages.Admin
         {
             await InvokeAsync(async () =>
                 {
-                    string path = "";
                     var fileDto = new FileDto();
                     if (NewFile != null)
                     { 

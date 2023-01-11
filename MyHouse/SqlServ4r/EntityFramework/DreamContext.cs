@@ -9,6 +9,7 @@ using Domain.Identity.UserTokens;
 using Domain.PartReviewDetails;
 using Domain.PartReviews;
 using Domain.Parts;
+using Domain.Tests;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,6 +20,7 @@ namespace SqlServ4r.EntityFramework
         public DbSet<PartReview> PartReviews { get; set;}
         public DbSet<Part> Parts { get; set;}
         public DbSet<PartReviewDetail> PartReviewDetails { get; set;}
+        
 
         public DreamContext(DbContextOptions<DreamContext> options):base(options)
         {

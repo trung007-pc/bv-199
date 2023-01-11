@@ -13,6 +13,7 @@ using Radzen;
 
 using WebClient.Data;
 using WebClient.Identity;
+using WebClient.Service.Dashboards;
 using WebClient.Service.PartReviewDetails;
 using WebClient.Service.PartReviews;
 using WebClient.Service.Parts;
@@ -35,7 +36,7 @@ builder.Services.AddTransient<PartService,PartService>();
 builder.Services.AddTransient<PartReviewService, PartReviewService>();
 builder.Services.AddTransient<PartReviewDetailService, PartReviewDetailService>();
 builder.Services.AddTransient<UploadService, UploadService>();
-
+builder.Services.AddTransient<DashboardService,DashboardService>();
 
 
 builder.Services.AddScoped<DialogService>();

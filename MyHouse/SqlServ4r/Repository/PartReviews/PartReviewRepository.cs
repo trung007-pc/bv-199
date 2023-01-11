@@ -23,7 +23,7 @@ namespace SqlServ4r.Repository.PartReviews
         
         public async Task<List<PartReview>> GetListWithNavigationPropertiesAsync()
         {
-            var items = await _context.PartReviews.Where(x=>!x.IsDeletion).
+            var items = await _context.PartReviews.Where(x=>!x.IsDeleted).
                 Include(x => x.PartReviewDetails).ToListAsync();
 
             return items;

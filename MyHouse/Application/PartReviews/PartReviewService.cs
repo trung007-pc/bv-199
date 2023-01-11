@@ -43,6 +43,7 @@ namespace Application.PartReviews
             foreach (var item in reviewsWithNav)
             {
                 var dto = ObjectMapper.Map<PartReview, PartReviewDto>(item);
+                item.PartReviewDetails = item.PartReviewDetails.Where(x => x.Rate > 0).ToList();
                 if (item.PartReviewDetails.Count > 0)
                 {
                     dto.AveragePoint = item.PartReviewDetails.Sum(x => x.Rate) / item.PartReviewDetails.Count;
@@ -103,7 +104,7 @@ namespace Application.PartReviews
                 throw new GlobalException(HttpMessage.NotFound, HttpStatusCode.BadRequest);
             }
 
-            review.IsDeletion = true;
+            review.IsDeleted = true;
             _partReviewRepository.Update(review);
         }
     }

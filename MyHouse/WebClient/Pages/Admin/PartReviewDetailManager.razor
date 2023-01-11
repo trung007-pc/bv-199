@@ -23,7 +23,6 @@
 </div>
 
 <RZBR></RZBR>
-@* <RadzenButton Text="Create" Click="@ShowNewModal" Style="margin-bottom: 20px;"/> *@
 
 <RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" AllowAlternatingRows="false" FilterMode="FilterMode.Advanced" AllowSorting="true" PageSize="5" AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true"
                 Data="@Details" TItem="PartReviewDetailDto" ColumnWidth="300px" LogicalFilterOperator="LogicalFilterOperator.Or" Style="width: 50%">
@@ -49,7 +48,7 @@
 
 
 <Modal @ref="CreateModal">
-    <ModalContent Size="ModalSize.ExtraLarge">
+    <ModalContent Size="ModalSize.Large" Centered="true">
         <ModalHeader>
             <ModalTitle>Create Rating</ModalTitle>
         </ModalHeader>
@@ -70,7 +69,7 @@
 
 
 <Modal @ref="EditModal">
-    <ModalContent Size="ModalSize.ExtraLarge">
+    <ModalContent Size="ModalSize.Large" Centered="true">
         <ModalHeader>
             <ModalTitle>Update Rating</ModalTitle>
         </ModalHeader>

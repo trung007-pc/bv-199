@@ -9,5 +9,8 @@ namespace Contract.PartReviews
         public string Note { get; set; }
         public int AveragePoint { get; set;}
         public DateTime CreationDate { get; set; } = DateTime.Now;
+        
+        
+        public string? ImageUrl { get; set; } 
     }
 }

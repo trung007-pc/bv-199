@@ -71,16 +71,21 @@ namespace WebClient.Pages.Admin
 
         private async Task UpdateUser()
         {
-            await _userManagerService.UpdateWithNavigationAsync(EditUser, EditUserId);
-            await GetUsers();
-            await HideEditModal();
-            await GetUsers();
+            await InvokeAsync(async () =>
+            {
+                await _userManagerService.UpdateWithNavigationAsync(EditUser, EditUserId);
+                await GetUsers();
+                await HideEditModal();
+            }, ActionType.Update, true);
         }
 
         private async Task DeleteUser(Guid id)
         {
-            await _userManagerService.DeleteAsync(id);
-            await GetUsers();
+            await InvokeAsync(async () =>
+            {
+                await _userManagerService.DeleteAsync(id);
+                await GetUsers();
+            },ActionType.Delete,true );
         }
         
         

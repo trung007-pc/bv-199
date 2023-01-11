@@ -9,7 +9,16 @@ namespace Domain.PartReviews
         public Guid Id { get; set; } = Guid.NewGuid();
         public string? Note { get; set; }
         public DateTime CreationDate { get; set; } = DateTime.Now;
-        public bool IsDeletion { get; set; }
+        public bool IsDeleted { get; set; }
+        
+        
+        
+        //media
+        public string? FileName { get; set; }
+        public string? Path { get; set;}
+        public string? ImageUrl { get; set;}
+        
+        
         public IList<PartReviewDetail> PartReviewDetails { get; set; }
 
     }

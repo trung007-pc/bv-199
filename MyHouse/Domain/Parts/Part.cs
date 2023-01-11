@@ -11,10 +11,14 @@ namespace Domain.Parts
         public string? Note { get; set; }
         public int Odx { get; set; }
         public bool IsActive { get; set; }
+
+        public bool IsDeleted { get; set; }
+        
+        
+        //media
         public string? FileName { get; set; }
         public string? Path { get; set;}
         public string? ImageUrl { get; set;}
-        public bool IsDeletion { get; set; }
 
         public IList<PartReviewDetail> PartReviewDetails { get; set; }
     }

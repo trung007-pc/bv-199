@@ -14,10 +14,10 @@ namespace WebApi.Controllers
 {
     [ApiController]
     [Route("api/part/")]
-    public class PartServiceController :  ControllerBase, IPartService
+    public class PartController :  ControllerBase, IPartService
     {
         private PartService _partService;
-        public PartServiceController(PartService partService)
+        public PartController(PartService partService)
         {
             _partService = partService;
         }

@@ -1,0 +1,94 @@
+﻿@page "/"
+@page "/dashboard"
+@inherits BaseBlazorPage
+@using WebClient.Service.Dashboards
+@using Core.Const
+@inject DashboardService _dashboardService;
+
+<h3>@HeaderTitle</h3>
+
+<div>
+    <div>
+        <RadzenBreadCrumb >
+            <RadzenBreadCrumbItem Path="/" Icon="home" Style="font-size: 20px"/>
+            <RadzenBreadCrumbItem Text="@HeaderTitle" Style="font-weight: 300"/>
+        </RadzenBreadCrumb>
+    </div>
+</div>
+<RZBR></RZBR>
+<RZBR></RZBR>
+
+<RadzenCard>
+    <Row Style="display:flex;align-items: center">
+        <Column ColumnSize="ColumnSize.Is3" Style="display:flex;align-items: center">
+            <RadzenIcon Icon="calendar_today" Style="margin-right: 7px;font-size: 28px;color: deeppink"/>
+            <DateRangePicker @bind-StartDate="StartDate" @bind-EndDate="EndDate"   Ranges="DateRanges" DateFormat="@DateFormatType.DateFormat" OnClosed="OnChangedDate" class="form-control form-control-md" placeholder="Select Date...">
+            </DateRangePicker>
+        </Column>
+
+        <Column ColumnSize="ColumnSize.Is6">
+            <RadzenTextBox Placeholder="Search..." Class="w-100"/>
+        </Column>
+
+        <Column ColumnSize="ColumnSize.Is3">
+            <RadzenButton Text="Search" Icon="search"/>
+        </Column>
+
+    </Row>
+</RadzenCard>
+
+
+
+<RZBR></RZBR>
+
+<RadzenCard>
+    <Strong>Total Reviews : <span style="color:#b02a37">@Stat.TotalReview</span></Strong>
+    <RadzenChart SeriesClick=@OnSeriesClick Style="width: 500px;margin: 0 auto">
+
+        <RadzenPieSeries Data="@DetailPartReviewdataItems" Title="Total" CategoryProperty="Label" ValueProperty="Value">
+            <TooltipTemplate Context="data">
+                <div>
+                    <span>@data.Label <RadzenIcon Icon="star" Style="color:gold"/></span>:
+                    <strong>
+                        @data.Value
+                    </strong>
+                </div>
+            </TooltipTemplate>
+        </RadzenPieSeries>
+    </RadzenChart>
+
+</RadzenCard>
+<RZBR></RZBR>
+
+@if (!IsLoading)
+{
+    <RadzenCard>
+        <RadzenChart>
+            <RadzenColumnSeries Data="@PartReviewdataItems" CategoryProperty="Label" Title="2020" LineType="LineType.Solid" ValueProperty="Value">
+
+                <TooltipTemplate Context="data">
+                    <div>
+                        Part:<strong>@data.Label</strong>
+                        <br/>
+                        Rating:
+                        <strong>
+                            @data.Value<RadzenIcon Icon="star" Style="color:gold"/>
+                        </strong>
+                    </div>
+                </TooltipTemplate>
+
+            </RadzenColumnSeries>
+            <RadzenSeriesDataLabels Visible="true" />
+
+            <RadzenColumnOptions Radius="5" Width="30"/>
+            <RadzenValueAxis Min="0">
+                <RadzenGridLines Visible="true"/>
+                <RadzenAxisTitle Text="Average Ratting"/>
+            </RadzenValueAxis>
+        </RadzenChart>
+    </RadzenCard>
+    
+    
+ 
+    
+}

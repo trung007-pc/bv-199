@@ -6,7 +6,9 @@ using Blazorise;
 using Contract.PartReviewDetails;
 using Contract.PartReviews;
 using Contract.Parts;
+using Contract.Uploads;
 using Core.Enum;
+using Microsoft.AspNetCore.Components.Forms;
 using Radzen;
 
 namespace WebClient.Pages.Client
@@ -20,6 +22,9 @@ namespace WebClient.Pages.Client
         private List<ReviewWithNavPropertiesModel> ReviewsWithNav = new List<ReviewWithNavPropertiesModel>();
         private string ReviewNote { get; set; }
         private List<PartReviewDto> Result { get; set; }
+        
+        private IBrowserFile? EnclosedFile { get; set; }
+
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
@@ -61,16 +66,27 @@ namespace WebClient.Pages.Client
 
         private async Task UpdatePartReviews()
         {
-            if (!ReviewNote.IsNullOrWhiteSpace())
+            if (!ReviewNote.IsNullOrWhiteSpace() || EnclosedFile != null)
             {
                 await InvokeAsync(async () =>
                 {
                     NewReview.Note = ReviewNote;
+                    
+                    var fileDto = new FileDto();
+                    if (EnclosedFile != null)
+                    { 
+                        fileDto =  await _uploadService.UploadImage(EnclosedFile);
+                        NewReview.ImageUrl = fileDto.Url;
+                    }
+                    
+                    NewReview.FileName = fileDto.FileName;
+                    NewReview.Path = fileDto.Path;
+                    
                     await _partReviewService.UpdateAsync(NewReview, EditReviewId);
                     NewReview = new CreateUpdatePartReviewDto();
                     EditReviewId = new Guid();
                     ReviewNote = "";
-                },ActionType.Update,true);
+                }, ActionType.Update, false);
             }
         }
         
@@ -86,6 +102,11 @@ namespace WebClient.Pages.Client
         {
             await UpdatePartReviews();
             ds.Close(true);
+        }
+        
+        async Task OnChangeFileAtNewModal(InputFileChangeEventArgs e)
+        {
+            EnclosedFile = e.GetMultipleFiles().FirstOrDefault();
         }
 
 

@@ -35,6 +35,16 @@
                     @data.AveragePoint   <RadzenIcon Icon="star"  Style="color:gold"/>
                 </Template>
             </RadzenDataGridColumn>
+            
+                   <RadzenDataGridColumn TItem="PartReviewDto" Property="ImageUrl" Title="Enclosed Image" Frozen="true" Width="120px" TextAlign="TextAlign.Center">
+                       <Template Context="data">
+                           @if (data.ImageUrl != null)
+                           {
+                               <RadzenImage Path="@data.ImageUrl" class="rz-gravatar" Style="width: 64px;height: 64px"/>
+                           }
+                       </Template>
+                       </RadzenDataGridColumn>
+                
             <RadzenDataGridColumn TItem="PartReviewDto" Property="PartReviewDto" Title="Action" Frozen="true" Width="160px">
                 <Template Context="data">
                     <RadzenButton Click="async () => { await NavigateToDetails(data.Id); }" ButtonStyle="ButtonStyle.Primary" Icon="visibility" Variant="Variant.Flat" Shade="Shade.Lighter" Size="ButtonSize.Medium" Class="my-1 ms-1">  </RadzenButton>
