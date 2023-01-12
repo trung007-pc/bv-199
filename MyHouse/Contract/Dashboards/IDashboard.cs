@@ -6,6 +6,6 @@ namespace Contract.Dashboards
 {
     public interface IDashboardService
     {
-       Task<PartReviewStatisticsDto> GetPartReviewStatisticsByDateRange(DateTime? start ,DateTime? end);
+       Task<UnitReviewStatisticsDto> GetUnitReviewStatisticsByDateRange(DateTime? start ,DateTime? end);
     }
 }

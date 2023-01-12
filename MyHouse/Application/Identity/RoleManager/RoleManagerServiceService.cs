@@ -9,20 +9,25 @@ using Contract;
 using Contract.Identity.RoleManager;
 using Core.Const;
 using Core.Exceptions;
+using Domain.Identity.RoleClaims;
 using Domain.Identity.Roles;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using SqlServ4r.Repository.RoleClaims;
 using Volo.Abp.DependencyInjection;
 
 namespace Application.Identity.RoleManager
 {
-    public class RoleManagerServiceService : ServiceBase, IRoleManagerService,ITransientDependency
+    public class RoleManagerService : ServiceBase, IRoleManagerService,ITransientDependency
     {
         private RoleManager<Role> _roleManager;
+        private RoleClaimRepository _roleClaimRepository;
 
-        public RoleManagerServiceService(RoleManager<Role> roleManager)
+        public RoleManagerService(RoleManager<Role> roleManager,
+            RoleClaimRepository roleClaimRepository)
         {
             _roleManager = roleManager;
+            _roleClaimRepository = roleClaimRepository;
         }
 
 
@@ -92,6 +97,21 @@ namespace Application.Identity.RoleManager
             }
         }
 
+        public async Task<RoleDto> CreateWithClaimsAsync(CreateUpdateRoleDto input)
+        {
+            var role = await CreateAsync(input);
+            var claims = ObjectMapper.Map<List<CreateUpdateClaimRole>,List<RoleClaim>>(input.Claims);
+            _roleClaimRepository.GetQueryable().AddRange(claims);
+            return role;
+        }
+
+        public async Task<RoleDto> UpdateWithClaimsAsync(CreateUpdateRoleDto input, Guid id)
+        {
+           await  UpdateAsync(input, id);
+           await DeleteClaimByRoleIDAsync(id);
+           return null;
+        }
+
         public async Task<List<RoleClaimDto>> GetClaimListAsync(Guid roleId)
         {
             var role = await _roleManager.FindByIdAsync(roleId.ToString());
@@ -117,6 +137,12 @@ namespace Application.Identity.RoleManager
             return input;
         }
 
+        public Task<CreateUpdateClaimRole> CreateClaimsAsync(List<CreateUpdateClaimRole> inputs)
+        {
+            throw new NotImplementedException();
+        }
+
+
         public async Task DeleteClaimAsync(RoleClaimModel input)
         {
             var role = await _roleManager.FindByIdAsync(input.RoleId.ToString());
@@ -130,7 +156,10 @@ namespace Application.Identity.RoleManager
             
         }
 
-        
-        
+        public async Task DeleteClaimByRoleIDAsync(Guid roleId)
+        {
+           var claims = await _roleClaimRepository.GetListAsync(x => x.RoleId == roleId);
+           _roleClaimRepository.RemoveRange(claims);
+        }
     }
 }

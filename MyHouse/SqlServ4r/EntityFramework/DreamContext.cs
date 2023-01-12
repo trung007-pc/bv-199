@@ -6,10 +6,10 @@ using Domain.Identity.UserLogins;
 using Domain.Identity.UserRoles;
 using Domain.Identity.Users;
 using Domain.Identity.UserTokens;
-using Domain.PartReviewDetails;
-using Domain.PartReviews;
-using Domain.Parts;
 using Domain.Tests;
+using Domain.UnitReviewDetails;
+using Domain.UnitReviews;
+using Domain.Units;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,9 +17,9 @@ namespace SqlServ4r.EntityFramework
 {
     public class DreamContext  : IdentityDbContext<User,Role,Guid,UserClaim,UserRole,UserLogin,RoleClaim,UserToken>
     {
-        public DbSet<PartReview> PartReviews { get; set;}
-        public DbSet<Part> Parts { get; set;}
-        public DbSet<PartReviewDetail> PartReviewDetails { get; set;}
+        public DbSet<UnitReview> UnitReviews { get; set;}
+        public DbSet<Unit> Units { get; set;}
+        public DbSet<UnitReviewDetail> UnitReviewDetails { get; set;}
         
 
         public DreamContext(DbContextOptions<DreamContext> options):base(options)
@@ -43,14 +43,14 @@ namespace SqlServ4r.EntityFramework
 
             
             
-            builder.Entity<PartReviewDetail>().HasKey(sc => new { sc.Id });
-            builder.Entity<PartReviewDetail>().HasOne<PartReview>(x => x.PartReview)
-                .WithMany(x => x.PartReviewDetails)
-                .HasForeignKey(x=>x.PartReviewId);
+            builder.Entity<UnitReviewDetail>().HasKey(sc => new { sc.Id });
+            builder.Entity<UnitReviewDetail>().HasOne<UnitReview>(x => x.UnitReview)
+                .WithMany(x => x.UnitReviewDetails)
+                .HasForeignKey(x=>x.UnitReviewId);
             
-            builder.Entity<PartReviewDetail>().HasOne<Part>(x => x.Part)
-                .WithMany(x => x.PartReviewDetails)
-                .HasForeignKey(x=>x.PartId);
+            builder.Entity<UnitReviewDetail>().HasOne<Unit>(x => x.Unit)
+                .WithMany(x => x.UnitReviewDetails)
+                .HasForeignKey(x=>x.UnitId);
 
 
         }

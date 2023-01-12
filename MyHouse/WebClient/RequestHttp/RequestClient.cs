@@ -11,7 +11,6 @@ using Blazored.LocalStorage;
 using Blazorise;
 using Contract;
 using Contract.Identity.UserManager;
-using Contract.Parts;
 using Core.Extension;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;

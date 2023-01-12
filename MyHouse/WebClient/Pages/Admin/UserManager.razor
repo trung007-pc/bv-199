@@ -96,7 +96,6 @@
                 <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Enter again Password </RadzenText>
                 <RadzenPassword Class="w-100" @bind-Value="NewUser.User.PasswordConfirm"/>
                 <ValidationMessage For="@(() => NewUser.User.PasswordConfirm)"/>
-                <InputFile OnChange="OnChooseFile" multiple/>
 
                 <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Role</RadzenText>
                 <RadzenDropDown AllowClear="true" AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"

@@ -19,10 +19,10 @@ namespace WebApi.Controllers
         }
         
         [HttpGet]
-        [Route("get-part-statistics/{start:?}/{end:?}")]
-        public async Task<PartReviewStatisticsDto> GetPartReviewStatisticsByDateRange(DateTime? start = null ,DateTime? end = null)
+        [Route("get-unit-statistics/{start:?}/{end:?}")]
+        public async Task<UnitReviewStatisticsDto> GetUnitReviewStatisticsByDateRange(DateTime? start = null ,DateTime? end = null)
         {   
-            return await _dashboardService.GetPartReviewStatisticsByDateRange(start,end);
+            return await _dashboardService.GetUnitReviewStatisticsByDateRange(start,end);
         }
         
     }

@@ -3,21 +3,21 @@
 @inject RoleManagerService _roleManagerService;
 @inherits BaseBlazorPage
 @using Contract.Identity.RoleManager;
+@using Core.Const
 @using WebClient.Service.Roles
 
 <h3>Role</h3>
 
 
-
 <div style="display: flex;justify-content: space-between;align-items: center">
     <div>
         <RadzenBreadCrumb >
-                <RadzenBreadCrumbItem Path="/" Icon="home" Style="font-size: 20px"/>
-                <RadzenBreadCrumbItem Text="@HeaderTitle" Style="font-weight: 300"/>
-            </RadzenBreadCrumb>
+            <RadzenBreadCrumbItem Path="/" Icon="home" Style="font-size: 20px"/>
+            <RadzenBreadCrumbItem Text="@HeaderTitle" Style="font-weight: 300"/>
+        </RadzenBreadCrumb>
     </div>
     <div>
-     <RadzenButton Text="Create" Click="@ShowNewModal" Style="margin-bottom: 20px;"/>
+        <RadzenButton Text="Create" Click="@ShowNewModal" Style="margin-bottom: 20px;"/>
     </div>
 </div>
 
@@ -32,7 +32,7 @@
                 <Template Context="data">
                     <RadzenButton Click="async () => { await ShowEditModal(data); }" Icon="edit" ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat" Size="ButtonSize.Medium">
                     </RadzenButton>
-    
+
                     <RadzenButton Click="async () => { await ShowConfirmMessage(data.Id); }" ButtonStyle="ButtonStyle.Danger" Icon="delete" Variant="Variant.Flat" Shade="Shade.Lighter" Size="ButtonSize.Medium" Class="my-1 ms-1">
                     </RadzenButton>
                 </Template>
@@ -54,6 +54,14 @@
                 <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Name</RadzenText>
                 <RadzenTextBox Class="w-100" @bind-Value="NewRole.Name"/>
                 <ValidationMessage For="@(() => NewRole.Name)"/>
+
+                <RadzenCheckBoxList @bind-Value=@Claims TValue="string"  AllowSelectAll="true" SelectAllText="Select all items" Class="mb-5" Style="outline:none">
+                    <Items >
+                        <RadzenCheckBoxListItem Text="@ClaimNameTypes.READ" Value="@ClaimNameTypes.READ"/>
+                        <RadzenCheckBoxListItem Text="@ClaimNameTypes.WRITE" Value="@ClaimNameTypes.WRITE"/>
+                        <RadzenCheckBoxListItem Text="@ClaimNameTypes.CREATE" Value="@ClaimNameTypes.CREATE"/>
+                    </Items>
+                </RadzenCheckBoxList>
             </ModalBody>
             <ModalFooter>
                 <RadzenButton ButtonStyle="ButtonStyle.Dark" Click="@HideNewModal">Close</RadzenButton>
@@ -75,6 +83,13 @@
                 <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Name</RadzenText>
                 <RadzenTextBox Class="w-100" @bind-Value="EditRole.Name"/>
                 <ValidationMessage For="@(() => EditRole.Name)"/>
+                  <RadzenCheckBoxList @bind-Value=@Claims TValue="string"  AllowSelectAll="true" SelectAllText="Select all items" Class="mb-5" Style="outline:none">
+                    <Items >
+                        <RadzenCheckBoxListItem Text="@ClaimNameTypes.READ" Value="@ClaimNameTypes.READ"/>
+                        <RadzenCheckBoxListItem Text="@ClaimNameTypes.WRITE" Value="@ClaimNameTypes.WRITE"/>
+                        <RadzenCheckBoxListItem Text="@ClaimNameTypes.CREATE" Value="@ClaimNameTypes.CREATE"/>
+                    </Items>
+                </RadzenCheckBoxList>
             </ModalBody>
             <ModalFooter>
                 <Button Color="Color.Secondary" Clicked="@HideEditModal">Close</Button>

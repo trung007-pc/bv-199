@@ -131,8 +131,8 @@ namespace WebClient.Shared
                   DateRangeType.Yesterday.GetDescriptionOrName(),
                   new DateRange()
                   {
-                      Start = now.AddDays(-1).Add(new TimeSpan(23,59,59)),
-                      End = now
+                      Start = now.AddDays(-1),
+                      End = now.AddDays(-1).Add(new TimeSpan(23,59,59))
                   }
               },
               {

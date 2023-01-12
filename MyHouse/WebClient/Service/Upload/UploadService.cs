@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using Contract.Parts;
 using Contract.Uploads;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Http;

@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Blazorise;
 using Contract.Identity.RoleManager;
 using Contract.Identity.UserManager;
+using Core.Const;
 using Core.Enum;
 using Microsoft.AspNetCore.Components;
 
@@ -23,9 +24,13 @@ namespace WebClient.Pages.Admin
         private Modal EditModal;
         private string HeaderTitle = "Role";
 
+        private IEnumerable<string> Claims = new List<string>();
+
         public RoleManager()
         {
         }
+        
+       
 
         protected override async void OnAfterRender(bool firstRender)
         {
@@ -104,6 +109,12 @@ namespace WebClient.Pages.Admin
         private void HideEditModal()
         {
             EditModal.Hide();
+        }
+        
+        
+        void OnChange(IEnumerable<int> value, string name)
+        {
+           
         }
     }
 }

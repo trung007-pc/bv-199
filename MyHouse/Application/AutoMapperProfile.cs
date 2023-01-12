@@ -1,14 +1,14 @@
 ﻿using AutoMapper;
 using Contract.Identity.RoleManager;
 using Contract.Identity.UserManager;
-using Contract.PartReviewDetails;
-using Contract.PartReviews;
-using Contract.Parts;
+using Contract.UnitReviewDetails;
+using Contract.UnitReviews;
+using Contract.Units;
 using Domain.Identity.Roles;
 using Domain.Identity.Users;
-using Domain.PartReviewDetails;
-using Domain.PartReviews;
-using Domain.Parts;
+using Domain.UnitReviewDetails;
+using Domain.UnitReviews;
+using Domain.Units;
 using Microsoft.Build.Tasks.Deployment.Bootstrapper;
 
 namespace Application
@@ -23,14 +23,14 @@ namespace Application
             CreateMap<RoleDto,CreateUpdateRoleDto>().ReverseMap();
             CreateMap<Role,CreateUpdateRoleDto>().ReverseMap();
             
-            CreateMap<Part,CreateUpdatePartDto>().ReverseMap();
-            CreateMap<Part,Contract.Parts.PartDto>().ReverseMap();
-            CreateMap<CreateUpdatePartDto,Contract.Parts.PartDto>().ReverseMap();
+            CreateMap<Unit,CreateUpdateUnitDto>().ReverseMap();
+            CreateMap<Unit,UnitDto>().ReverseMap();
+            CreateMap<CreateUpdateUnitDto,UnitDto>().ReverseMap();
 
-            CreateMap<CreateUpdatePartReviewDto, PartReview>().ReverseMap();
-            CreateMap<PartReview, PartReviewDto>().ReverseMap();
-            CreateMap<PartReviewDetailDto, PartReviewDetail>().ReverseMap();
-            CreateMap<CreateUpdatePartReviewDetailDto, PartReviewDetail>().ReverseMap();
+            CreateMap<CreateUpdateUnitReviewDto, UnitReview>().ReverseMap();
+            CreateMap<UnitReview, UnitReviewDto>().ReverseMap();
+            CreateMap<UnitReviewDetailDto, UnitReviewDetail>().ReverseMap();
+            CreateMap<CreateUpdateUnitReviewDetailDto, UnitReviewDetail>().ReverseMap();
 
         }
     }

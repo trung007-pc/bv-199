@@ -8,9 +8,9 @@ namespace WebClient.Service.Dashboards
 {
     public class DashboardService : IDashboardService
     {
-        public async Task<PartReviewStatisticsDto> GetPartReviewStatisticsByDateRange(DateTime? start ,DateTime? end)
+        public async Task<UnitReviewStatisticsDto> GetUnitReviewStatisticsByDateRange(DateTime? start ,DateTime? end)
         {
-            return await RequestClient.GetAPIAsync<PartReviewStatisticsDto>($"dashboard/get-part-statistics/{start:MM-dd-yyyy HH:mm:ss}{(start.HasValue ? '/' : ' ')}{end:MM-dd-yyyy HH:mm:ss}");
+            return await RequestClient.GetAPIAsync<UnitReviewStatisticsDto>($"dashboard/get-unit-statistics/{start:MM-dd-yyyy HH:mm:ss}{(start.HasValue ? '/' : ' ')}{end:MM-dd-yyyy HH:mm:ss}");
         }
     }
 }

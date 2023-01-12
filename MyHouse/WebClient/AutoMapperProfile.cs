@@ -1,10 +1,9 @@
 ﻿using AutoMapper;
 using Contract.Identity.RoleManager;
 using Contract.Identity.UserManager;
-using Contract.PartReviewDetails;
-using Contract.PartReviews;
-using Contract.Parts;
-using Domain.Parts;
+using Contract.UnitReviewDetails;
+using Contract.UnitReviews;
+using Contract.Units;
 using WebClient.Pages.Admin;
 using WebClient.Pages.Client;
 
@@ -18,16 +17,16 @@ namespace WebClient
             CreateMap<UserDto, CreateUpdateUserDto>().ReverseMap();
             CreateMap<UserWithNavigationDto, CreateUpdateUserWithNavDto>().ReverseMap();
 
-            CreateMap<CreateUpdatePartDto,Contract.Parts.PartDto>().ReverseMap();
-            CreateMap<PartReviewDetailDto, CreateUpdatePartReviewDetailDto>().ReverseMap();
+            CreateMap<CreateUpdateUnitDto,UnitDto>().ReverseMap();
+            CreateMap<UnitReviewDetailDto, CreateUpdateUnitReviewDetailDto>().ReverseMap();
 
-            CreateMap<PartReviewDto, CreateUpdatePartReviewDto>().ReverseMap();
-            CreateMap<PartDto, PartReview.ReviewWithNavPropertiesModel>().ForMember(
-                x => x.PartId,
+            CreateMap<UnitReviewDto, CreateUpdateUnitReviewDto>().ReverseMap();
+            CreateMap<UnitDto, UnitReview.ReviewWithNavPropertiesModel>().ForMember(
+                x => x.UnitId,
                 y => y.MapFrom(x => x.Id)
             );
 
-            CreateMap<PartReview.ReviewWithNavPropertiesModel, CreateUpdatePartReviewDto>();
+            CreateMap<UnitReview.ReviewWithNavPropertiesModel, CreateUpdateUnitReviewDto>();
 
 
 

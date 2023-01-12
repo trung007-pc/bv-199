@@ -5,41 +5,39 @@ using System.Threading.Tasks;
 using Contract.Dashboards;
 using Core.Enum;
 using Core.Extension;
-using Domain.PartReviewDetails;
-using Domain.PartReviews;
+using Domain.UnitReviewDetails;
 using Microsoft.EntityFrameworkCore;
-using SqlServ4r.Repository.PartReviewDetails;
-using SqlServ4r.Repository.PartReviews;
-using SqlServ4r.Repository.Parts;
+using SqlServ4r.Repository.UnitReviews;
+using SqlServ4r.Repository.Units;
 using Volo.Abp.DependencyInjection;
 
 namespace Application.Dashboards
 {
     public class DashboardService : IDashboardService,ITransientDependency
     {
-        private PartRepository _partRepository;
-        private PartReviewRepository _partReviewRepository;
+        private UnitRepository _unitRepository;
+        private UnitReviewRepository _unitReviewRepository;
 
-        public DashboardService(PartRepository partRepository,PartReviewRepository partReviewRepository)
+        public DashboardService(UnitRepository unitRepository,UnitReviewRepository unitReviewRepository)
         {
-            _partRepository = partRepository;
-            _partReviewRepository = partReviewRepository;
+            _unitRepository = unitRepository;
+            _unitReviewRepository = unitReviewRepository;
         }
 
-        public async Task<PartReviewStatisticsDto> GetPartReviewStatisticsByDateRange(DateTime? start ,DateTime? end)
+        public async Task<UnitReviewStatisticsDto> GetUnitReviewStatisticsByDateRange(DateTime? start ,DateTime? end)
         {
             var dataItems = new List<DataItem>();
-            var partsWithNavProperties = _partRepository.GetPartStatisticsByReviewDateRange(start,end);
+            var unitsWithNavProperties = _unitRepository.GetUnitStatisticsByReviewDateRange(start,end);
             
             
-                foreach (var items in partsWithNavProperties)
+                foreach (var items in unitsWithNavProperties)
                 {   
-                    var details = items.PartReviewDetails
+                    var details = items.UnitReviewDetails
                         .Where(x =>x.Rate > 0).ToList();
             
                     dataItems.Add(new DataItem()
                     {
-                        Label = items.Part.Name,
+                        Label = items.Unit.Name,
                         Value = (details.Count() != 0
                             ? details.Sum(x => x.Rate) / details.Count()
                             : 0)
@@ -49,11 +47,11 @@ namespace Application.Dashboards
                
                 
             var orderedDataItems = dataItems.OrderBy(x => x.Value).ToList();
-            var reviewCount = partsWithNavProperties.SelectMany(x => x.PartReviewDetails).GroupBy(x=>x.PartReviewId).Count();
-            var allDetails = partsWithNavProperties.SelectMany(x => x.PartReviewDetails);
+            var reviewCount = unitsWithNavProperties.SelectMany(x => x.UnitReviewDetails).GroupBy(x=>x.UnitReviewId).Count();
+            var allDetails = unitsWithNavProperties.SelectMany(x => x.UnitReviewDetails);
             
-            return new PartReviewStatisticsDto()
-                {PartReviewItems = orderedDataItems, TotalReview = reviewCount, DetailPartReviewItems =  GetRatingStats(allDetails)};
+            return new UnitReviewStatisticsDto()
+                {UnitReviewItems = orderedDataItems, TotalReview = reviewCount, DetailUnitReviewItems =  GetRatingStats(allDetails)};
             
 
         }
@@ -65,8 +63,9 @@ namespace Application.Dashboards
         
         
 
-        private static List<DataItem> GetRatingStats(IEnumerable<PartReviewDetail> allDetails)
+        private static List<DataItem> GetRatingStats(IEnumerable<UnitReviewDetail> allDetails)
         {
+            if (allDetails.Count() == 0) return new List<DataItem>();
             var detailItems = new List<DataItem>()
             {
                 new DataItem()

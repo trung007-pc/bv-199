@@ -41,30 +41,33 @@
 
 <RZBR></RZBR>
 
-<RadzenCard>
-    <Strong>Total Reviews : <span style="color:#b02a37">@Stat.TotalReview</span></Strong>
-    <RadzenChart SeriesClick=@OnSeriesClick Style="width: 500px;margin: 0 auto">
+@if (!IsLoading)
+{
+    <RadzenCard>
+        <Strong>Total Reviews : <span style="color:#b02a37">@Stat.TotalReview</span></Strong>
+        <RadzenChart SeriesClick=@OnSeriesClick Style="width: 500px;margin: 0 auto">
 
-        <RadzenPieSeries Data="@DetailPartReviewdataItems" Title="Total" CategoryProperty="Label" ValueProperty="Value">
-            <TooltipTemplate Context="data">
-                <div>
-                    <span>@data.Label <RadzenIcon Icon="star" Style="color:gold"/></span>:
-                    <strong>
-                        @data.Value
-                    </strong>
-                </div>
-            </TooltipTemplate>
-        </RadzenPieSeries>
-    </RadzenChart>
+            <RadzenPieSeries Data="@DetailUnitReviewdataItems" Title="Total" CategoryProperty="Label" ValueProperty="Value">
+                <TooltipTemplate Context="data">
+                    <div>
+                        <span>@data.Label <RadzenIcon Icon="star" Style="color:gold"/></span>:
+                        <strong>
+                            @data.Value
+                        </strong>
+                    </div>
+                </TooltipTemplate>
+            </RadzenPieSeries>
+        </RadzenChart>
 
-</RadzenCard>
+    </RadzenCard>
+}
 <RZBR></RZBR>
 
 @if (!IsLoading)
 {
     <RadzenCard>
         <RadzenChart>
-            <RadzenColumnSeries Data="@PartReviewdataItems" CategoryProperty="Label" Title="2020" LineType="LineType.Solid" ValueProperty="Value">
+            <RadzenColumnSeries Data="@UnitReviewdataItems" CategoryProperty="Label" Title="2020" LineType="LineType.Solid" ValueProperty="Value">
 
                 <TooltipTemplate Context="data">
                     <div>

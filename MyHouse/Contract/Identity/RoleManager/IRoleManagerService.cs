@@ -12,12 +12,19 @@ namespace Contract.Identity.RoleManager
         Task<RoleDto> UpdateAsync(CreateUpdateRoleDto input,Guid id);
         Task DeleteAsync(Guid id);
         
-        
+        //  Task<RoleDto> CreateWithClaimsAsync(CreateUpdateRoleDto input);
+        // Task<RoleDto> UpdateWithClaimsAsync(CreateUpdateRoleDto input,Guid id);
+        //
+        // public Task DeleteClaimByRoleIDAsync(Guid roleId);
+        // public Task<CreateUpdateClaimRole> CreateClaimsAsync(List<CreateUpdateClaimRole> inputs);
+
         
         
         //role-claim
         public Task<List<RoleClaimDto>> GetClaimListAsync(Guid roleId);
         public Task<CreateUpdateClaimRole> CreateClaimAsync(CreateUpdateClaimRole input);
         public Task DeleteClaimAsync(RoleClaimModel input);
+
+
     }
 }

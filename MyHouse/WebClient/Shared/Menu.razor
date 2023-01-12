@@ -1,15 +1,24 @@
-﻿<h3>Menu</h3>
-
+﻿
 <RadzenPanelMenu >
     <RadzenPanelMenuItem Text="Administrator" Icon="account_box">
         <RadzenPanelMenuItem Text="User" Path="user" Icon="table_view"></RadzenPanelMenuItem>
         <RadzenPanelMenuItem Text="Role" Path="role" Icon="table_view"></RadzenPanelMenuItem>
     </RadzenPanelMenuItem>
-    <RadzenPanelMenuItem Text="Satisfaction Survey" Icon="tab">
-        <RadzenPanelMenuItem Text="Dashboard" Path="dashboard" Icon="dashboard"></RadzenPanelMenuItem>
-        <RadzenPanelMenuItem Text="Part" Path="part" Icon="table_view"></RadzenPanelMenuItem>
-        <RadzenPanelMenuItem Text="Part Review" Path="part-review" Icon="table_view"></RadzenPanelMenuItem>
-        <RadzenPanelMenuItem Text="TestPage" Path="demo" Icon="table_view"></RadzenPanelMenuItem>
-    </RadzenPanelMenuItem>
+    
+    
+    <AuthorizeView>
+        @if (context.User.IsInRole("Quality Manager") 
+             ||context.User.IsInRole("Admin"))
+        {   
+            <RadzenPanelMenuItem Text="Satisfaction Survey" Icon="tab">
+                 <RadzenPanelMenuItem Text="Dashboard" Path="dashboard" Icon="dashboard"></RadzenPanelMenuItem>
+                 <RadzenPanelMenuItem Text="Unit" Path="unit" Icon="table_view"></RadzenPanelMenuItem>
+                 <RadzenPanelMenuItem Text="Unit Review" Path="unit-review" Icon="table_view"></RadzenPanelMenuItem>
+                 <RadzenPanelMenuItem Text="TestPage" Path="demo" Icon="table_view"></RadzenPanelMenuItem>
+             </RadzenPanelMenuItem>
+            
+        }
+    </AuthorizeView>
+
 
 </RadzenPanelMenu>

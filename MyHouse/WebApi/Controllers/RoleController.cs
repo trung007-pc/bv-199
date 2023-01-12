@@ -15,45 +15,45 @@ namespace WebApi.Controllers
     [Route("api/role/")]
     public class RoleController : IRoleManagerService
     {
-        public RoleManagerServiceService RoleManagerServiceService;
+        public RoleManagerService RoleManagerService;
 
-        public RoleController(RoleManagerServiceService roleManagerServiceService)
+        public RoleController(RoleManagerService roleManagerService)
         {
-            RoleManagerServiceService = roleManagerServiceService;
+            RoleManagerService = roleManagerService;
         }
 
         [HttpGet]
-        [Authorize]
+        // [Authorize]
         public async Task<List<RoleDto>> GetListAsync()
         {
-            return await RoleManagerServiceService.GetListAsync();
+            return await RoleManagerService.GetListAsync();
         }
 
         [HttpPost]
         public async Task<RoleDto> CreateAsync(CreateUpdateRoleDto input)
         {
-            return await RoleManagerServiceService.CreateAsync(input);
+            return await RoleManagerService.CreateAsync(input);
         }
 
         [HttpPut]
         [Route("{id}")]
         public async Task<RoleDto> UpdateAsync(CreateUpdateRoleDto input, Guid id)
         {
-            return await RoleManagerServiceService.UpdateAsync(input, id);
+            return await RoleManagerService.UpdateAsync(input, id);
         }
 
         [HttpDelete]
         [Route("{id}")]
         public async Task DeleteAsync(Guid id)
         {
-             await RoleManagerServiceService.DeleteAsync(id);
+             await RoleManagerService.DeleteAsync(id);
         }
 
         [HttpGet]
         [Route("get-claims/{roleId}")]
         public async Task<List<RoleClaimDto>> GetClaimListAsync(Guid roleId)
         {
-            return await RoleManagerServiceService.GetClaimListAsync(roleId);
+            return await RoleManagerService.GetClaimListAsync(roleId);
         }
 
         [HttpPost]
@@ -61,14 +61,16 @@ namespace WebApi.Controllers
         [Authorize("EmployeeOnly")]
         public async Task<CreateUpdateClaimRole> CreateClaimAsync(CreateUpdateClaimRole input)
         {
-            return await RoleManagerServiceService.CreateClaimAsync(input);
+            return await RoleManagerService.CreateClaimAsync(input);
         }
+
+ 
 
         [HttpPost]
         [Route("delete-claim")]
         public async Task DeleteClaimAsync(RoleClaimModel input)
         {
-             await RoleManagerServiceService.DeleteClaimAsync(input);
+             await RoleManagerService.DeleteClaimAsync(input);
         }
     }
 }

@@ -14,10 +14,10 @@ using Radzen;
 using WebClient.Data;
 using WebClient.Identity;
 using WebClient.Service.Dashboards;
-using WebClient.Service.PartReviewDetails;
-using WebClient.Service.PartReviews;
-using WebClient.Service.Parts;
 using WebClient.Service.Roles;
+using WebClient.Service.UnitReviewDetails;
+using WebClient.Service.UnitReviews;
+using WebClient.Service.Units;
 using WebClient.Service.Upload;
 using WebClient.Service.Users;
 
@@ -32,9 +32,9 @@ builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<WeatherForecastService>();
 builder.Services.AddScoped<RoleManagerService, RoleManagerService>();
 builder.Services.AddTransient<UserManagerService,UserManagerService>();
-builder.Services.AddTransient<PartService,PartService>();
-builder.Services.AddTransient<PartReviewService, PartReviewService>();
-builder.Services.AddTransient<PartReviewDetailService, PartReviewDetailService>();
+builder.Services.AddTransient<UnitService,UnitService>();
+builder.Services.AddTransient<UnitReviewService, UnitReviewService>();
+builder.Services.AddTransient<UnitReviewDetailService, UnitReviewDetailService>();
 builder.Services.AddTransient<UploadService, UploadService>();
 builder.Services.AddTransient<DashboardService,DashboardService>();
 

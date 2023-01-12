@@ -225,31 +225,31 @@ namespace WebApi.Migrations
                     b.ToTable("UserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Domain.PartReviewDetails.PartReviewDetail", b =>
+            modelBuilder.Entity("Domain.UnitReviewDetails.UnitReviewDetail", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("PartId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("PartReviewId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<int>("Rate")
                         .HasColumnType("int");
 
+                    b.Property<Guid>("UnitId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UnitReviewId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("PartId");
+                    b.HasIndex("UnitId");
 
-                    b.HasIndex("PartReviewId");
+                    b.HasIndex("UnitReviewId");
 
-                    b.ToTable("PartReviewDetails");
+                    b.ToTable("UnitReviewDetails");
                 });
 
-            modelBuilder.Entity("Domain.PartReviews.PartReview", b =>
+            modelBuilder.Entity("Domain.UnitReviews.UnitReview", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -275,10 +275,10 @@ namespace WebApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("PartReviews");
+                    b.ToTable("UnitReviews");
                 });
 
-            modelBuilder.Entity("Domain.Parts.Part", b =>
+            modelBuilder.Entity("Domain.Units.Unit", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -311,7 +311,7 @@ namespace WebApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Parts");
+                    b.ToTable("Units");
                 });
 
             modelBuilder.Entity("Domain.Identity.RoleClaims.RoleClaim", b =>
@@ -365,33 +365,33 @@ namespace WebApi.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Domain.PartReviewDetails.PartReviewDetail", b =>
+            modelBuilder.Entity("Domain.UnitReviewDetails.UnitReviewDetail", b =>
                 {
-                    b.HasOne("Domain.Parts.Part", "Part")
-                        .WithMany("PartReviewDetails")
-                        .HasForeignKey("PartId")
+                    b.HasOne("Domain.Units.Unit", "Unit")
+                        .WithMany("UnitReviewDetails")
+                        .HasForeignKey("UnitId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.PartReviews.PartReview", "PartReview")
-                        .WithMany("PartReviewDetails")
-                        .HasForeignKey("PartReviewId")
+                    b.HasOne("Domain.UnitReviews.UnitReview", "UnitReview")
+                        .WithMany("UnitReviewDetails")
+                        .HasForeignKey("UnitReviewId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Part");
+                    b.Navigation("Unit");
 
-                    b.Navigation("PartReview");
+                    b.Navigation("UnitReview");
                 });
 
-            modelBuilder.Entity("Domain.PartReviews.PartReview", b =>
+            modelBuilder.Entity("Domain.UnitReviews.UnitReview", b =>
                 {
-                    b.Navigation("PartReviewDetails");
+                    b.Navigation("UnitReviewDetails");
                 });
 
-            modelBuilder.Entity("Domain.Parts.Part", b =>
+            modelBuilder.Entity("Domain.Units.Unit", b =>
                 {
-                    b.Navigation("PartReviewDetails");
+                    b.Navigation("UnitReviewDetails");
                 });
 #pragma warning restore 612, 618
         }
