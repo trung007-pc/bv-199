@@ -1,4 +1,5 @@
 ﻿@page "/user"
+@attribute [Authorize]
 @using ButtonType = Radzen.ButtonType
 @inject UserManagerService _userManagerService;
 @inherits BaseBlazorPage
@@ -14,12 +15,12 @@
 <div style="display: flex;justify-content: space-between;align-items: center">
     <div>
         <RadzenBreadCrumb >
-                <RadzenBreadCrumbItem Path="/" Icon="home" Style="font-size: 20px"/>
-                <RadzenBreadCrumbItem Text="@HeaderTitle" Style="font-weight: 300"/>
-            </RadzenBreadCrumb>
+            <RadzenBreadCrumbItem Path="/" Icon="home" Style="font-size: 20px"/>
+            <RadzenBreadCrumbItem Text="@HeaderTitle" Style="font-weight: 300"/>
+        </RadzenBreadCrumb>
     </div>
     <div>
-        <RadzenButton Text="Create" Click="@ShowNewModal" />
+        <RadzenButton Text="Create" Click="@ShowNewModal"/>
     </div>
 </div>
 
@@ -29,52 +30,54 @@
 <RadzenCard>
     <Row Style="display:flex;align-items: center">
         <Column ColumnSize="ColumnSize.Is2">
-            <RadzenIcon Icon="calendar_today" />
+            <RadzenIcon Icon="calendar_today"/>
         </Column>
-        
+
         <Column ColumnSize="ColumnSize.Is7">
-            <RadzenTextBox Placeholder="Search..."  Class="w-100" />
+            <RadzenTextBox Placeholder="Search..." Class="w-100"/>
         </Column>
-        
+
         <Column ColumnSize="ColumnSize.Is3">
-            <RadzenButton Text="Search"  Icon="search"/>
+            <RadzenButton Text="Search" Icon="search"/>
         </Column>
-        
+
     </Row>
 </RadzenCard>
 
 <RZBR/>
 
 
+<RadzenCard>
+    <RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" AllowAlternatingRows="false"   PageSize="10" AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true"
+                    Data="@UsersWithNav" TItem="UserWithNavigationDto" ColumnWidth="300px" 
+                    AllowSorting="true"
+                    FilterMode="FilterMode.Simple"
+                    FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                    LogicalFilterOperator="LogicalFilterOperator.Or" Style="   width: 100%">
+        <Columns>
+            <RadzenDataGridColumn TItem="UserWithNavigationDto" Filterable="false" Property="Index"  Title="Index" Frozen="true" Width="80px" TextAlign="TextAlign.Center"/>
+            <RadzenDataGridColumn TItem="UserWithNavigationDto" Property="UserDto.UserName" Title="User Name" Frozen="true" Width="160px"/>
+            <RadzenDataGridColumn TItem="UserWithNavigationDto" Filterable="false" Sortable="false"  Property="RoleNames" Title="Roles" Frozen="true" Width="160px">
+                <Template Context="data">
+                    @{ int i = 0; }
+                    @foreach (var item in data.RoleNames)
+                    {
+                        <RadzenBadge BadgeStyle="ChooseColorByNumber(i)" IsPill="@true" Text="@item" Class="ml-2"/>
+                        i++;
+                    }
 
-
-              <RadzenCard>
-<RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" AllowAlternatingRows="false" FilterMode="FilterMode.Advanced" AllowSorting="true" PageSize="10" AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true"
-                Data="@UsersWithNav" TItem="UserWithNavigationDto" ColumnWidth="300px" LogicalFilterOperator="LogicalFilterOperator.Or"  Style="width: 100%">
-    <Columns>
-        <RadzenDataGridColumn TItem="UserWithNavigationDto" Property="Index" Filterable="false" Title="Index" Frozen="true" Width="80px" TextAlign="TextAlign.Center"/>
-        <RadzenDataGridColumn TItem="UserWithNavigationDto" Property="UserDto.UserName" Title="User Name" Frozen="true" Width="160px"/>
-        <RadzenDataGridColumn TItem="UserWithNavigationDto" Property="UserDto.RoleNames" Title="Roles" Frozen="true" Width="160px">
-            <Template Context="data">
-                @{ int i = 0; }
-                @foreach (var item in data.RoleNames)
-                {
-                    <RadzenBadge BadgeStyle="ChooseColorByNumber(i)" IsPill="@true" Text="@item" Class="ml-2"/>
-                    i++;
-                }
-
-            </Template>
-        </RadzenDataGridColumn>
-        <RadzenDataGridColumn TItem="UserWithNavigationDto" Property="UserName" Title="Action" Frozen="true" Width="160px">
-            <Template Context="data">
-                <RadzenButton Click="() => { ShowEditModal(data.UserDto.Id); }" Icon="edit" ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat" Size="ButtonSize.Medium">
-                </RadzenButton>
-                <RadzenButton Click="async () => { await ShowConfirmMessage(data.UserDto.Id); }" ButtonStyle="ButtonStyle.Danger" Icon="delete" Variant="Variant.Flat" Shade="Shade.Lighter" Size="ButtonSize.Medium" Class="my-1 ms-1">
-                </RadzenButton>
-            </Template>
-        </RadzenDataGridColumn>
-    </Columns>
-</RadzenDataGrid>
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="UserWithNavigationDto" Filterable="false" Property="Index" Title="Action" Frozen="true" Width="160px">
+                <Template Context="data">
+                    <RadzenButton Click="() => { ShowEditModal(data.UserDto.Id); }" Icon="edit" ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat" Size="ButtonSize.Medium">
+                    </RadzenButton>
+                    <RadzenButton Click="async () => { await ShowConfirmMessage(data.UserDto.Id); }" ButtonStyle="ButtonStyle.Danger" Icon="delete" Variant="Variant.Flat" Shade="Shade.Lighter" Size="ButtonSize.Medium" Class="my-1 ms-1">
+                    </RadzenButton>
+                </Template>
+            </RadzenDataGridColumn>
+        </Columns>
+    </RadzenDataGrid>
 
 </RadzenCard>
 
@@ -83,7 +86,7 @@
         <ModalHeader>
             <ModalTitle>User</ModalTitle>
         </ModalHeader>
-        <EditForm Model="NewUser" OnValidSubmit="async () => { await CreateUser(); }">
+        <EditForm Model="NewUser.User" OnValidSubmit="async () => { await CreateUser(); }" >
             <ModalBody>
 
                 <DataAnnotationsValidator/>
@@ -116,7 +119,7 @@
         <ModalHeader>
             <ModalTitle>User</ModalTitle>
         </ModalHeader>
-        <EditForm Model="EditUser" OnValidSubmit="async () => { await UpdateUser(); }">
+        <EditForm Model="EditUser.User" OnValidSubmit="async () => { await UpdateUser(); }">
 
             <ModalBody>
                 <DataAnnotationsValidator/>

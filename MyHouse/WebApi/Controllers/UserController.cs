@@ -15,6 +15,7 @@ namespace WebApi.Controllers
 {
     [ApiController]
     [Route("api/user/")]
+    [Authorize]
     public class UserController : IUserManagerService
     {
         private UserManagerService _userManagerService;
@@ -24,7 +25,7 @@ namespace WebApi.Controllers
             _userManagerService = userManagerService;
         }
 
-        [HttpGet]
+        [HttpGet]   
         [Route("get-list-with-nav")]
         public async Task<List<UserWithNavigationDto>> GetListWithNavigationAsync()
         {
@@ -81,6 +82,7 @@ namespace WebApi.Controllers
         
         [HttpPost]
         [Route("sign-in")]
+        [AllowAnonymous]
         public async Task<TokenDto> SignInAsync(UserModel input)
         {
             return await _userManagerService.SignInAsync(input);
@@ -89,7 +91,7 @@ namespace WebApi.Controllers
 
         [HttpPost]
         [Route("sign-up")]
-
+        [AllowAnonymous]
         public async Task<UserDto> SignUpAsync(CreateUpdateUserDto input)
         {
             return await _userManagerService.SignUpAsync(input);
@@ -126,6 +128,7 @@ namespace WebApi.Controllers
 
         [HttpPost]
         [Route("refresh-token")]
+        [AllowAnonymous]
         public async Task<TokenDto> RefreshTokenAsync(TokenModel token)
         {
             return await _userManagerService.RefreshTokenAsync(token);

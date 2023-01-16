@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Application.Uploads;
+using Castle.Core.Configuration;
 using Contract;
 using Contract.Uploads;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,9 +14,9 @@ namespace WebApi.Controllers
     [Route("api/upload/")]
     public class UploadController : IUploadService
     {
-        public UploadService _uploadService;
+        private UploadService _uploadService;
 
-        public UploadController(UploadService uploadService)
+        public UploadController(UploadService uploadService  )
         {
             _uploadService = uploadService;
         }

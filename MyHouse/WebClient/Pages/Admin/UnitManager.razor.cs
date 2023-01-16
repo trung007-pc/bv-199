@@ -46,9 +46,13 @@ namespace WebClient.Pages.Admin
         {
             if (firstRender)
             {
-                await GetDateRangePickers();
-                await GetList();
-                StateHasChanged();
+                await InvokeAsync(async () =>
+                {
+                    await GetDateRangePickers();
+                    await GetList();
+                    StateHasChanged();
+                }, ActionType.GetList, false);
+   
             }
         }
 

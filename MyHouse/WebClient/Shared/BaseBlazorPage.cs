@@ -39,6 +39,7 @@ namespace WebClient.Shared
                 cfg.AddProfile(new AutoMapperProfile());
             });
             ObjectMapper = config.CreateMapper();
+            
         }
         
 
@@ -78,6 +79,27 @@ namespace WebClient.Shared
                             _notificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Xóa Thành cộng", Duration = 4000 });
                             break;
                         }
+                        case ActionType.SignIn:
+                        {
+                            _notificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Sign In Success", Duration = 4000 });
+                            break;
+                        }
+                        case ActionType.SignOut:
+                        {
+                            _notificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Sign Out Success", Duration = 4000 });
+                            break;
+                        }
+                        case ActionType.SignUp:
+                        {
+                            _notificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Sign Up Success", Duration = 4000 });
+                            break;
+                        }
+                        
+                        case ActionType.Review:
+                        {
+                            _notificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Đánh giá thành công", Duration = 4000 });
+                            break;
+                        }
                     
                     }
                 }
@@ -91,7 +113,7 @@ namespace WebClient.Shared
 
                 if (exceptionType == typeof(BadRequestException))
                 {
-                    _notificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error Summary", Detail = e.Message, Duration = 4000 });
+                    _notificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error Summary", Detail = e.Message, Duration = 4000});
 
                 }
 

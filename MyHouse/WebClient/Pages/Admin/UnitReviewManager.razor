@@ -24,20 +24,25 @@
 
 <RZBR></RZBR>
 <RadzenCard>
-    <RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" AllowAlternatingRows="false" FilterMode="FilterMode.Advanced" AllowSorting="true" PageSize="5" AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true"
-                    Data="@UnitReviews" TItem="UnitReviewDto" ColumnWidth="300px" LogicalFilterOperator="LogicalFilterOperator.Or" Style="width: 100%">
+    <RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" AllowAlternatingRows="false"  PageSize="5" AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true"
+                    Data="@UnitReviews" TItem="UnitReviewDto" ColumnWidth="300px"
+                    AllowSorting="true"
+                    FilterMode="FilterMode.Simple"
+                    FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                    LogicalFilterOperator="LogicalFilterOperator.Or" 
+                    Style="width: 100%">
         <Columns>
             <RadzenDataGridColumn TItem="UnitReviewDto" Property="Index" Filterable="false" Title="Index" Frozen="true" Width="80px" TextAlign="TextAlign.Center"/>
-            <RadzenDataGridColumn TItem="UnitReviewDto" Property="UnitReview.Note" Filterable="false" Title="Note" Frozen="true" Width="80px" TextAlign="TextAlign.Center"/>
-            <RadzenDataGridColumn TItem="UnitReviewDto" Property="UnitReview.CreationDate" Filterable="false" Title="Creation Date" Frozen="true" Width="80px" TextAlign="TextAlign.Center"/>
+            <RadzenDataGridColumn TItem="UnitReviewDto" Property="Note"  Title="Note" Frozen="true" Width="80px" TextAlign="TextAlign.Center"/>
+            <RadzenDataGridColumn TItem="UnitReviewDto" Property="CreationDate"  Title="Creation Date" Frozen="true" Width="80px" TextAlign="TextAlign.Center"/>
     
-            <RadzenDataGridColumn TItem="UnitReviewDto" Property="UnitReview.AveragePoint" Filterable="false" Title="Average Point" Frozen="true" Width="80px" TextAlign="TextAlign.Center">
+            <RadzenDataGridColumn TItem="UnitReviewDto" Property="AveragePoint" Filterable="false"  Title="Average Point" Frozen="true" Width="80px" TextAlign="TextAlign.Center">
                 <Template Context="data">
                     @data.AveragePoint   <RadzenIcon Icon="star"  Style="color:gold"/>
                 </Template>
             </RadzenDataGridColumn>
             
-                   <RadzenDataGridColumn TItem="UnitReviewDto" Property="ImageUrl" Title="Enclosed Image" Frozen="true" Width="120px" TextAlign="TextAlign.Center">
+                   <RadzenDataGridColumn TItem="UnitReviewDto" Property="ImageUrl" Title="Enclosed Image" Frozen="true" Width="120px" TextAlign="TextAlign.Center" Filterable="false">
                        <Template Context="data">
                            @if (data.ImageUrl != null)
                            {
@@ -46,7 +51,7 @@
                        </Template>
                        </RadzenDataGridColumn>
                 
-            <RadzenDataGridColumn TItem="UnitReviewDto" Property="UnitReviewDto" Title="Action" Frozen="true" Width="160px">
+            <RadzenDataGridColumn TItem="UnitReviewDto" Property="Index" Title="Action" Frozen="true" Width="160px" Filterable="false">
                 <Template Context="data">
                     <RadzenButton Click="async () => { await NavigateToDetails(data.Id); }" ButtonStyle="ButtonStyle.Primary" Icon="visibility" Variant="Variant.Flat" Shade="Shade.Lighter" Size="ButtonSize.Medium" Class="my-1 ms-1">  </RadzenButton>
                     <RadzenButton Click="async () => { await ShowConfirmMessage(data.Id); }" ButtonStyle="ButtonStyle.Danger" Icon="delete" Variant="Variant.Flat" Shade="Shade.Lighter" Size="ButtonSize.Medium" Class="my-1 ms-1">

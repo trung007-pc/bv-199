@@ -8,6 +8,7 @@ using Core.Const;
 using Core.Exceptions;
 using Domain.Units;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using SqlServ4r.Repository.Units;
 using Volo.Abp.DependencyInjection;
 
@@ -16,18 +17,25 @@ namespace Application.Units
     public class UnitService : ServiceBase, IUnitService, ITransientDependency
     {
         public UnitRepository _unitRepository;
+        private IConfiguration _configuration;
 
-        public UnitService(UnitRepository unitRepository)
+
+        public UnitService(UnitRepository unitRepository,IConfiguration configuration)
         {
             _unitRepository = unitRepository;
+            _configuration = configuration;
         }
 
 
         public async Task<UnitDto> CreateAsync(CreateUpdateUnitDto input)
         {
             var unit = ObjectMapper.Map<CreateUpdateUnitDto, Unit>(input);
+            if (unit.ImageUrl == null)
+            {
+                unit.ImageUrl = _configuration["Media:Default_Image_Path"];
+            }
 
-            var exist = _unitRepository.GetQueryable().Any(x => x.Name == input.Name);
+            var exist = _unitRepository.GetQueryable().Any(x => x.Name == input.Name && !x.IsDeleted);
             
             if(exist) throw new GlobalException(HttpMessage.DuplicateName, HttpStatusCode.BadRequest);
             

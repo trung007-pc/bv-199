@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Contract.Units
 {
@@ -9,13 +10,15 @@ namespace Contract.Units
         public string? Note { get; set; }
         public int Odx { get; set; }
         public bool IsActive { get; set; } = true;
+        public DateTime CreationDate { get; set; } = DateTime.Now;
+
         
         //File will saved in here
         public string? FileName { get; set; }
         public string? Path { get; set;}
 
-        public string? ImageUrl { get; set; } =
-            "https://localhost:7093/StaticFiles/Images/Default/Logo_BenhVien199.png";
+        public string? ImageUrl { get; set; } 
+          
 
     }
 }

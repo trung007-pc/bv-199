@@ -29,12 +29,19 @@ namespace WebClient.RequestHttp
 
         //intergated service
         private static ILocalStorageService _localStorage;
+        public static IConfiguration Config;
 
 
         static RequestClient()
         {
             _client = new HttpClient();
-            _client.BaseAddress = new Uri(AppSetting.API_Base_ADRESS);
+        }
+        
+        public static void Initialize(IConfiguration configuration)
+        {
+            Config = configuration;
+            _client.BaseAddress = new Uri(Config["RemoteServices:BaseUrl"]);
+            // _client.BaseAddress = new Uri(AppSetting.API_Base_ADRESS);
         }
 
         public static void SetLocalStorageService(ILocalStorageService localStorage)
@@ -164,7 +171,8 @@ namespace WebClient.RequestHttp
 
         private static async Task<T> HandleForUnauthorization<T>(HttpResponseMessage httpResponseMessage)
         {
-            var request = httpResponseMessage.RequestMessage.Clone();
+            var request = await httpResponseMessage.RequestMessage.CloneHttpRequestMessageAsync();
+            
             var accessToken = await _localStorage.GetItemAsync<string>("my-access-token");
             var refreshToken = await _localStorage.GetItemAsync<string>("my-refresh-token");
             var tokenModel = new TokenModel() {AccessToken = accessToken, RefreshToken = refreshToken};

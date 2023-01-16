@@ -6,6 +6,10 @@
         Update,
         Delete,
         GetList,
-        Get
+        Get,
+        SignIn,
+        SignOut,
+        SignUp,
+        Review
     }
 }

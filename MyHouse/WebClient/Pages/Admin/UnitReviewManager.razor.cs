@@ -49,9 +49,13 @@ namespace WebClient.Pages.Admin
         protected override async void OnAfterRender(bool firstRender)
         {
             if (firstRender)
-            { 
-                await GetUnitReviews();
-                StateHasChanged();
+            {
+                await InvokeAsync(async () =>
+                {
+                    await GetUnitReviews();
+                    StateHasChanged();
+                }, ActionType.GetList, false);
+         
             }
         }
 

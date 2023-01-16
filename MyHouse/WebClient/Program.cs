@@ -13,6 +13,7 @@ using Radzen;
 
 using WebClient.Data;
 using WebClient.Identity;
+using WebClient.RequestHttp;
 using WebClient.Service.Dashboards;
 using WebClient.Service.Roles;
 using WebClient.Service.UnitReviewDetails;
@@ -27,6 +28,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
+RequestClient.Initialize(builder.Configuration);
 
 //service
 builder.Services.AddSingleton<WeatherForecastService>();

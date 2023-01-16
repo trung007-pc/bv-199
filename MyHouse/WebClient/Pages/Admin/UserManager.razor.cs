@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Blazorise;
+using Blazorise.States;
 using Contract.Identity.RoleManager;
 using Contract.Identity.UserManager;
 using Core.Enum;
@@ -42,9 +43,13 @@ namespace WebClient.Pages.Admin
         {
             if (firstRender)
             {
-                await GetUsers();
-                await GetRoles();
-                StateHasChanged();
+                await InvokeAsync(async () =>
+                {
+                    await GetUsers();
+                    await GetRoles();
+                    StateHasChanged();
+                }, ActionType.GetList, false);
+             
             }
         }
 
@@ -61,6 +66,8 @@ namespace WebClient.Pages.Admin
 
         private async Task CreateUser()
         {
+           
+            
             await InvokeAsync(async () =>
             {
                 await _userManagerService.CreateWithNavigationAsync(NewUser);

@@ -25,17 +25,16 @@ namespace SqlServ4r.Repository.Units
                 join detail in _context.UnitReviewDetails on review.Id equals detail.UnitReviewId
                 select detail;
             
-            var secondQueryable = from unit in _context.Units.Where(x => !x.IsDeleted)
+            var secondQueryable = from unit in _context.Units.Where(x=>!x.IsDeleted).
+                    WhereIf(start != null && end != null,
+                    x => x.CreationDate >= start && x.CreationDate <= end
+                    || x.CreationDate <= start)
                 select new UnitWithNavProperties
                 {
                    Unit = unit,
                    UnitReviewDetails = firstQueryable.AsEnumerable().Where(x=>x.UnitId == unit.Id)
                 };
-
-            secondQueryable = secondQueryable.Where(x => x.UnitReviewDetails.Count() > 0);
             
-
-
              return secondQueryable.ToList();
              
 

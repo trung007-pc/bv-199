@@ -5,6 +5,7 @@ using Application.Units;
 using Contract;
 using Contract.Identity.UserManager;
 using Contract.Units;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -14,6 +15,7 @@ namespace WebApi.Controllers
 {
     [ApiController]
     [Route("api/unit/")]
+    [Authorize]
     public class UnitController :  ControllerBase, IUnitService
     {
         private readonly UnitService _unitService;
@@ -51,6 +53,7 @@ namespace WebApi.Controllers
 
         [HttpPost]
         [Route("get-list-by-filter")]
+        [AllowAnonymous]
         public async Task<List<UnitDto>> GetListAsync(UnitFilter input)
         {
             return await _unitService.GetListAsync(input);

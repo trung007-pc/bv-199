@@ -3,6 +3,7 @@ using System.Net;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Application;
+using Microsoft.Extensions.Configuration;
 using Contract;
 using Core.Const;
 using Core.Exceptions;
@@ -17,10 +18,13 @@ namespace WebApi
     public class GlobalErrorHandlingMiddleware
     {
         private readonly RequestDelegate _next;
+        public static IConfiguration _configuration;
 
-        public GlobalErrorHandlingMiddleware(RequestDelegate next)
+        public GlobalErrorHandlingMiddleware(RequestDelegate next,IConfiguration config)
         {
             _next = next;
+            _configuration = config;
+
         }
 
         public async Task Invoke(HttpContext context)
@@ -56,7 +60,7 @@ namespace WebApi
                 status = HttpStatusCode.InternalServerError;
                 stackTrace = exception.StackTrace;
                 
-                FileHelper.WriteLog(exception,GlobalSetting.LOG_PATH);
+                FileHelper.WriteLog(exception,_configuration["Media:LOG_PATH"]);
             }
 
             context.Response.ContentType = "application/json";

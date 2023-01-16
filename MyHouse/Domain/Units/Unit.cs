@@ -14,6 +14,9 @@ namespace Domain.Units
 
         public bool IsDeleted { get; set; }
         
+        public DateTime CreationDate { get; set; } = DateTime.Now;
+
+        
         
         //media
         public string? FileName { get; set; }

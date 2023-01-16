@@ -55,15 +55,15 @@
    }
 
    <RadzenBody Style="transform: none !important;">
-       
-       <ErrorBoundary>
-           <ChildContent>
-                 @Body
-           </ChildContent>
-           <ErrorContent>
-                 @Body
-           </ErrorContent>
-       </ErrorBoundary>
+        @Body
+       @* <ErrorBoundary> *@
+       @*     <ChildContent> *@
+       @*           @Body *@
+       @*     </ChildContent> *@
+       @*     <ErrorContent> *@
+       @*           @Body *@
+       @*     </ErrorContent> *@
+       @* </ErrorBoundary> *@
     
    </RadzenBody>
    
@@ -72,7 +72,7 @@
     </RadzenFooter>
 </RadzenLayout>
 
-<RadzenNotification/>
+<RadzenNotification Style="z-index: 9999"/>
 <RadzenDialog/>
 
 @code {
@@ -84,12 +84,12 @@
     bool sidebar6Expanded = true;
 
 
-    ErrorBoundary? boundary;
-    
-    protected override void OnParametersSet()
-    {
-        boundary?.Recover();
-        
-    }
+    // ErrorBoundary? boundary;
+    //
+    // protected override void OnParametersSet()
+    // {
+    //     boundary?.Recover();
+    //     
+    // }
 
 }

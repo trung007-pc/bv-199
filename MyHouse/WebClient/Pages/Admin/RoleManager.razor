@@ -1,4 +1,5 @@
 ﻿@page "/role"
+@attribute [Authorize]
 @using ButtonType = Radzen.ButtonType
 @inject RoleManagerService _roleManagerService;
 @inherits BaseBlazorPage
@@ -23,12 +24,17 @@
 
 
 <RadzenCard>
-    <RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" AllowAlternatingRows="false" FilterMode="FilterMode.Advanced" AllowSorting="true" PageSize="5" AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true"
-                    Data="@Roles" TItem="RoleDto" ColumnWidth="300px" LogicalFilterOperator="LogicalFilterOperator.Or" Style="width: 100%">
+    <RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" AllowAlternatingRows="false"  AllowSorting="true" PageSize="5" AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true"
+                    Data="@Roles" TItem="RoleDto" ColumnWidth="300px" 
+                    
+                    FilterMode="FilterMode.Simple"
+                    LogicalFilterOperator="LogicalFilterOperator.Or"
+                    FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                    Style="width: 100%">
         <Columns>
             <RadzenDataGridColumn TItem="RoleDto" Property="Index" Filterable="false" Title="Index" Frozen="true" Width="80px" TextAlign="TextAlign.Center"/>
             <RadzenDataGridColumn TItem="RoleDto" Property="Name" Title="Name" Frozen="true" Width="160px"/>
-            <RadzenDataGridColumn TItem="RoleDto" Property="Name" Title="Action" Frozen="true" Width="160px">
+            <RadzenDataGridColumn TItem="RoleDto" Property="Name" Title="Action" Frozen="true" Width="160px" Filterable="false">
                 <Template Context="data">
                     <RadzenButton Click="async () => { await ShowEditModal(data); }" Icon="edit" ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat" Size="ButtonSize.Medium">
                     </RadzenButton>

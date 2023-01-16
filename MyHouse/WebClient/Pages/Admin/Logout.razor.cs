@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Core.Enum;
 
 namespace WebClient.Pages.Admin
 {
@@ -7,8 +8,12 @@ namespace WebClient.Pages.Admin
         
         protected override async Task OnInitializedAsync()
         {
-            _navigationManager.NavigateTo("/login");
-            _userManagerService.Logout();
+            await InvokeAsync( async () =>
+            {
+                _navigationManager.NavigateTo("/login");
+                _userManagerService.Logout();
+            }, ActionType.SignOut, true);
+  
         }
 
     }

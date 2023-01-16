@@ -1,5 +1,6 @@
 ﻿@page "/"
 @page "/dashboard"
+@attribute [Authorize]
 @inherits BaseBlazorPage
 @using WebClient.Service.Dashboards
 @using Core.Const
@@ -67,7 +68,7 @@
 {
     <RadzenCard>
         <RadzenChart>
-            <RadzenColumnSeries Data="@UnitReviewdataItems" CategoryProperty="Label" Title="2020" LineType="LineType.Solid" ValueProperty="Value">
+            <RadzenColumnSeries Data="@UnitReviewdataItems" CategoryProperty="Label" Title="Rating" LineType="LineType.Solid" ValueProperty="Value">
 
                 <TooltipTemplate Context="data">
                     <div>
@@ -84,14 +85,14 @@
             <RadzenSeriesDataLabels Visible="true" />
 
             <RadzenColumnOptions Radius="5" Width="30"/>
-            <RadzenValueAxis Min="0">
+            <RadzenValueAxis>
                 <RadzenGridLines Visible="true"/>
                 <RadzenAxisTitle Text="Average Ratting"/>
             </RadzenValueAxis>
         </RadzenChart>
     </RadzenCard>
-    
-    
- 
-    
+
+
+
+
 }

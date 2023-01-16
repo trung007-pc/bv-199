@@ -13,6 +13,7 @@ namespace WebApi.Controllers
 {
     [ApiController]
     [Route("api/role/")]
+    [Authorize]
     public class RoleController : IRoleManagerService
     {
         public RoleManagerService RoleManagerService;
@@ -23,7 +24,6 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
-        // [Authorize]
         public async Task<List<RoleDto>> GetListAsync()
         {
             return await RoleManagerService.GetListAsync();

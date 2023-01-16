@@ -36,8 +36,11 @@ namespace WebClient.Pages.Admin
         {
             if (firstRender)
             {
-                await GetRoles();
-                StateHasChanged();
+                await InvokeAsync(async () =>
+                {
+                    await GetRoles();
+                    StateHasChanged();
+                }, ActionType.GetList, false);
             }
         }
 

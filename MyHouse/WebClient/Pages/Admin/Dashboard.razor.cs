@@ -51,17 +51,11 @@ namespace WebClient.Pages.Admin
         {
                 Stat = await _dashboardService.GetUnitReviewStatisticsByDateRange(StartDate?.DateTime,EndDate?.DateTime);
                 UnitReviewdataItems = Stat.UnitReviewItems;
-                if (UnitReviewdataItems.Count() < 1)
-                {
-                    UnitReviewdataItems.Add(new DataItem(){Label = "",Value = 1});
-                }
+                UnitReviewdataItems.Add(new DataItem(){Label = "",Value = 0});
                 DetailUnitReviewdataItems = Stat.DetailUnitReviewItems;
+                // DetailUnitReviewdataItems.Add(new DataItem(){Label = "",Value = 0});
                 
-                if (DetailUnitReviewdataItems.Count() < 1)
-                {
-                    DetailUnitReviewdataItems.Add(new DataItem(){Label = "",Value = 1});
-                }
-                
+            
                 IsLoading = false;
         }
         

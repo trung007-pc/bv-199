@@ -27,11 +27,15 @@
 </div>
 <RZBR></RZBR>
 <RadzenCard>
-    <RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" AllowAlternatingRows="false" FilterMode="FilterMode.Advanced" AllowSorting="true" PageSize="5" AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true"
-                    Data="@Units" TItem="UnitDto" ColumnWidth="300px" LogicalFilterOperator="LogicalFilterOperator.Or" Style="width: 100%">
+    <RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" AllowAlternatingRows="false" PageSize="5" AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true"
+                    Data="@Units" TItem="UnitDto" ColumnWidth="300px" 
+                    AllowSorting="true"
+                    FilterMode="FilterMode.Simple" 
+                    FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                    LogicalFilterOperator="LogicalFilterOperator.Or" Style="width: 100%">
         <Columns>
             <RadzenDataGridColumn TItem="UnitDto" Property="Index" Filterable="false" Title="Index" Frozen="true" Width="80px" TextAlign="TextAlign.Center"/>
-            <RadzenDataGridColumn TItem="UnitDto" Property="ImageUrl" Title="Photo" Frozen="true" Width="80px" TextAlign="TextAlign.Center">
+            <RadzenDataGridColumn TItem="UnitDto" Property="ImageUrl" Title="Photo" Frozen="true" Width="80px" TextAlign="TextAlign.Center" Filterable="false" >
                 <Template Context="data">
                     <RadzenImage Path="@data.ImageUrl" class="rz-gravatar" Style="width: 64px;height: 64px"/>
                 </Template>
@@ -48,7 +52,7 @@
             </RadzenDataGridColumn>
     
     
-            <RadzenDataGridColumn TItem="UnitDto" Property="Note" Title="Action" Frozen="true" Width="160px">
+            <RadzenDataGridColumn TItem="UnitDto" Property="Note" Title="Action" Frozen="true" Width="160px" Filterable="false" >
                 <Template Context="data">
                     <RadzenButton Click="() => { ShowEditModal(data); }" Icon="edit" ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat" Size="ButtonSize.Medium">
                     </RadzenButton>

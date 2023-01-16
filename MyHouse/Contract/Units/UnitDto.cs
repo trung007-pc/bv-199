@@ -10,7 +10,7 @@ namespace Contract.Units
         public string? Note { get; set; }
         public int Odx { get; set; }
         public bool IsActive { get; set; }
-        
+        public DateTime CreationDate { get; set; } 
         
         public string? FileName { get; set; }
         public string? ImageUrl { get; set; } 

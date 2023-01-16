@@ -151,7 +151,7 @@ namespace Application.Identity.UserManager
             var user = await _userManager.FindByNameAsync(input.UserName);
             if (user == null)
             {
-                throw new GlobalException(HttpMessage.NotFound, HttpStatusCode.BadRequest);
+                throw new GlobalException(HttpMessage.CheckInformation, HttpStatusCode.BadRequest);
             }
 
             var result = await _userManager.CheckPasswordAsync(user, input.Password);
@@ -176,7 +176,8 @@ namespace Application.Identity.UserManager
             var result = await _userManager.CreateAsync(user, input.Password);
             if (!result.Succeeded)
             {
-                throw new GlobalException(HttpMessage.CheckInformation, HttpStatusCode.BadRequest);
+               
+                throw new GlobalException( result.Errors.FirstOrDefault().Description, HttpStatusCode.BadRequest);
             }
             
             return ObjectMapper.Map<User,UserDto>(user);
@@ -296,7 +297,7 @@ namespace Application.Identity.UserManager
                 issuer: _configuration["Jwt:Issuer"],
                 audience: _configuration["Jwt:Audience"],
                 claims: claims,
-                expires: DateTime.Now.AddSeconds(60),
+                expires: DateTime.Now.AddHours(4),
                 signingCredentials: signinCredentials
             );
             var tokenString = new JwtSecurityTokenHandler().WriteToken(tokeOptions);

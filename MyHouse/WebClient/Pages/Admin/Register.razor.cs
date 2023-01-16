@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Contract.Identity.UserManager;
+using Core.Enum;
 
 namespace WebClient.Pages.Admin
 {
@@ -20,11 +21,13 @@ namespace WebClient.Pages.Admin
 
         public async Task HandleRegistration()
         {
-            //call api
-         var response = await _userManagerService.SignUpAsync(UserDto);
-         
-         
-         
+
+        await  InvokeAsync(async () =>
+         {
+            var result = await _userManagerService.SignUpAsync(UserDto);
+            _navigationManager.NavigateTo("/login",true);
+         }, ActionType.SignUp, true);
+
         }
         
    

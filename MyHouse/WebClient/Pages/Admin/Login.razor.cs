@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Contract.Identity.UserManager;
+using Core.Enum;
 
 namespace WebClient.Pages.Admin
 {
@@ -16,8 +17,12 @@ namespace WebClient.Pages.Admin
 
         private async Task SignIn()
         {
-          await  _userManagerService.SignInAsync(UserModel);
-          _navigationManager.NavigateTo("/",true);
+            await InvokeAsync(async () =>
+            {
+                await  _userManagerService.SignInAsync(UserModel);
+                _navigationManager.NavigateTo("/",true);
+            }, ActionType.SignIn, true);
+   
             
         }
 

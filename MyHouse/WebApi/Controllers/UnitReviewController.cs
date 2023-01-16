@@ -5,12 +5,14 @@ using Application.UnitReviews;
 using Contract;
 using Contract.UnitReviewDetails;
 using Contract.UnitReviews;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers
 {
     [ApiController]
     [Route("api/unit-review/")]
+    [Authorize]
     public class UnitReviewController : IUnitReviewService
     {
         public readonly UnitReviewService UnitReviewService;
@@ -36,6 +38,7 @@ namespace WebApi.Controllers
 
         [HttpPut]
         [Route("{Id}")]
+        [AllowAnonymous]
         public async Task<UnitReviewDto> UpdateAsync(CreateUpdateUnitReviewDto input, Guid Id)
         {
             return await UnitReviewService.UpdateAsync(input, Id);
@@ -43,6 +46,7 @@ namespace WebApi.Controllers
 
         [HttpPost]
         [Route("create-review-details")]
+        [AllowAnonymous]
         public async Task<UnitReviewDto> CreateReviewWithDetailsAsync(List<CreateUpdateUnitReviewDetailDto> inputs)
         {
             return await UnitReviewService.CreateReviewWithDetailsAsync(inputs);

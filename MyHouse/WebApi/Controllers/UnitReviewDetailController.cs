@@ -4,12 +4,14 @@ using System.Threading.Tasks;
 using Application.UnitReviewDetails;
 using Contract;
 using Contract.UnitReviewDetails;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers
 {
     [ApiController]
     [Route("api/unit-review-detail/")]
+    [Authorize]
     public class UnitReviewDetailController :ControllerBase, IUnitReviewDetailService
     {
         private readonly UnitReviewDetailService _unitReviewDetailService;

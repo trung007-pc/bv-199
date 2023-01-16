@@ -41,9 +41,11 @@ namespace WebClient.Pages.Admin
         {
             if (firstRender)
             {
-               await GetDetails();
-               
-               StateHasChanged();
+                await InvokeAsync(async () =>
+                {
+                    await GetDetails();
+                    StateHasChanged();
+                }, ActionType.GetList, false);
             }
         }
 

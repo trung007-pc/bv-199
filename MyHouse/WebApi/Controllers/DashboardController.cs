@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Application.Dashboards;
 using Contract.Dashboards;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers
 {
     [ApiController]
     [Route("api/dashboard/")]
+     [Authorize]
     public class DashboardController : ControllerBase,IDashboardService
     {
         private DashboardService _dashboardService;
@@ -21,7 +23,7 @@ namespace WebApi.Controllers
         [HttpGet]
         [Route("get-unit-statistics/{start:?}/{end:?}")]
         public async Task<UnitReviewStatisticsDto> GetUnitReviewStatisticsByDateRange(DateTime? start = null ,DateTime? end = null)
-        {   
+        {
             return await _dashboardService.GetUnitReviewStatisticsByDateRange(start,end);
         }
         
