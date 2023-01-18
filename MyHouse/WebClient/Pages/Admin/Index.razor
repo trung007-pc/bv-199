@@ -1,4 +1,6 @@
+@page "/"
 @page "/index"
+
 @attribute [Authorize]
 @inject UserManagerService _userManagerService;
 @inherits BaseBlazorPage
@@ -7,10 +9,5 @@
 @using WebClient.Service.Users
 
 
-<div>
-    <DateRangePicker   @bind-StartDate="StartDate" @bind-EndDate="EndDate"  Ranges="DateRanges" class="form-control form-control-md">
-        
-    </DateRangePicker>
-</div>
-
+<h1 style="color: red">Hello Index</h1>
 

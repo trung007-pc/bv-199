@@ -119,13 +119,13 @@
         <ModalHeader>
             <ModalTitle>User</ModalTitle>
         </ModalHeader>
-        <EditForm Model="EditUser.User" OnValidSubmit="async () => { await UpdateUser(); }">
+        <EditForm Model="EditUser" OnValidSubmit="async () => { await UpdateUser(); }">
 
             <ModalBody>
                 <DataAnnotationsValidator/>
                 <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">UserName</RadzenText>
-                <RadzenTextBox Class="w-100" @bind-Value="EditUser.User.UserName"/>
-                <ValidationMessage For="@(() => EditUser.User.UserName)"/>
+                <RadzenTextBox Class="w-100" @bind-Value="EditUser.UserName"/>
+                <ValidationMessage For="@(() => EditUser.UserName)"/>
 
                 <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Role</RadzenText>
                 <RadzenDropDown AllowClear="true" AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using Blazorise;
@@ -18,7 +19,7 @@ namespace WebClient.Pages.Admin
         [Inject] IMessageService _messageService { get; set; }
         private List<UserWithNavigationDto> UsersWithNav { get; set; } = new List<UserWithNavigationDto>();
         private CreateUpdateUserWithNavDto NewUser { get; set; } = new CreateUpdateUserWithNavDto();
-        private CreateUpdateUserWithNavDto EditUser { get; set; } = new CreateUpdateUserWithNavDto();
+        private UpdateUserNameWithNavDto EditUser { get; set; } = new UpdateUserNameWithNavDto();
         private List<RoleDto> Roles = new List<RoleDto>();
         private List<string> RoleNames = new List<string>();
         private List<string> SelectedRoles = new List<string>();
@@ -80,7 +81,7 @@ namespace WebClient.Pages.Admin
         {
             await InvokeAsync(async () =>
             {
-                await _userManagerService.UpdateWithNavigationAsync(EditUser, EditUserId);
+                await _userManagerService.UpdateUserNameWithNavigationAsync(EditUser, EditUserId);
                 await GetUsers();
                 await HideEditModal();
             }, ActionType.Update, true);
@@ -121,14 +122,14 @@ namespace WebClient.Pages.Admin
 
         private Task ShowEditModal(Guid id)
         {
-            EditUser = new CreateUpdateUserWithNavDto();
+            EditUser = new UpdateUserNameWithNavDto();
             SelectedRoles = new List<string>();
 
             var userWithNavDto = UsersWithNav.FirstOrDefault(x => x.UserDto.Id == id);
             EditUser.Roles = userWithNavDto.RoleNames;
             SelectedRoles = EditUser.Roles;
             EditUserId = id;
-            EditUser.User = ObjectMapper.Map<UserDto, CreateUpdateUserDto>(userWithNavDto.UserDto);
+            EditUser = ObjectMapper.Map<UserDto, UpdateUserNameWithNavDto>(userWithNavDto.UserDto);
             return EditModal.Show();
         }
 
@@ -181,5 +182,7 @@ namespace WebClient.Pages.Admin
         {
             return EditModal.Hide();
         }
+
+  
     }
 }

@@ -24,6 +24,7 @@ namespace WebClient.Pages.Client
         private List<UnitReviewDto> Result { get; set; }
         
         private IBrowserFile? EnclosedFile { get; set; }
+        private string HeaderTitle { get; set; } = "Khảo Sát Hài Lòng Người Bệnh";
 
 
         protected override async Task OnAfterRenderAsync(bool firstRender)

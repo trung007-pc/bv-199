@@ -16,7 +16,7 @@ namespace WebClient.Pages.Admin
 
         protected override async Task OnInitializedAsync()
         {
-            
+           
         }
 
         public async Task HandleRegistration()

@@ -1,6 +1,7 @@
 ﻿using System;
 using Domain.Identity.RoleClaims;
 using Domain.Identity.Roles;
+using Domain.Identity.UnitTypes;
 using Domain.Identity.UserClaim;
 using Domain.Identity.UserLogins;
 using Domain.Identity.UserRoles;
@@ -20,7 +21,8 @@ namespace SqlServ4r.EntityFramework
         public DbSet<UnitReview> UnitReviews { get; set;}
         public DbSet<Unit> Units { get; set;}
         public DbSet<UnitReviewDetail> UnitReviewDetails { get; set;}
-        
+        public DbSet<UnitType> UnitTypes { get; set;}
+
 
         public DreamContext(DbContextOptions<DreamContext> options):base(options)
         {
@@ -42,7 +44,6 @@ namespace SqlServ4r.EntityFramework
 
 
             
-            
             builder.Entity<UnitReviewDetail>().HasKey(sc => new { sc.Id });
             builder.Entity<UnitReviewDetail>().HasOne<UnitReview>(x => x.UnitReview)
                 .WithMany(x => x.UnitReviewDetails)
@@ -51,6 +52,10 @@ namespace SqlServ4r.EntityFramework
             builder.Entity<UnitReviewDetail>().HasOne<Unit>(x => x.Unit)
                 .WithMany(x => x.UnitReviewDetails)
                 .HasForeignKey(x=>x.UnitId);
+
+            builder.Entity<Unit>().HasOne<UnitType>(x => x.UnitType)
+                .WithMany(x => x.Units)
+                .HasForeignKey(x => x.UnitTypeId);
 
 
         }

@@ -9,7 +9,7 @@ namespace Contract.Identity.UserManager
     {
         public Task<List<UserWithNavigationDto>> GetListWithNavigationAsync();
         public Task<CreateUpdateUserWithNavDto> CreateWithNavigationAsync(CreateUpdateUserWithNavDto input);
-        public Task<CreateUpdateUserWithNavDto> UpdateWithNavigationAsync(CreateUpdateUserWithNavDto input,Guid id);
+        public Task<UserDto> UpdateUserNameWithNavigationAsync(UpdateUserNameWithNavDto input,Guid id);
         public Task DeleteWithNavigationAsync(Guid id);
         public Task<List<UserDto>> GetListAsync();
         public Task<UserDto> CreateAsync(CreateUpdateUserDto input);

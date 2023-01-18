@@ -121,7 +121,11 @@ namespace WebClient.Shared
                 {
                     _navigationManager.NavigateTo("server-error",true);
                 }
-                
+
+                if (exceptionType == typeof(InvalidOperationException))
+                {
+                    _navigationManager.NavigateTo("connection-error",true);
+                }
                 if (exceptionType == typeof(Exception))
                 {
                     _navigationManager.NavigateTo("server-error",true);

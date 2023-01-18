@@ -38,12 +38,13 @@ namespace WebApi.Controllers
         {
             return await _userManagerService.CreateWithNavigationAsync(input);
         }
+
         
         [HttpPost]
-        [Route("update-with-nav/{id}")]
-        public async Task<CreateUpdateUserWithNavDto> UpdateWithNavigationAsync(CreateUpdateUserWithNavDto input, Guid id)
+        [Route("update-username-with-nav/{id}")]
+        public async Task<UserDto> UpdateUserNameWithNavigationAsync(UpdateUserNameWithNavDto input, Guid id)
         {
-            return await _userManagerService.UpdateWithNavigationAsync(input,id);
+            return await _userManagerService.UpdateUserNameWithNavigationAsync(input,id);
         }
         
         [HttpPost]

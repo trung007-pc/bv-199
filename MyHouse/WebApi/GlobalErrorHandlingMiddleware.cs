@@ -11,6 +11,7 @@ using Core.Helper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.Data.SqlClient;
 using NuGet.Common;
 
 namespace WebApi
@@ -45,6 +46,7 @@ namespace WebApi
             var stackTrace = string.Empty;
             string message = "";
 
+            
             var exceptionType = exception.GetType();
 
             if (exceptionType == typeof(GlobalException))
@@ -53,6 +55,15 @@ namespace WebApi
                 message = globalException.Message;
                 status = globalException.Status;
                 stackTrace = globalException.StackTrace;
+            }
+
+            if (exception is SystemException)
+            {
+                var globalException =  exception;
+                message = globalException.Message;
+                status = HttpStatusCode.BadGateway;
+                stackTrace = globalException.StackTrace;
+                FileHelper.WriteLog(exception,_configuration["Media:LOG_PATH"]);
             }
             else
             {

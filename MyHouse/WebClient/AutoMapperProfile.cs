@@ -26,6 +26,8 @@ namespace WebClient
                 y => y.MapFrom(x => x.Id)
             );
 
+            CreateMap<UserDto, UpdateUserNameWithNavDto>().ReverseMap();
+
             CreateMap<UnitReview.ReviewWithNavPropertiesModel, CreateUpdateUnitReviewDto>();
 
 

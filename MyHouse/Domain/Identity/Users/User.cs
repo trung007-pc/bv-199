@@ -7,5 +7,6 @@ namespace Domain.Identity.Users
     {
         public bool IsActive { get; set; } = true;
         public string? RefreshToken { get; set;}
+        
     }
 }

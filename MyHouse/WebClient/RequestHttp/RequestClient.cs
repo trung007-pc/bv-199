@@ -158,6 +158,11 @@ namespace WebClient.RequestHttp
                 throw new ServerErrorException("Server-Error");
             }
 
+            if (httpResponseMessage.StatusCode == HttpStatusCode.BadGateway)
+            {
+                throw new InvalidOperationException("connection-error");
+            }
+
             if (httpResponseMessage.StatusCode == HttpStatusCode.BadRequest)
             {
                 string? jsonResponse = await httpResponseMessage.Content.ReadAsStringAsync() ?? null;

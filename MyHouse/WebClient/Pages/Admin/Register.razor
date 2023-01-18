@@ -1,35 +1,36 @@
-﻿@page "/register"
+﻿@page "/abzzzs2"
 @using WebClient.Service.Users
+@layout DefaultLayout
 @inject NavigationManager _navigationManager;
 @inject UserManagerService _userManagerService;
 @inherits BaseBlazorPage
 
 <h3>Register</h3>
 
-<div class="card">
-    <div class="card-body">
-        <h5 class="card-title">Please enter your details</h5>
-        <EditForm Model="UserDto" OnValidSubmit="async () => { await HandleRegistration(); }">
-            <DataAnnotationsValidator/>
-            @* <ValidationSummary/> *@
-            <div class="form-group">
-                <label for="email">User Name</label>
-                <InputText Id="email" class="form-control" @bind-Value="UserDto.UserName"/>
-                <ValidationMessage For="@(() => UserDto.UserName)"/>
-            </div>
-            <div class="form-group">
-                <label for="password">Password</label>
-                <InputText Id="password" type="password" class="form-control" @bind-Value="UserDto.Password"/>
-                <ValidationMessage For="@(() => UserDto.Password)"/>
-            </div>
-            <div class="form-group">
-                <label for="password">Enter Again Password </label>
-                <InputText Id="password" type="password" class="form-control" @bind-Value="UserDto.PasswordConfirm"/>
-                <ValidationMessage For="@(() => UserDto.PasswordConfirm)"/>
-            </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
-        </EditForm>
-    </div>
-</div>
+@* <div class="card"> *@
+@*     <div class="card-body"> *@
+@*         <h5 class="card-title">Please enter your details</h5> *@
+@*         <EditForm Model="UserDto" OnValidSubmit="async () => { await HandleRegistration(); }"> *@
+@*             <DataAnnotationsValidator/> *@
+@*             $1$ <ValidationSummary/> #1# *@
+@*             <div class="form-group"> *@
+@*                 <label for="email">User Name</label> *@
+@*                 <InputText Id="email" class="form-control" @bind-Value="UserDto.UserName"/> *@
+@*                 <ValidationMessage For="@(() => UserDto.UserName)"/> *@
+@*             </div> *@
+@*             <div class="form-group"> *@
+@*                 <label for="password">Password</label> *@
+@*                 <InputText Id="password" type="password" class="form-control" @bind-Value="UserDto.Password"/> *@
+@*                 <ValidationMessage For="@(() => UserDto.Password)"/> *@
+@*             </div> *@
+@*             <div class="form-group"> *@
+@*                 <label for="password">Enter Again Password </label> *@
+@*                 <InputText Id="password" type="password" class="form-control" @bind-Value="UserDto.PasswordConfirm"/> *@
+@*                 <ValidationMessage For="@(() => UserDto.PasswordConfirm)"/> *@
+@*             </div> *@
+@*             <button type="submit" class="btn btn-primary">Submit</button> *@
+@*         </EditForm> *@
+@*     </div> *@
+@* </div> *@
 
 

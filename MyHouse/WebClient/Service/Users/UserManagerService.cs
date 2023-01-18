@@ -35,11 +35,11 @@ namespace WebClient.Service.Users
             return await RequestClient.PostAPIAsync<CreateUpdateUserWithNavDto>("user/create-with-nav", input);
         }
 
-        public async Task<CreateUpdateUserWithNavDto> UpdateWithNavigationAsync(CreateUpdateUserWithNavDto input, Guid id)
+        public async Task<UserDto> UpdateUserNameWithNavigationAsync(UpdateUserNameWithNavDto input, Guid id)
         {
-            return await RequestClient.PostAPIAsync<CreateUpdateUserWithNavDto>($"user/update-with-nav/{id}", input);
+            return await RequestClient.PostAPIAsync<UserDto>($"user/update-username-with-nav/{id}", input);
         }
-
+        
         public async Task DeleteWithNavigationAsync(Guid id)
         {
              await RequestClient.PostAPIAsync<Task>($"user/delete-with-nav/{id}",null);

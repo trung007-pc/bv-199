@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Domain.Identity.UnitTypes;
 using Domain.UnitReviewDetails;
 
 namespace Domain.Units
@@ -22,7 +23,16 @@ namespace Domain.Units
         public string? FileName { get; set; }
         public string? Path { get; set;}
         public string? ImageUrl { get; set;}
-
+        
+        
+        
+        
+       //foreign key
+       public Guid UnitTypeId { get; set; }
+        
+        
+        //Nav
+        public UnitType UnitType { get; set;}
         public IList<UnitReviewDetail> UnitReviewDetails { get; set; }
     }
 }

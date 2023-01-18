@@ -70,12 +70,26 @@ namespace Application.Identity.UserManager
             return input;
         }
 
-        public async Task<CreateUpdateUserWithNavDto> UpdateWithNavigationAsync(CreateUpdateUserWithNavDto input, Guid id)
+        public async Task<UserDto> UpdateUserNameWithNavigationAsync(UpdateUserNameWithNavDto input, Guid id)
         {
-            var user = input.User; 
-            await UpdateAsync(user, id);
-            await UpdateRolesForUser(user.UserName, input.Roles);
-            return input;
+            
+            var item = await _userManager.FindByIdAsync(id.ToString());
+
+            if (item == null)
+            {
+                throw new GlobalException(HttpMessage.NotFound, HttpStatusCode.BadRequest);
+            }
+
+            item.UserName = input.UserName;
+            var result = await _userManager.UpdateAsync(item);
+            if (!result.Succeeded)
+            {
+                throw new GlobalException(result.Errors?.FirstOrDefault().Description, HttpStatusCode.BadRequest);
+            }
+            
+            await UpdateRolesForUser(item.UserName, input.Roles);
+            
+            return ObjectMapper.Map<User,UserDto>(item);
         }
 
         public async Task DeleteWithNavigationAsync(Guid id)

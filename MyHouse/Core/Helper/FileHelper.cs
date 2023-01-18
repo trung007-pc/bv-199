@@ -60,6 +60,10 @@ namespace Core.Helper
 
         public static void WriteLog(Exception e,string basePath)
         {
+            if (!Directory.Exists(basePath))
+            {
+                Directory.CreateDirectory(basePath);
+            }
             
             string filePath = Path.GetFullPath(Path.Combine(basePath,$"{DateTime.Now:dd-MM-yyyy}.txt"));
             StreamWriter sw;
