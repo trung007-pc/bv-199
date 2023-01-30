@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Application.Dashboards;
 using Contract.Dashboards;
+using Contract.UnitTypes;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,12 +21,18 @@ namespace WebApi.Controllers
             _dashboardService = dashboardService;
         }
         
-        [HttpGet]
-        [Route("get-unit-statistics/{start:?}/{end:?}")]
-        public async Task<UnitReviewStatisticsDto> GetUnitReviewStatisticsByDateRange(DateTime? start = null ,DateTime? end = null)
+        [HttpPost]
+        [Route("get-unit-statistics")]
+        public async Task<UnitReviewStatisticsDto> GetUnitReviewStatistics(DashboardFilter input)
         {
-            return await _dashboardService.GetUnitReviewStatisticsByDateRange(start,end);
+            return await _dashboardService.GetUnitReviewStatistics(input);
         }
-        
+
+        [HttpGet]
+        [Route("look-up-unit-types")]
+        public async Task<List<UnitTypeDto>> LookUpUnitTypes()
+        {
+            return await _dashboardService.LookUpUnitTypes();
+        }
     }
 }

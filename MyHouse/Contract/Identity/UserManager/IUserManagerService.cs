@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Domain.Identity.Users;
 
 namespace Contract.Identity.UserManager
 {

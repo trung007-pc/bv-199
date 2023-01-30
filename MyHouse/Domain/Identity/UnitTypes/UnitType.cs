@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Domain.Units;
+using Microsoft.EntityFrameworkCore;
 
 namespace Domain.Identity.UnitTypes
 {
@@ -10,7 +11,7 @@ namespace Domain.Identity.UnitTypes
         
         public string Name { get; set;}
         
-        public IList<Unit> Units { get; set; }
+        public ICollection<Unit> Units { get; set; }
 
     }
 }

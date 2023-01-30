@@ -55,8 +55,7 @@
                     FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
                     LogicalFilterOperator="LogicalFilterOperator.Or" Style="   width: 100%">
         <Columns>
-            <RadzenDataGridColumn TItem="UserWithNavigationDto" Filterable="false" Property="Index"  Title="Index" Frozen="true" Width="80px" TextAlign="TextAlign.Center"/>
-            <RadzenDataGridColumn TItem="UserWithNavigationDto" Property="UserDto.UserName" Title="User Name" Frozen="true" Width="160px"/>
+            <RadzenDataGridColumn TItem="UserWithNavigationDto" Property="UserDto.UserName" TextAlign="TextAlign.Center" Title="User Name" Frozen="true" Width="160px"/>
             <RadzenDataGridColumn TItem="UserWithNavigationDto" Filterable="false" Sortable="false"  Property="RoleNames" Title="Roles" Frozen="true" Width="160px">
                 <Template Context="data">
                     @{ int i = 0; }
@@ -68,7 +67,7 @@
 
                 </Template>
             </RadzenDataGridColumn>
-            <RadzenDataGridColumn TItem="UserWithNavigationDto" Filterable="false" Property="Index" Title="Action" Frozen="true" Width="160px">
+            <RadzenDataGridColumn TItem="UserWithNavigationDto" Filterable="false" Property="UserDto.UserName" Title="Action" Frozen="true" Width="160px">
                 <Template Context="data">
                     <RadzenButton Click="() => { ShowEditModal(data.UserDto.Id); }" Icon="edit" ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat" Size="ButtonSize.Medium">
                     </RadzenButton>
@@ -100,7 +99,7 @@
                 <RadzenPassword Class="w-100" @bind-Value="NewUser.User.PasswordConfirm"/>
                 <ValidationMessage For="@(() => NewUser.User.PasswordConfirm)"/>
 
-                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Role</RadzenText>
+                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Roles</RadzenText>
                 <RadzenDropDown AllowClear="true" AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
                                 @bind-Value=@SelectedRoles Multiple="true" Placeholder="Select..." Data=@RoleNames
                                 Change="OnCreateSelectedRoles" Class="w-100"/>
@@ -127,7 +126,7 @@
                 <RadzenTextBox Class="w-100" @bind-Value="EditUser.UserName"/>
                 <ValidationMessage For="@(() => EditUser.UserName)"/>
 
-                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Role</RadzenText>
+                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Roles</RadzenText>
                 <RadzenDropDown AllowClear="true" AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
                                 @bind-Value=@SelectedRoles Multiple="true" Placeholder="Select..." Data=@RoleNames
                                 Change="OnEditSelectedRoles" Class="w-100"/>

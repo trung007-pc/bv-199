@@ -4,6 +4,7 @@ using Contract.Identity.UserManager;
 using Contract.UnitReviewDetails;
 using Contract.UnitReviews;
 using Contract.Units;
+using Contract.UnitTypes;
 using WebClient.Pages.Admin;
 using WebClient.Pages.Client;
 
@@ -21,15 +22,13 @@ namespace WebClient
             CreateMap<UnitReviewDetailDto, CreateUpdateUnitReviewDetailDto>().ReverseMap();
 
             CreateMap<UnitReviewDto, CreateUpdateUnitReviewDto>().ReverseMap();
-            CreateMap<UnitDto, UnitReview.ReviewWithNavPropertiesModel>().ForMember(
-                x => x.UnitId,
-                y => y.MapFrom(x => x.Id)
-            );
+            CreateMap<UnitWithNavPropertiesDto, UnitReview.ReviewWithNavPropertiesModel>();
 
             CreateMap<UserDto, UpdateUserNameWithNavDto>().ReverseMap();
 
             CreateMap<UnitReview.ReviewWithNavPropertiesModel, CreateUpdateUnitReviewDto>();
 
+            CreateMap<UnitTypeDto,CreateUpdateUnitTypeDto>().ReverseMap();
 
 
 

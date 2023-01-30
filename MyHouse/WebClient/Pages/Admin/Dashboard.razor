@@ -20,23 +20,31 @@
 
 <RadzenCard>
     <Row Style="display:flex;align-items: center">
-        <Column ColumnSize="ColumnSize.Is3" Style="display:flex;align-items: center">
+        <Column ColumnSize="ColumnSize.Is2" Style="display:flex;align-items: center">
             <RadzenIcon Icon="calendar_today" Style="margin-right: 7px;font-size: 28px;color: deeppink"/>
-            <DateRangePicker @bind-StartDate="StartDate" @bind-EndDate="EndDate"   Ranges="DateRanges" DateFormat="@DateFormatType.DateFormat" OnClosed="OnChangedDate" class="form-control form-control-md" placeholder="Select Date...">
+            <DateRangePicker @bind-StartDate="Timeline.StartDay"  @bind-EndDate="Timeline.EndDay" Ranges="DateRanges" DateFormat="@DateFormatType.DateFormat" OnClosed="OnChangedDate" class="form-control form-control-md" placeholder="Select Date...">
             </DateRangePicker>
         </Column>
+        <Column ColumnSize="ColumnSize.Is2" Style="display:flex;align-items: center;padding-left: 0px"> 
+            <RadzenIcon Icon="dns" Style="margin-right: 7px;font-size: 28px;color: deeppink"/>
 
-        <Column ColumnSize="ColumnSize.Is6">
+            <RadzenDropDown AllowClear="true" AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                            Multiple="false" Placeholder="Type..." Data=@Types
+                            TextProperty="Name"
+                            ValueProperty="Id"
+                            @bind-Value="Filter.UnitTypeId"
+                            Change="OnChangeSelectedTypes" Class="w-100"/>
+        </Column>
+        <Column ColumnSize="ColumnSize.Is5">
             <RadzenTextBox Placeholder="Search..." Class="w-100"/>
         </Column>
 
-        <Column ColumnSize="ColumnSize.Is3">
+        <Column ColumnSize="ColumnSize.Is2">
             <RadzenButton Text="Search" Icon="search"/>
         </Column>
 
     </Row>
 </RadzenCard>
-
 
 
 <RZBR></RZBR>
@@ -50,7 +58,9 @@
             <RadzenPieSeries Data="@DetailUnitReviewdataItems" Title="Total" CategoryProperty="Label" ValueProperty="Value">
                 <TooltipTemplate Context="data">
                     <div>
-                        <span>@data.Label <RadzenIcon Icon="star" Style="color:gold"/></span>:
+                        <span>
+                            @data.Label <RadzenIcon Icon="star" Style="color:gold"/>
+                        </span>:
                         <strong>
                             @data.Value
                         </strong>
@@ -81,7 +91,7 @@
                 </TooltipTemplate>
 
             </RadzenColumnSeries>
-            <RadzenSeriesDataLabels Visible="true" />
+            <RadzenSeriesDataLabels Visible="true"/>
 
             <RadzenColumnOptions Radius="5" Width="30"/>
             <RadzenValueAxis>
@@ -90,8 +100,4 @@
             </RadzenValueAxis>
         </RadzenChart>
     </RadzenCard>
-
-
-
-
 }

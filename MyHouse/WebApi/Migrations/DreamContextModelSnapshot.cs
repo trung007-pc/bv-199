@@ -74,6 +74,21 @@ namespace WebApi.Migrations
                     b.ToTable("Roles", (string)null);
                 });
 
+            modelBuilder.Entity("Domain.Identity.UnitTypes.UnitType", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UnitTypes");
+                });
+
             modelBuilder.Entity("Domain.Identity.UserClaim.UserClaim", b =>
                 {
                     b.Property<int>("Id")
@@ -312,7 +327,12 @@ namespace WebApi.Migrations
                     b.Property<string>("Path")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid?>("UnitTypeId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UnitTypeId");
 
                     b.ToTable("Units");
                 });
@@ -385,6 +405,20 @@ namespace WebApi.Migrations
                     b.Navigation("Unit");
 
                     b.Navigation("UnitReview");
+                });
+
+            modelBuilder.Entity("Domain.Units.Unit", b =>
+                {
+                    b.HasOne("Domain.Identity.UnitTypes.UnitType", "UnitType")
+                        .WithMany("Units")
+                        .HasForeignKey("UnitTypeId");
+
+                    b.Navigation("UnitType");
+                });
+
+            modelBuilder.Entity("Domain.Identity.UnitTypes.UnitType", b =>
+                {
+                    b.Navigation("Units");
                 });
 
             modelBuilder.Entity("Domain.UnitReviews.UnitReview", b =>

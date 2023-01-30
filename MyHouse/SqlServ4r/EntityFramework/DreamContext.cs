@@ -55,7 +55,7 @@ namespace SqlServ4r.EntityFramework
 
             builder.Entity<Unit>().HasOne<UnitType>(x => x.UnitType)
                 .WithMany(x => x.Units)
-                .HasForeignKey(x => x.UnitTypeId);
+                .HasForeignKey(x => x.UnitTypeId).IsRequired(false);
 
 
         }

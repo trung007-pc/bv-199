@@ -32,8 +32,7 @@
                     FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
                     Style="width: 100%">
         <Columns>
-            <RadzenDataGridColumn TItem="RoleDto" Property="Index" Filterable="false" Title="Index" Frozen="true" Width="80px" TextAlign="TextAlign.Center"/>
-            <RadzenDataGridColumn TItem="RoleDto" Property="Name" Title="Name" Frozen="true" Width="160px"/>
+            <RadzenDataGridColumn TItem="RoleDto" Property="Name"  TextAlign="TextAlign.Center" Title="Name" Frozen="true" Width="160px"/>
             <RadzenDataGridColumn TItem="RoleDto" Property="Name" Title="Action" Frozen="true" Width="160px" Filterable="false">
                 <Template Context="data">
                     <RadzenButton Click="async () => { await ShowEditModal(data); }" Icon="edit" ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat" Size="ButtonSize.Medium">

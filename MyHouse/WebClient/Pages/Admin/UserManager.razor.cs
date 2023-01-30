@@ -17,17 +17,17 @@ namespace WebClient.Pages.Admin
     public partial class UserManager
     {
         [Inject] IMessageService _messageService { get; set; }
-        private List<UserWithNavigationDto> UsersWithNav { get; set; } = new List<UserWithNavigationDto>();
-        private CreateUpdateUserWithNavDto NewUser { get; set; } = new CreateUpdateUserWithNavDto();
-        private UpdateUserNameWithNavDto EditUser { get; set; } = new UpdateUserNameWithNavDto();
-        private List<RoleDto> Roles = new List<RoleDto>();
-        private List<string> RoleNames = new List<string>();
-        private List<string> SelectedRoles = new List<string>();
-        private Guid EditUserId { get; set; }
+        public List<UserWithNavigationDto> UsersWithNav { get; set; } = new List<UserWithNavigationDto>();
+        public CreateUpdateUserWithNavDto NewUser { get; set; } = new CreateUpdateUserWithNavDto();
+        public UpdateUserNameWithNavDto EditUser { get; set; } = new UpdateUserNameWithNavDto();
+        public List<RoleDto> Roles = new List<RoleDto>();
+        public List<string> RoleNames = new List<string>();
+        public List<string> SelectedRoles = new List<string>();
+        public Guid EditUserId { get; set; }
 
-        private Modal CreateModal = new Modal();
-        private Modal EditModal = new Modal();
-        private string HeaderTitle = "User";
+        public Modal CreateModal = new Modal();
+        public Modal EditModal = new Modal();
+        public string HeaderTitle = "User";
 
 
         public UserManager()
@@ -54,18 +54,18 @@ namespace WebClient.Pages.Admin
             }
         }
 
-        private async Task GetUsers()
+        public async Task GetUsers()
         {
             UsersWithNav = await _userManagerService.GetListWithNavigationAsync();
         }
 
-        private async Task GetRoles()
+        public async Task GetRoles()
         {
             Roles = await _roleManagerService.GetListAsync();
             RoleNames = Roles.Select(x => x.Name).ToList();
         }
 
-        private async Task CreateUser()
+        public async Task CreateUser()
         {
            
             
@@ -77,7 +77,7 @@ namespace WebClient.Pages.Admin
             }, ActionType.Create, true);
         }
 
-        private async Task UpdateUser()
+        public async Task UpdateUser()
         {
             await InvokeAsync(async () =>
             {
@@ -87,7 +87,7 @@ namespace WebClient.Pages.Admin
             }, ActionType.Update, true);
         }
 
-        private async Task DeleteUser(Guid id)
+        public async Task DeleteUser(Guid id)
         {
             await InvokeAsync(async () =>
             {
@@ -97,7 +97,7 @@ namespace WebClient.Pages.Admin
         }
         
         
-        private async Task ShowConfirmMessage(Guid id)
+        public async Task ShowConfirmMessage(Guid id)
         {
             if ( await _messageService.Confirm( "Are you sure you want to confirm?", "Confirmation" ) )
             {
@@ -106,21 +106,21 @@ namespace WebClient.Pages.Admin
         }
 
 
-        private void ShowNewModal()
+        public void ShowNewModal()
         {
             NewUser = new CreateUpdateUserWithNavDto();
             SelectedRoles = new List<string>();
             CreateModal.Show();
         }
 
-        private void HideNewModal()
+        public void HideNewModal()
         {
             NewUser = new CreateUpdateUserWithNavDto();
             CreateModal.Hide();
         }
 
 
-        private Task ShowEditModal(Guid id)
+        public Task ShowEditModal(Guid id)
         {
             EditUser = new UpdateUserNameWithNavDto();
             SelectedRoles = new List<string>();
@@ -178,7 +178,7 @@ namespace WebClient.Pages.Admin
             NewUser.Roles = selectedRoles;
         }
 
-        private Task HideEditModal()
+        public Task HideEditModal()
         {
             return EditModal.Hide();
         }

@@ -1,5 +1,5 @@
 ﻿@page "/unit-review"
-@attribute [Authorize(Roles = "Admin,Quality Manager")]
+@attribute [Authorize(Roles = "ADMIN,QUALITY MANAGER")]
 @inherits BaseBlazorPage
 @inject UnitReviewService _unitReviewService;
 @inject NavigationManager _navigationManager
@@ -32,7 +32,6 @@
                     LogicalFilterOperator="LogicalFilterOperator.Or" 
                     Style="width: 100%">
         <Columns>
-            <RadzenDataGridColumn TItem="UnitReviewDto" Property="Index" Filterable="false" Title="Index" Frozen="true" Width="80px" TextAlign="TextAlign.Center"/>
             <RadzenDataGridColumn TItem="UnitReviewDto" Property="Note"  Title="Note" Frozen="true" Width="80px" TextAlign="TextAlign.Center"/>
             <RadzenDataGridColumn TItem="UnitReviewDto" Property="CreationDate"  Title="Creation Date" Frozen="true" Width="80px" TextAlign="TextAlign.Center"/>
     
@@ -51,7 +50,7 @@
                        </Template>
                        </RadzenDataGridColumn>
                 
-            <RadzenDataGridColumn TItem="UnitReviewDto" Property="Index" Title="Action" Frozen="true" Width="160px" Filterable="false">
+            <RadzenDataGridColumn TItem="UnitReviewDto" Property="AveragePoint" Title="Action" Frozen="true" Width="160px" Filterable="false">
                 <Template Context="data">
                     <RadzenButton Click="async () => { await NavigateToDetails(data.Id); }" ButtonStyle="ButtonStyle.Primary" Icon="visibility" Variant="Variant.Flat" Shade="Shade.Lighter" Size="ButtonSize.Medium" Class="my-1 ms-1">  </RadzenButton>
                     <RadzenButton Click="async () => { await ShowConfirmMessage(data.Id); }" ButtonStyle="ButtonStyle.Danger" Icon="delete" Variant="Variant.Flat" Shade="Shade.Lighter" Size="ButtonSize.Medium" Class="my-1 ms-1">

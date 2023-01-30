@@ -28,7 +28,7 @@ namespace Domain.Units
         
         
        //foreign key
-       public Guid UnitTypeId { get; set; }
+       public Guid? UnitTypeId { get; set; }
         
         
         //Nav

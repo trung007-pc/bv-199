@@ -8,6 +8,8 @@
         public const  string Ok = "Successful";
         public const string ServerError = "Server Error";
         public const string InvalidExtension = "Invalid Extention";
+        public const string Unauthorized = "Unauthorized";
+        public const string Conflict = "The operation was updated by another user";
 
     }
 }

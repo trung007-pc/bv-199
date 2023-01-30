@@ -1,4 +1,5 @@
 ﻿using System;
+using Contract.UnitTypes;
 
 namespace Contract.Units
 {

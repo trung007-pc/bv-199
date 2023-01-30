@@ -11,7 +11,8 @@ namespace Contract.Units
         public int Odx { get; set; }
         public bool IsActive { get; set; } = true;
         public DateTime CreationDate { get; set; } = DateTime.Now;
-
+        
+        public Guid? UnitTypeId { get; set; }
         
         //File will saved in here
         public string? FileName { get; set; }

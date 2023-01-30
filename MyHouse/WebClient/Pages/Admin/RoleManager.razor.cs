@@ -13,18 +13,18 @@ namespace WebClient.Pages.Admin
 {
     public partial class RoleManager
     {
-        private List<RoleDto> Roles = new List<RoleDto>();
-        private CreateUpdateRoleDto NewRole = new CreateUpdateRoleDto();
-        private CreateUpdateRoleDto EditRole = new CreateUpdateRoleDto();
-        private Guid EditRoleId { get; set; }
-        [Inject] IMessageService _messageService { get; set; }
+        public List<RoleDto> Roles = new List<RoleDto>();
+        public CreateUpdateRoleDto NewRole = new CreateUpdateRoleDto();
+        public CreateUpdateRoleDto EditRole = new CreateUpdateRoleDto();
+        public Guid EditRoleId { get; set; }
+         [Inject]  IMessageService _messageService { get; set; }
 
 
-        private Modal CreateModal;
-        private Modal EditModal;
-        private string HeaderTitle = "Role";
+        public Modal CreateModal;
+        public Modal EditModal;
+        public string HeaderTitle = "Role";
 
-        private IEnumerable<string> Claims = new List<string>();
+        public IEnumerable<string> Claims = new List<string>();
 
         public RoleManager()
         {
@@ -44,12 +44,12 @@ namespace WebClient.Pages.Admin
             }
         }
 
-        private async Task GetRoles()
+        public async Task GetRoles()
         {
             Roles = await _roleManagerService.GetListAsync();
         }
 
-        private async Task CreateRole()
+        public async Task CreateRole()
         {
             await InvokeAsync(async () =>
             {
@@ -59,7 +59,7 @@ namespace WebClient.Pages.Admin
             }, ActionType.Create, true);
         }
 
-        private async Task UpdateRole()
+        public async Task UpdateRole()
         {
             await InvokeAsync(async () =>
             {
@@ -70,7 +70,7 @@ namespace WebClient.Pages.Admin
             
         }
 
-        private async Task DeleteRole(Guid id)
+        public async Task DeleteRole(Guid id)
         {
             await InvokeAsync(async () =>
             {
@@ -81,7 +81,7 @@ namespace WebClient.Pages.Admin
             
         }
 
-        private async Task ShowConfirmMessage(Guid id)
+        public async Task ShowConfirmMessage(Guid id)
         {
             if (await _messageService.Confirm("Are you sure you want to confirm?", "Confirmation"))
             {
@@ -89,19 +89,19 @@ namespace WebClient.Pages.Admin
             }
         }
 
-        private void ShowNewModal()
+        public void ShowNewModal()
         {
             NewRole = new CreateUpdateRoleDto();
             CreateModal.Show();
         }
 
-        private void HideNewModal()
+        public void HideNewModal()
         {
             CreateModal.Hide();
         }
 
 
-        private Task ShowEditModal(RoleDto roleModel)
+        public Task ShowEditModal(RoleDto roleModel)
         {
             EditRole = new CreateUpdateRoleDto();
             EditRole = ObjectMapper.Map<RoleDto, CreateUpdateRoleDto>(roleModel);
@@ -109,7 +109,7 @@ namespace WebClient.Pages.Admin
             return EditModal.Show();
         }
 
-        private void HideEditModal()
+        public void HideEditModal()
         {
             EditModal.Hide();
         }

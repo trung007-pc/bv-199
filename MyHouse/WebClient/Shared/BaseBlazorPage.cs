@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using BlazorDateRangePicker;
 using Blazorise;
 using Contract;
+using Contract.Dashboards;
 using Core.Enum;
 using Core.Extension;
 using FluentDateTimeOffset;
@@ -116,7 +118,12 @@ namespace WebClient.Shared
                     _notificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error Summary", Detail = e.Message, Duration = 4000});
 
                 }
-
+                if (exceptionType == typeof(UnauthorizedException))
+                {
+                    _notificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Warning, Summary = "your token is so old. please log in again to get a new token. 4s later you automatically logout", Detail = e.Message, Duration = 4000});
+                    Thread.Sleep(4000);
+                    _navigationManager.NavigateTo("login",true);
+                }
                 if (exceptionType == typeof(ServerErrorException))
                 {
                     _navigationManager.NavigateTo("server-error",true);
@@ -126,15 +133,26 @@ namespace WebClient.Shared
                 {
                     _navigationManager.NavigateTo("connection-error",true);
                 }
-                if (exceptionType == typeof(Exception))
+
+                if (exceptionType == typeof(ConflictException))
                 {
-                    _navigationManager.NavigateTo("server-error",true);
+                    _notificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Warning, Summary = "", Detail = e.Message, Duration = 4000});
+                }
+
+                if (exceptionType == typeof(TooManyRequests))
+                {
+                    // too many request
                 }
                 
             }
 
             return false;
 
+        }
+
+        public void NotifyMessage(NotificationSeverity type,string message,int duration)
+        {
+            _notificationService.Notify(new NotificationMessage { Severity = type, Summary = message, Duration = duration });
         }
 
 
@@ -201,6 +219,12 @@ namespace WebClient.Shared
 
           return ranges;
 
+        }
+
+        protected (DateTime?,DateTime?) GetDateTimeFromOffSet(DateTimeOffset? fromDateOffset, DateTimeOffset? toDateTimeOffset)
+        {
+            if (!fromDateOffset.HasValue || !toDateTimeOffset.HasValue) return (null, null);
+            return (fromDateOffset.Value.DateTime, toDateTimeOffset.Value.DateTime);
         }
         
         

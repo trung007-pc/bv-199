@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using Contract.Uploads;
 using Core.Const;
 using Core.Exceptions;
 using Microsoft.AspNetCore.Http;
@@ -18,11 +17,11 @@ namespace Core.Helper
             ".jpg",
             ".png"
         };
-        public static async Task<FileDto> UploadImage(IFormFile file,string basePath,string baseUri ="")
+        public static async Task<FileModel> UploadImage(IFormFile file,string basePath,string baseUri ="")
         {
             string directoryPath = "";
             var filePath = "";
-            var fileDto = new FileDto();
+            var fileDto = new FileModel();
                 if (file.Length > 0)
                 {
                     var ext = Path.GetExtension(file.FileName);
@@ -91,5 +90,13 @@ namespace Core.Helper
   
         
         
+    }
+
+    public class FileModel
+    {
+        public string Path { get; set; }
+        public string FileName { get; set;}
+        
+        public string Url { get; set; }
     }
 }

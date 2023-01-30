@@ -1,6 +1,5 @@
 ﻿@page "/unit-review-detail"
-@attribute [Authorize(Roles = "Admin,Quality Manager")]
-@using Microsoft.EntityFrameworkCore.Storage
+@attribute [Authorize(Roles = "ADMIN,QUALITY MANAGER")]
 @using Contract.UnitReviewDetails
 @using WebClient.Service.UnitReviewDetails
 @using ButtonType = Radzen.ButtonType
@@ -28,7 +27,6 @@
 <RadzenDataGrid AllowFiltering="false" AllowColumnResize="true" AllowAlternatingRows="false" FilterMode="FilterMode.Advanced" AllowSorting="false" PageSize="5" AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true"
                 Data="@Details" TItem="UnitReviewDetailDto" ColumnWidth="300px" LogicalFilterOperator="LogicalFilterOperator.Or" Style="width: 50%">
     <Columns>
-        <RadzenDataGridColumn TItem="UnitReviewDetailDto" Property="Index" Filterable="false" Title="Index" Frozen="true" Width="80px" TextAlign="TextAlign.Center"/>
         <RadzenDataGridColumn TItem="UnitReviewDetailDto" Property="UnitName" Filterable="false" Title="Unit" Frozen="true" Width="80px" TextAlign="TextAlign.Center"/>
         <RadzenDataGridColumn TItem="UnitReviewDetailDto" Property="Rate" Title="Rating" Frozen="true" Width="160px">
             <Template Context="data">

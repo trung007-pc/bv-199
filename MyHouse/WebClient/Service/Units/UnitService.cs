@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Contract.Units;
+using Contract.UnitTypes;
 using Microsoft.AspNetCore.Components;
 using Radzen;
 using WebClient.RequestHttp;
@@ -37,14 +38,22 @@ namespace WebClient.Service.Units
               await  RequestClient.DeleteAPIAsync<Task>($"unit/{id}");
         }
 
+        public async Task<List<UnitWithNavPropertiesDto>> GetListWithNavPropertiesAsync(UnitFilter input)
+        {
+            return  await RequestClient.PostAPIAsync<List<UnitWithNavPropertiesDto>>
+                ("unit/get-list-with-nav-properties",input);
+
+        }
+
         public async Task<List<UnitDto>> GetListAsync()
         {
             return  await  RequestClient.GetAPIAsync<List<UnitDto>>("unit");
         }
+        
 
-        public async Task<List<UnitDto>> GetListAsync(UnitFilter input)
+        public async Task<List<UnitTypeDto>> LookUpUnitTypes()
         {
-            return  await  RequestClient.PostAPIAsync<List<UnitDto>>("unit/get-list-by-filter",input,false);
+            return await  RequestClient.GetAPIAsync<List<UnitTypeDto>>("unit/look-up-unit-types");
         }
     }
 }

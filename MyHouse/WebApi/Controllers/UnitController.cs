@@ -5,6 +5,7 @@ using Application.Units;
 using Contract;
 using Contract.Identity.UserManager;
 using Contract.Units;
+using Contract.UnitTypes;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Http;
@@ -44,19 +45,21 @@ namespace WebApi.Controllers
         {
             return _unitService.DeleteAsync(id);
         }
-
-        [HttpGet]
-        public async Task<List<UnitDto>> GetListAsync()
+        
+        [HttpPost]
+        [Route("get-list-with-nav-properties")]
+        [AllowAnonymous]
+        public async Task<List<UnitWithNavPropertiesDto>> GetListWithNavPropertiesAsync(UnitFilter input)
         {
-            return await _unitService.GetListAsync();
+            return await _unitService.GetListWithNavPropertiesAsync(input);
         }
 
-        [HttpPost]
-        [Route("get-list-by-filter")]
-        [AllowAnonymous]
-        public async Task<List<UnitDto>> GetListAsync(UnitFilter input)
+
+        [HttpGet]
+        [Route("look-up-unit-types")]
+        public async Task<List<UnitTypeDto>> LookUpUnitTypes()
         {
-            return await _unitService.GetListAsync(input);
+            return await _unitService.LookUpUnitTypes();
         }
     }
 }

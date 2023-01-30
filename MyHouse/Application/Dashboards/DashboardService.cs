@@ -3,33 +3,39 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Contract.Dashboards;
+using Contract.UnitReviewDetails;
+using Contract.Units;
+using Contract.UnitTypes;
 using Core.Enum;
 using Core.Extension;
+using Domain.Identity.UnitTypes;
 using Domain.UnitReviewDetails;
+using Domain.Units;
 using Microsoft.EntityFrameworkCore;
 using SqlServ4r.Repository.UnitReviews;
 using SqlServ4r.Repository.Units;
+using SqlServ4r.Repository.UnitTypes;
 using Volo.Abp.DependencyInjection;
 
 namespace Application.Dashboards
 {
-    public class DashboardService : IDashboardService,ITransientDependency
+    public class DashboardService :ServiceBase, IDashboardService,ITransientDependency
     {
-        private UnitRepository _unitRepository;
-        private UnitReviewRepository _unitReviewRepository;
+        private readonly UnitRepository _unitRepository;
+        private readonly UnitTypeRepository _unitTypeRepository;
 
-        public DashboardService(UnitRepository unitRepository,UnitReviewRepository unitReviewRepository)
+        public DashboardService(UnitRepository unitRepository
+        ,UnitTypeRepository unitTypeRepository)
         {
             _unitRepository = unitRepository;
-            _unitReviewRepository = unitReviewRepository;
+            _unitTypeRepository = unitTypeRepository;
         }
 
-        public async Task<UnitReviewStatisticsDto> GetUnitReviewStatisticsByDateRange(DateTime? start ,DateTime? end)
+        public async Task<UnitReviewStatisticsDto> GetUnitReviewStatistics(DashboardFilter input)
         {
             
             var dataItems = new List<DataItem>();
-            var unitsWithNavProperties = _unitRepository.GetUnitStatisticsByReviewDateRange(start,end);
-            
+            var unitsWithNavProperties = _unitRepository.GetUnitsWithNavProperties(input);
             
                 foreach (var items in unitsWithNavProperties)
                 {   
@@ -52,19 +58,35 @@ namespace Application.Dashboards
             var allDetails = unitsWithNavProperties.SelectMany(x => x.UnitReviewDetails);
             
             return new UnitReviewStatisticsDto()
-                {UnitReviewItems = orderedDataItems, TotalReview = reviewCount, DetailUnitReviewItems =  GetRatingStats(allDetails)};
+                {UnitReviewItems = orderedDataItems, TotalReview = reviewCount, DetailUnitReviewItems =  _getRatingStats(allDetails)};
             
 
         }
-        
-        
-  
-        
-        
-        
-        
 
-        private static List<DataItem> GetRatingStats(IEnumerable<UnitReviewDetail> allDetails)
+        public async Task<List<UnitTypeDto>> LookUpUnitTypes()
+        {
+           var types = await _unitTypeRepository.ToListAsync();
+           return ObjectMapper.Map<List<UnitType>,List<UnitTypeDto>>(types);
+        }
+
+
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        private static List<DataItem> _getRatingStats(IEnumerable<UnitReviewDetail> allDetails)
         {
             if (allDetails.Count() == 0) return new List<DataItem>();
             var detailItems = new List<DataItem>()

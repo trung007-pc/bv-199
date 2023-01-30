@@ -8,6 +8,7 @@
 
     <ItemGroup>
       <PackageReference Include="FluentDateTime" Version="2.1.0" />
+      <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="2.2.0" />
       <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     </ItemGroup>
 
@@ -15,10 +16,6 @@
       <Reference Include="Microsoft.AspNetCore.Http.Features, Version=6.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60">
         <HintPath>..\..\..\..\..\Program Files\dotnet\shared\Microsoft.AspNetCore.App\6.0.12\Microsoft.AspNetCore.Http.Features.dll</HintPath>
       </Reference>
-    </ItemGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\Contract\Contract.csproj" />
     </ItemGroup>
 
 </Project>

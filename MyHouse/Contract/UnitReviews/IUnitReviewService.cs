@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Contract.UnitReviewDetails;
+using Contract.Units;
 
 namespace Contract.UnitReviews
 {
@@ -12,7 +13,7 @@ namespace Contract.UnitReviews
         Task<UnitReviewDto> UpdateAsync(CreateUpdateUnitReviewDto input,Guid Id);
         Task<UnitReviewDto> CreateReviewWithDetailsAsync(List<CreateUpdateUnitReviewDetailDto> inputs);
         Task DeleteAsync(Guid reviewId);
-        
+
 
 
     }

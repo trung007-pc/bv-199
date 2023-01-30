@@ -99,6 +99,8 @@ namespace WebClient.RequestHttp
         }
         
         
+        
+        
         public static async Task<T> PostAPIWithFileAsync<T>([Required] string URL, IBrowserFile file)
         {
             HttpResponseMessage httpResponseMessage = new HttpResponseMessage();
@@ -158,6 +160,19 @@ namespace WebClient.RequestHttp
                 throw new ServerErrorException("Server-Error");
             }
 
+            if (httpResponseMessage.StatusCode == HttpStatusCode.TooManyRequests)
+            {
+                throw new TooManyRequests("Too many request");
+            }
+
+            if (httpResponseMessage.StatusCode == HttpStatusCode.Conflict)
+            {
+                string? jsonResponse = await httpResponseMessage.Content.ReadAsStringAsync() ?? null;
+                var response =  JsonConvert.DeserializeObject<ResponseApi>(jsonResponse);
+                
+                throw new ConflictException(response.message);
+            }
+
             if (httpResponseMessage.StatusCode == HttpStatusCode.BadGateway)
             {
                 throw new InvalidOperationException("connection-error");
@@ -181,8 +196,7 @@ namespace WebClient.RequestHttp
             var accessToken = await _localStorage.GetItemAsync<string>("my-access-token");
             var refreshToken = await _localStorage.GetItemAsync<string>("my-refresh-token");
             var tokenModel = new TokenModel() {AccessToken = accessToken, RefreshToken = refreshToken};
-            var response = await PostAPIAsync<ApiIdentityResponse>("user/refresh-token", tokenModel,false);
-
+            var response = await PostToRefreshTokenAsync<ApiIdentityResponse>("user/refresh-token", tokenModel);
             AttachToken(response.AccessToken);
             await _localStorage.SetItemAsync("my-access-token", response.AccessToken);
             await _localStorage.SetItemAsync("my-refresh-token", response.RefreshToken);
@@ -205,6 +219,55 @@ namespace WebClient.RequestHttp
 
             throw new Exception("AAAAAAAAAAAAA");
         }
+        
+        public static async Task<T> PostToRefreshTokenAsync<T>([Required] string URL, dynamic input)
+        {
+            HttpResponseMessage httpResponseMessage = new HttpResponseMessage();
+            StringContent content =
+                new StringContent(JsonConvert.SerializeObject(input), Encoding.UTF8, "application/json");
+
+            httpResponseMessage = await _client.PostAsync(URL, content);
+            
+            if (httpResponseMessage.IsSuccessStatusCode)
+            {
+                string? jsonResponse = await httpResponseMessage.Content.ReadAsStringAsync() ?? null;
+                return JsonConvert.DeserializeObject<T>(jsonResponse);
+            }
+            
+
+            if (httpResponseMessage.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                await _localStorage.RemoveItemAsync("my-access-token");
+                await _localStorage.RemoveItemAsync("my-refresh-token");
+                string? jsonResponse = await httpResponseMessage.Content.ReadAsStringAsync() ?? null;
+                var response =  JsonConvert.DeserializeObject<ResponseApi>(jsonResponse);
+                throw new UnauthorizedException(response?.message);
+            }
+
+            if (httpResponseMessage.StatusCode == HttpStatusCode.InternalServerError)
+            { 
+                throw new ServerErrorException("Server-Error");
+            }
+
+            if (httpResponseMessage.StatusCode == HttpStatusCode.BadGateway)
+            {
+                throw new InvalidOperationException("connection-error");
+            }
+
+            if (httpResponseMessage.StatusCode == HttpStatusCode.BadRequest)
+            {
+                string? jsonResponse = await httpResponseMessage.Content.ReadAsStringAsync() ?? null;
+                var response =  JsonConvert.DeserializeObject<ResponseApi>(jsonResponse);
+                throw new BadRequestException(response.message);
+            }
+
+            throw new Exception("AAAAAAAAAAAAA");
+            
+            
+        }
+        
+        
+        
     }
 
     public class ResponseApi

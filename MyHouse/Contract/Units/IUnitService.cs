@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Contract.UnitTypes;
 
 namespace Contract.Units
 {
@@ -9,9 +10,9 @@ namespace Contract.Units
         Task<UnitDto> CreateAsync(CreateUpdateUnitDto input);
         Task<UnitDto> UpdateAsync(CreateUpdateUnitDto input,Guid id);
         Task DeleteAsync(Guid id);
-        Task<List<UnitDto>> GetListAsync();
+        Task<List<UnitWithNavPropertiesDto>> GetListWithNavPropertiesAsync(UnitFilter input);
         
-        Task<List<UnitDto>> GetListAsync(UnitFilter input);
+        Task<List<UnitTypeDto>> LookUpUnitTypes();
 
     }
 }

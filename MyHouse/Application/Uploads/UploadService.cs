@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using Contract;
@@ -13,8 +14,8 @@ namespace Application.Uploads
 {
     public class UploadService : IUploadService,ITransientDependency
     {
-        private IConfiguration _configuration;
-        private IWebHostEnvironment _environment;
+        private readonly IConfiguration _configuration;
+        private readonly IWebHostEnvironment _environment;
         
         public UploadService(IConfiguration configuration, IWebHostEnvironment environment)
         {
@@ -22,21 +23,26 @@ namespace Application.Uploads
             _environment = environment;
         }
 
-        public void InitConfig(IConfiguration configuration)
+        public  (double latitude, double longitude) InitConfig(IConfiguration configuration)
         {
-            
+            (double latitude, double longitude) coordinates = (55.39594, 10.38831);
+
+            return coordinates;
         }
 
 
         public async Task<FileDto> UploadFile(IFormFile file)
         {
+           
+            
             throw new Exception();
         }
 
-        public Task<FileDto> UploadImage(IFormFile file)
+        public async Task<FileDto> UploadImage(IFormFile file)
         {
             string pathBase = Path.Combine(_environment.WebRootPath,_configuration["Media:BASE_IMAGE_PATH"]);
-            return FileHelper.UploadImage(file,pathBase,_configuration["Media:BASE_IMAGE_URL"]);
+            var fileModel = await FileHelper.UploadImage(file, pathBase, _configuration["Media:BASE_IMAGE_URL"]);
+            return new FileDto(){FileName = fileModel.FileName , Path = fileModel.Path,Url = fileModel.Url};
         }
     }
 }

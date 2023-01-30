@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Blazorise;
 using Contract.Units;
+using Contract.UnitTypes;
 using Contract.Uploads;
 using Core.Enum;
 using Microsoft.AspNetCore.Components;
@@ -19,24 +20,28 @@ namespace WebClient.Pages.Admin
     public partial class UnitManager
     {
         [Inject] IMessageService _messageService { get; set; }
-        private List<UnitDto> Units { get; set; }
-        private Modal CreateModal = new Modal();
-        private Modal EditModal = new Modal();
-        private CreateUpdateUnitDto NewUnit { get; set; }
+        public List<UnitWithNavPropertiesDto> Units { get; set; }
+        public Modal CreateModal = new Modal();
+        public Modal EditModal = new Modal();
+        public CreateUpdateUnitDto NewUnit { get; set; }
 
-        private CreateUpdateUnitDto EditUnit { get; set; }
-        private Guid EditUnitId { get; set; }
+        public CreateUpdateUnitDto EditUnit { get; set; }
+        public Guid EditUnitId { get; set; }
 
-        private long maxFileSize = 1024 * 15;
+        public long maxFileSize = 1024 * 15;
         
-        private IBrowserFile? NewFile { get; set; }
-        private IBrowserFile? EditFile { get; set; }
+        public IBrowserFile? NewFile { get; set; }
+        public IBrowserFile? EditFile { get; set; }
+        
+        public List<UnitTypeDto> Types { get; set; }
+        public Guid? OnEditSelectedTypeId { get; set; }
 
-        private string HeaderTitle { get; set; } = "Part";
+
+        public string HeaderTitle { get; set; } = "Part";
         
         public UnitManager()
         {
-            Units = new List<UnitDto>();
+            Units = new List<UnitWithNavPropertiesDto>();
             NewUnit = new CreateUpdateUnitDto();
             EditUnit = new CreateUpdateUnitDto();
         }
@@ -50,31 +55,37 @@ namespace WebClient.Pages.Admin
                 {
                     await GetDateRangePickers();
                     await GetList();
+                    await GetUnitTypes();
                     StateHasChanged();
                 }, ActionType.GetList, false);
    
             }
         }
 
-        private async Task GetList()
+        public async Task GetList()
         {
-            Units = await _unitService.GetListAsync();
+            Units = await _unitService.GetListWithNavPropertiesAsync(new UnitFilter());
             StateHasChanged();
         }
 
-        private void ShowNewModal()
+        public async Task GetUnitTypes()
+        {
+            Types =  await _unitService.LookUpUnitTypes();
+        }
+
+        public void ShowNewModal()
         {
             NewUnit = new CreateUpdateUnitDto();
             NewFile = null;
             CreateModal.Show();
         }
 
-        private void HideNewModal()
+        public void HideNewModal()
         {
             CreateModal.Hide();
         }
 
-        private async void CreateUnit()
+        public async void CreateUnit()
         {
             await InvokeAsync(async () =>
                 {
@@ -93,7 +104,7 @@ namespace WebClient.Pages.Admin
                 }, ActionType.Create,true);
         }
 
-        private async Task ShowConfirmMessage(Guid id)
+        public async Task ShowConfirmMessage(Guid id)
         {
             if ( await _messageService.Confirm( "Are you sure you want to confirm?", "Confirmation" ) )
             {
@@ -103,7 +114,7 @@ namespace WebClient.Pages.Admin
                 },ActionType.Delete,true);
             }
         }
-        private async Task DeleteUnit(Guid id)
+        public async Task DeleteUnit(Guid id)
         {
     
                 await _unitService.DeleteAsync(id);
@@ -126,7 +137,7 @@ namespace WebClient.Pages.Admin
             Console.Write($"{name} value changed to {value}");
         }
 
-        private async Task UpdateUnit()
+        public async Task UpdateUnit()
         {
            await  InvokeAsync(async () =>
             {
@@ -145,18 +156,36 @@ namespace WebClient.Pages.Admin
             },ActionType.Update,true);
         }
 
-        private Task ShowEditModal(UnitDto unitDto)
+        public Task ShowEditModal(UnitWithNavPropertiesDto unitWithNavProperties)
         {
-            EditUnit = new CreateUpdateUnitDto();
+            var unitDto = unitWithNavProperties.Unit;
+            var type = unitWithNavProperties.UnitType;
+            
             EditUnit = ObjectMapper.Map<UnitDto, CreateUpdateUnitDto>(unitDto);
             EditFile = null;
+            
             EditUnitId = unitDto.Id;
+            EditUnit.UnitTypeId = type.Id;
+            
+            OnEditSelectedTypeId = type.Id;
             return EditModal.Show();
         }
 
-        private void HideEditModal()
+        public void HideEditModal()
         {
             EditModal.Hide();
         }
+
+        public void OnNewSelectedTypes(object value)
+        {
+            NewUnit.UnitTypeId = (Guid)value;
+        }
+        
+        public void OnEditSelectedTypes(object value)
+        {
+            EditUnit.UnitTypeId = (Guid)value;
+        }
+        
+        
     }
 }

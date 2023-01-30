@@ -46,8 +46,10 @@ namespace WebClient.Service.UnitReviews
         {
              await RequestClient.DeleteAPIAsync<Task>($"unit-review/reviewId={reviewId}");
         }
-        
 
-    
+        public async Task<List<UnitWithNavPropertiesDto>> GetUnitsWithNavigationPropertiesAsync(UnitFilter unitFilter)
+        {
+            return await RequestClient.PostAPIAsync<List<UnitWithNavPropertiesDto>>($"unit-review/get-units-with-navigation-properties",unitFilter);
+        }
     }
 }

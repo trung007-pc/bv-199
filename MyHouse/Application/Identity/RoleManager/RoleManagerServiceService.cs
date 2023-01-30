@@ -30,7 +30,7 @@ namespace Application.Identity.RoleManager
             _roleClaimRepository = roleClaimRepository;
         }
 
-
+   
         public async Task<List<RoleDto>> GetListAsync()
         {
             var roles = await _roleManager.Roles.ToListAsync();
@@ -49,6 +49,8 @@ namespace Application.Identity.RoleManager
         public async Task<RoleDto> CreateAsync(CreateUpdateRoleDto input)
         {
             var role = ObjectMapper.Map<CreateUpdateRoleDto, Role>(input);
+            role.Name = role.Name.Trim().ToUpper();
+            
             var result = await _roleManager.CreateAsync(role);
             if (!result.Succeeded)
             {
@@ -69,6 +71,7 @@ namespace Application.Identity.RoleManager
             }
 
             var role = ObjectMapper.Map(input, item);
+            role.Name = role.Name.Trim().ToUpper();
             var result = await _roleManager.UpdateAsync(role);
             
             if (!result.Succeeded)

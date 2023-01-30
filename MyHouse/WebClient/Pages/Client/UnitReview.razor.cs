@@ -6,26 +6,30 @@ using Blazorise;
 using Contract.UnitReviewDetails;
 using Contract.UnitReviews;
 using Contract.Units;
+using Contract.UnitTypes;
 using Contract.Uploads;
 using Core.Enum;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Radzen;
 
 namespace WebClient.Pages.Client
 {
-    public partial class UnitReview
+    public partial class UnitReview 
     {
-        private CreateUpdateUnitReviewDto NewReview { get; set; } = new CreateUpdateUnitReviewDto();
-        private Guid EditReviewId { get; set;}
-        private List<UnitDto> Units = new List<UnitDto>();
-        private Modal CreateModal = new Modal();
-        private List<ReviewWithNavPropertiesModel> ReviewsWithNav = new List<ReviewWithNavPropertiesModel>();
-        private string ReviewNote { get; set; }
-        private List<UnitReviewDto> Result { get; set; }
+        public CreateUpdateUnitReviewDto NewReview { get; set; } = new CreateUpdateUnitReviewDto();
+        public Guid EditReviewId { get; set;}
+        public List<UnitWithNavPropertiesDto> Units = new List<UnitWithNavPropertiesDto>();
+        public Modal CreateModal = new Modal();
+        public List<ReviewWithNavPropertiesModel> ReviewsWithNav = new List<ReviewWithNavPropertiesModel>();
+        public string ReviewNote { get; set; }
+        public List<UnitReviewDto> Result { get; set; }
         
-        private IBrowserFile? EnclosedFile { get; set; }
-        private string HeaderTitle { get; set; } = "Khảo Sát Hài Lòng Người Bệnh";
+        public IBrowserFile? EnclosedFile { get; set; }
+        public string HeaderTitle { get; set; } = "Khảo Sát Hài Lòng Người Bệnh";
 
+        [Parameter]
+        public Guid? TypeId { get; set; }
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
@@ -41,12 +45,12 @@ namespace WebClient.Pages.Client
 
         public void Init()
         {
-            ReviewsWithNav = ObjectMapper.Map<List<UnitDto>, List<ReviewWithNavPropertiesModel>>(Units);
+            ReviewsWithNav = ObjectMapper.Map<List<UnitWithNavPropertiesDto>, List<ReviewWithNavPropertiesModel>>(Units);
         }
 
       
 
-        private async Task CreateUnitReviewsWithDetail()
+        public async Task CreateUnitReviewsWithDetail()
         {
 
             await InvokeAsync(async () =>
@@ -54,7 +58,7 @@ namespace WebClient.Pages.Client
                 var details = new List<CreateUpdateUnitReviewDetailDto>();
                 foreach (var item in ReviewsWithNav)
                 {
-                    details.Add(new CreateUpdateUnitReviewDetailDto() {UnitId = item.UnitId, Rate = item.Rating});
+                    details.Add(new CreateUpdateUnitReviewDetailDto() {UnitId = item.Unit.Id, Rate = item.Rating});
                 }
 
                 var reviewDto = await _unitReviewService.CreateReviewWithDetailsAsync(details);
@@ -65,7 +69,7 @@ namespace WebClient.Pages.Client
 
         }
 
-        private async Task UpdatePartReviews()
+        public async Task UpdatePartReviews()
         {
             if (!ReviewNote.IsNullOrWhiteSpace() || EnclosedFile != null)
             {
@@ -93,13 +97,13 @@ namespace WebClient.Pages.Client
         
     
         
-        private async Task GetUnits()
+        public async Task GetUnits()
         {
-            Units = await _unitService.GetListAsync(new UnitFilter(){IsActive = true});
+             Units = await _unitService.GetListWithNavPropertiesAsync(new UnitFilter(){IsActive = true,UnitTypeId = TypeId});
         }
 
 
-        private async Task HideDiaLog(DialogService ds)
+        public async Task HideDiaLog(DialogService ds)
         {
             await UpdatePartReviews();
             ds.Close(true);
@@ -113,10 +117,10 @@ namespace WebClient.Pages.Client
 
         public class ReviewWithNavPropertiesModel
         {
-            public Guid UnitId { get; set; } = Guid.NewGuid(); 
-            public string Name { get; set; }
+            public UnitDto Unit { get; set; }
+        
+            public UnitTypeDto UnitType { get; set;}
             public int Rating { get; set;}
-            public string ImageUrl { get; set;}
         }
         
     }

@@ -5,28 +5,35 @@ using System.Net;
 using System.Threading.Tasks;
 using Contract.UnitReviewDetails;
 using Contract.UnitReviews;
+using Contract.Units;
 using Core.Const;
 using Core.Exceptions;
 using Domain.UnitReviewDetails;
 using Domain.UnitReviews;
+using Domain.Units;
 using SqlServ4r.Repository.UnitReviewDetails;
 using SqlServ4r.Repository.UnitReviews;
+using SqlServ4r.Repository.Units;
 using Volo.Abp.DependencyInjection;
 
 namespace Application.UnitReviews
 {
     public class UnitReviewService : ServiceBase, IUnitReviewService, ITransientDependency
     {
-        public UnitReviewRepository _unitReviewRepository;
+        private readonly UnitReviewRepository _unitReviewRepository;
 
-        public UnitReviewDetailRepository _unitReviewDetailRepository;
+        private readonly UnitReviewDetailRepository _unitReviewDetailRepository;
+        private readonly UnitRepository _unitRepository;
+        
 
 
         public UnitReviewService(UnitReviewRepository unitReviewRepository,
-            UnitReviewDetailRepository unitReviewDetailRepository)
+            UnitReviewDetailRepository unitReviewDetailRepository,
+            UnitRepository unitRepository)
         {
             _unitReviewRepository = unitReviewRepository;
             _unitReviewDetailRepository = unitReviewDetailRepository;
+            _unitRepository = unitRepository;
         }
 
         public async Task<List<UnitReviewDto>> GetListWithCalculatingAverageAsync()
@@ -45,8 +52,6 @@ namespace Application.UnitReviews
 
                 reviewsWithNavDto.Add(dto);
             }
-
-            AttachIndex(reviewsWithNavDto);
             return reviewsWithNavDto;
         }
 
@@ -101,5 +106,6 @@ namespace Application.UnitReviews
             review.IsDeleted = true;
             _unitReviewRepository.Update(review);
         }
+        
     }
 }

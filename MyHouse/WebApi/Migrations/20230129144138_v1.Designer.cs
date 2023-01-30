@@ -12,7 +12,7 @@ using SqlServ4r.EntityFramework;
 namespace WebApi.Migrations
 {
     [DbContext(typeof(DreamContext))]
-    [Migration("20230114140013_v1")]
+    [Migration("20230129144138_v1")]
     partial class v1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -74,6 +74,21 @@ namespace WebApi.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("Roles", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.Identity.UnitTypes.UnitType", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UnitTypes");
                 });
 
             modelBuilder.Entity("Domain.Identity.UserClaim.UserClaim", b =>
@@ -314,7 +329,12 @@ namespace WebApi.Migrations
                     b.Property<string>("Path")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid?>("UnitTypeId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UnitTypeId");
 
                     b.ToTable("Units");
                 });
@@ -387,6 +407,20 @@ namespace WebApi.Migrations
                     b.Navigation("Unit");
 
                     b.Navigation("UnitReview");
+                });
+
+            modelBuilder.Entity("Domain.Units.Unit", b =>
+                {
+                    b.HasOne("Domain.Identity.UnitTypes.UnitType", "UnitType")
+                        .WithMany("Units")
+                        .HasForeignKey("UnitTypeId");
+
+                    b.Navigation("UnitType");
+                });
+
+            modelBuilder.Entity("Domain.Identity.UnitTypes.UnitType", b =>
+                {
+                    b.Navigation("Units");
                 });
 
             modelBuilder.Entity("Domain.UnitReviews.UnitReview", b =>

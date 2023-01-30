@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using NuGet.Common;
 
 namespace WebApi
@@ -56,8 +57,14 @@ namespace WebApi
                 status = globalException.Status;
                 stackTrace = globalException.StackTrace;
             }
+            else if (exceptionType == typeof(DbUpdateConcurrencyException))
+            {
+                message = HttpMessage.Conflict;
+                status = HttpStatusCode.Conflict;
+                stackTrace = exception.StackTrace;
+            }
 
-            if (exception is SystemException)
+            else if (exception is SystemException)
             {
                 var globalException =  exception;
                 message = globalException.Message;

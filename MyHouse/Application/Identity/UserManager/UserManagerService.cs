@@ -255,7 +255,7 @@ namespace Application.Identity.UserManager
 
         public async Task<TokenDto> RefreshTokenAsync(TokenModel token)
         {
-            if (token is null) throw new GlobalException(HttpMessage.NotFound, HttpStatusCode.BadRequest);
+            if (token is null) throw new GlobalException(HttpMessage.Unauthorized, HttpStatusCode.Unauthorized);
                 
 
             var principal = GetPrincipalFromExpiredToken(token.AccessToken);
@@ -263,7 +263,7 @@ namespace Application.Identity.UserManager
 
             var user = await _userManager.FindByNameAsync(userName);
 
-            if (user == null || user.RefreshToken != user.RefreshToken) throw new GlobalException(HttpMessage.CheckInformation, HttpStatusCode.BadRequest);
+            if (user == null || user.RefreshToken != user.RefreshToken) throw new GlobalException(HttpMessage.Unauthorized, HttpStatusCode.Unauthorized);
             
             var refreshToken = GenerateRefreshToken();
             var accessToken = await GenerateTokenByUser(user);
@@ -272,7 +272,7 @@ namespace Application.Identity.UserManager
 
             if (!result.Succeeded)
             {
-                 throw new GlobalException(HttpMessage.CheckInformation, HttpStatusCode.BadRequest);
+                 throw new GlobalException(HttpMessage.Conflict, HttpStatusCode.TooManyRequests);
             }
 
             return new TokenDto()
@@ -350,21 +350,6 @@ namespace Application.Identity.UserManager
             return principal;
         }
 
-        private ApiResponseBase GetApiResponse(IdentityResult result)
-        {
-            var apiResponse = new ApiResponseBase();
-
-            if (!result.Succeeded)
-            {
-                apiResponse.Message = result.Errors.FirstOrDefault().Description;
-                apiResponse.StatusCode = HttpStatusCode.BadRequest;
-                apiResponse.IsSuccess = false;
-                return apiResponse;
-            }
-
-            apiResponse.IsSuccess = true;
-            apiResponse.StatusCode = HttpStatusCode.OK;
-            return apiResponse;
-        }
+   
     }
 }

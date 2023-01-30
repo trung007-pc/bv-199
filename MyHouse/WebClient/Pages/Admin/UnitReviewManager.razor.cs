@@ -17,23 +17,23 @@ namespace WebClient.Pages.Admin
     public partial class UnitReviewManager
     {
         [Inject] IMessageService _messageService { get; set; }
-        private List<UnitReviewDto> UnitReviews { get; set; } =
+        public List<UnitReviewDto> UnitReviews { get; set; } =
             new List<UnitReviewDto>();
 
-        private CreateUpdateUnitReviewDto NewReview { get; set; } = new CreateUpdateUnitReviewDto();
-        private CreateUpdateUnitReviewDto EditReview { get; set; } = new CreateUpdateUnitReviewDto();
-        private List<UnitDto> Units = new List<UnitDto>();
+        public CreateUpdateUnitReviewDto NewReview { get; set; } = new CreateUpdateUnitReviewDto();
+        public CreateUpdateUnitReviewDto EditReview { get; set; } = new CreateUpdateUnitReviewDto();
+        public List<UnitDto> Units = new List<UnitDto>();
        
 
 
-        private Guid SelectedNewUnitId = new Guid();
-        private Guid EditUnitId { get; set; }
-        private Guid EditReviewId { get; set;}
+        public Guid SelectedNewUnitId = new Guid();
+        public Guid EditUnitId { get; set; }
+        public Guid EditReviewId { get; set;}
 
-        private Modal CreateModal = new Modal();
+        public Modal CreateModal = new Modal();
         
-        private Modal EditModal = new Modal();
-        private string HeaderTitle { get; set; } = "Unit Review";
+        public Modal EditModal = new Modal();
+        public string HeaderTitle { get; set; } = "Unit Review";
 
 
         public UnitReviewManager()
@@ -59,16 +59,16 @@ namespace WebClient.Pages.Admin
             }
         }
 
-        private async Task GetUnitReviews()
+        public async Task GetUnitReviews()
         {
             UnitReviews = await _unitReviewService.GetListWithCalculatingAverageAsync();
         }
-        private async Task NavigateToDetails(Guid reviewId)
+        public async Task NavigateToDetails(Guid reviewId)
         {
             _navigationManager.NavigateTo($"unit-review-detail?reviewId={reviewId}");
         }
 
-        private async Task ShowConfirmMessage(Guid reviewId)
+        public async Task ShowConfirmMessage(Guid reviewId)
         {
             if ( await _messageService.Confirm( "Are you sure you want to confirm?", "Confirmation" ) )
             {
@@ -79,20 +79,20 @@ namespace WebClient.Pages.Admin
             }
             
         }
-        private async Task DeleteUnitReview(Guid reviewId)
+        public async Task DeleteUnitReview(Guid reviewId)
         {
             await _unitReviewService.DeleteAsync(reviewId);
             await GetUnitReviews();
         }
         
-        private void ShowNewModal()
+        public void ShowNewModal()
         {
             NewReview = new CreateUpdateUnitReviewDto();
             CreateModal.Show();
         }
         
         
-        private void ShowEditModal(UnitReviewDto input)
+        public void ShowEditModal(UnitReviewDto input)
         {
             EditUnitId = input.Id;
             EditReviewId = input.Id;

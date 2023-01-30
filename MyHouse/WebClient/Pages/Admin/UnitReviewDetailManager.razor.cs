@@ -24,9 +24,9 @@ namespace WebClient.Pages.Admin
         public CreateUpdateUnitReviewDetailDto EditDetail = new CreateUpdateUnitReviewDetailDto();
         public Guid EditDetailId { get; set;}
         
-        private Modal CreateModal;
-        private Modal EditModal;
-        private string HeaderTitle { get; set; } = "Review Detail ";
+        public Modal CreateModal;
+        public Modal EditModal;
+        public string HeaderTitle { get; set; } = "Review Detail ";
 
 
 
@@ -49,7 +49,7 @@ namespace WebClient.Pages.Admin
             }
         }
 
-        private async Task CreateDetail()
+        public async Task CreateDetail()
         {
             await InvokeAsync(async () =>
             {
@@ -60,7 +60,7 @@ namespace WebClient.Pages.Admin
             },ActionType.Create,true);
         }
         
-        private async Task UpdateDetail()
+        public async Task UpdateDetail()
         {
 
             await InvokeAsync(async () =>
@@ -81,19 +81,19 @@ namespace WebClient.Pages.Admin
 
         }
         
-        private async Task GetDetails()
+        public async Task GetDetails()
         {
             Details = await _unitReviewDetailService.GetDetailsByReviewIdAsync(ReviewID);
         }
         
-        private void ShowNewModal()
+        public void ShowNewModal()
         {
             NewDetail = new CreateUpdateUnitReviewDetailDto();
             CreateModal.Show();
         }
         
 
-        private void HideNewModal()
+        public void HideNewModal()
         {
             NewDetail = new CreateUpdateUnitReviewDetailDto();
             CreateModal.Hide();
@@ -101,7 +101,7 @@ namespace WebClient.Pages.Admin
         
         
         
-        private Task ShowEditModal(UnitReviewDetailDto input)
+        public Task ShowEditModal(UnitReviewDetailDto input)
         {
             EditDetail = new CreateUpdateUnitReviewDetailDto();
             EditDetailId = input.Id;
@@ -109,7 +109,7 @@ namespace WebClient.Pages.Admin
             return EditModal.Show();
         }
 
-        private  void HideEditModal()
+        public  void HideEditModal()
         {
              EditModal.Hide();
         }
