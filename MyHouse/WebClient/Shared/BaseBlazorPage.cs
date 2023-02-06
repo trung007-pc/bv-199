@@ -13,6 +13,7 @@ using Core.Enum;
 using Core.Extension;
 using FluentDateTimeOffset;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
@@ -30,7 +31,7 @@ namespace WebClient.Shared
           [Inject] private NavigationManager _navigationManager { get; set;}
           [Inject] private NotificationService _notificationService { get; set;}
 
-      
+
         protected IMapper ObjectMapper { get;}
         
         public BaseBlazorPage()
@@ -102,6 +103,12 @@ namespace WebClient.Shared
                             _notificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Đánh giá thành công", Duration = 4000 });
                             break;
                         }
+                        
+                        case ActionType.UploadFile:
+                        {
+                            _notificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Upload File Succeeded ", Duration = 4000 });
+                            break;
+                        }
                     
                     }
                 }
@@ -129,7 +136,7 @@ namespace WebClient.Shared
                     _navigationManager.NavigateTo("server-error",true);
                 }
 
-                if (exceptionType == typeof(InvalidOperationException))
+                if (exceptionType == typeof(DbConnectionException))
                 {
                     _navigationManager.NavigateTo("connection-error",true);
                 }
@@ -143,7 +150,20 @@ namespace WebClient.Shared
                 {
                     // too many request
                 }
+
+                if (exceptionType == typeof(NotFoundFile))
+                {
+                    _notificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Warning, Summary = "Not Found File", Detail = e.Message, Duration = 4000});
+                }
                 
+                if (exceptionType == typeof(FailedOperation))
+                {
+                    _notificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Warning, Summary = "The Failed Operation", Detail ="The Failed Operation", Duration = 4000});
+
+                }
+                
+                // _navigationManager.NavigateTo("server-error",true);
+
             }
 
             return false;
@@ -226,6 +246,8 @@ namespace WebClient.Shared
             if (!fromDateOffset.HasValue || !toDateTimeOffset.HasValue) return (null, null);
             return (fromDateOffset.Value.DateTime, toDateTimeOffset.Value.DateTime);
         }
+
+     
         
         
         

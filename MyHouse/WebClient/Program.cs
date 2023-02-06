@@ -43,6 +43,7 @@ builder.Services.AddTransient<UnitTypeService,UnitTypeService>();
 builder.Services.AddTransient<UploadService, UploadService>();
 builder.Services.AddTransient<DashboardService,DashboardService>();
 
+builder.Services.AddScoped<DownloadFileService>();
 builder.Services.AddScoped<TooltipService>();
 builder.Services.AddScoped<ClipboardService>();
 builder.Services.AddScoped<DialogService>();

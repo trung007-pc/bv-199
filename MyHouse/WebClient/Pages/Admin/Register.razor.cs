@@ -6,12 +6,12 @@ namespace WebClient.Pages.Admin
 {
     public partial class Register
     {
-        private CreateUpdateUserDto UserDto { get; set;} 
+        private CreateUserDto UserDto { get; set;} 
         private string Name { get; set; }
         
         public Register()
         {
-            UserDto = new CreateUpdateUserDto();
+            UserDto = new CreateUserDto();
         }
 
         protected override async Task OnInitializedAsync()

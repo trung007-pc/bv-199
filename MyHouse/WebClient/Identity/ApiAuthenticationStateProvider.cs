@@ -84,7 +84,7 @@ namespace WebClient.Identity
         var keyValuePairs = JsonSerializer.Deserialize<Dictionary<string, object>>(jsonBytes);
 
         keyValuePairs.TryGetValue(ClaimTypes.Role, out object roles);
-
+    
         if (roles != null)
         {
             if (roles.ToString().Trim().StartsWith("["))

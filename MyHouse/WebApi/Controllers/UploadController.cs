@@ -34,5 +34,12 @@ namespace WebApi.Controllers
         {
             return await _uploadService.UploadImage(file);
         }
+
+        [HttpPost]
+        [Route("excel-file-of-users")]
+        public async Task<FileDto> UploadExcelFileOfUsers(IFormFile file)
+        {
+            return await _uploadService.UploadExcelFileOfUsers(file);
+        }
     }
 }

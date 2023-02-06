@@ -43,6 +43,7 @@ namespace SqlServ4r.Repository.Units
 
         public async Task<List<UnitWithNavProperties>> GetUnitsWithNavProperties(UnitFilter input)
         {
+            
             var query = from unit in _context.Units.Where(x => !x.IsDeleted)
                     .WhereIf(!input.TextFilter.IsNullOrWhiteSpace(), x => x.Name.Contains(input.TextFilter))
                     .WhereIf(input.IsActive != null, x => x.IsActive == input.IsActive)

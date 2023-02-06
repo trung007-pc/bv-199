@@ -10,8 +10,21 @@ namespace WebClient.Components
         [Parameter]
         public EventCallback<InputFileChangeEventArgs> Event { get; set; } =
             new EventCallback<InputFileChangeEventArgs>();
+        
+        [Parameter]
+        public string Text { get; set;}
+        
+        [Parameter]
+        public string Accept { get; set; }
+        
+        [Parameter]
+        public string Icon { get; set; }
+        
+        [Parameter]
+        public string Style { get; set;}
+        
 
-        private string _fileStatus = "";
+        private string _fileName = "";
         private Guid  FileID  = Guid.NewGuid();
 
         protected override Task OnInitializedAsync()
@@ -22,7 +35,7 @@ namespace WebClient.Components
         private async Task OnChangeFileAtEditModal(InputFileChangeEventArgs e)
         {
             await Event.InvokeAsync(e);
-            _fileStatus = e.File.Name;
+            _fileName = e.File.Name;
         }
     }
 }

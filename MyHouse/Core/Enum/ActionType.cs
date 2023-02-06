@@ -10,6 +10,7 @@
         SignIn,
         SignOut,
         SignUp,
-        Review
+        Review,
+        UploadFile
     }
 }

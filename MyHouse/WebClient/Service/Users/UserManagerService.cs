@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Blazored.LocalStorage;
 using Contract;
 using Contract.Identity.UserManager;
+using Contract.Uploads;
 using Microsoft.AspNetCore.Components.Authorization;
 using WebClient.Identity;
 using WebClient.RequestHttp;
@@ -25,21 +26,32 @@ namespace WebClient.Service.Users
         }
 
 
-        public async Task<List<UserWithNavigationDto>> GetListWithNavigationAsync()
+        public async Task<List<UserWithNavigationPropertiesDto>> GetListWithNavigationAsync()
         {   
-             return await RequestClient.GetAPIAsync<List<UserWithNavigationDto>>("user/get-list-with-nav");
+             return await RequestClient.GetAPIAsync<List<UserWithNavigationPropertiesDto>>("user/get-list-with-nav");
         }
 
-        public async Task<CreateUpdateUserWithNavDto> CreateWithNavigationAsync(CreateUpdateUserWithNavDto input)
+        public async Task<UserDto> CreateUserWithRolesAsync(CreateUserDto input)
         {
-            return await RequestClient.PostAPIAsync<CreateUpdateUserWithNavDto>("user/create-with-nav", input);
+            return await RequestClient.PostAPIAsync<UserDto>("user/create-user-with-roles", input);
+
         }
 
-        public async Task<UserDto> UpdateUserNameWithNavigationAsync(UpdateUserNameWithNavDto input, Guid id)
+        public async Task<UserDto> UpdateUserWithRolesAsync(UpdateUserDto input, Guid id)
         {
-            return await RequestClient.PostAPIAsync<UserDto>($"user/update-username-with-nav/{id}", input);
+            return await RequestClient.PostAPIAsync<UserDto>($"user/update-user-with-roles/{id}", input);
+        }
+
+        public Task<UserDto> UpdateUserWithRolesByPhoneNumberAsync(UpdateUserDto input, string phoneNumber)
+        {
+            throw new NotImplementedException();
         }
         
+        public async Task<ExcelValidator> CreateUsersFromCSVFile(FileDto file)
+        {
+            return await RequestClient.PostAPIAsync<ExcelValidator>($"user/create-users-from-csv-file", file);
+        }
+
         public async Task DeleteWithNavigationAsync(Guid id)
         {
              await RequestClient.PostAPIAsync<Task>($"user/delete-with-nav/{id}",null);
@@ -50,12 +62,12 @@ namespace WebClient.Service.Users
             return await RequestClient.GetAPIAsync<List<UserDto>>("user");
         }
 
-        public async Task<UserDto> CreateAsync(CreateUpdateUserDto input)
+        public async Task<UserDto> CreateAsync(CreateUserDto input)
         {
             return await RequestClient.PostAPIAsync<UserDto>("user",input);
         }
 
-        public async Task<UserDto> UpdateAsync(CreateUpdateUserDto input, Guid id)
+        public async Task<UserDto> UpdateAsync(UpdateUserDto input, Guid id)
         {
             return await RequestClient.PutAPIAsync<UserDto>($"user/{id}",input);
 
@@ -70,16 +82,16 @@ namespace WebClient.Service.Users
         {
             var response = await RequestClient.PostAPIAsync<TokenDto>("user/sign-in", input);
             RequestClient.AttachToken(response.AccessToken);
-                RequestClient.SetLocalStorageService(_localStorage);
+                 RequestClient.SetLocalStorageService(_localStorage);
                 await _localStorage.SetItemAsync("my-access-token", response.AccessToken);
                 await _localStorage.SetItemAsync("my-refresh-token", response.RefreshToken);
-                ((ApiAuthenticationStateProvider)_authenticationStateProvider).MarkUserAsAuthenticated(input.UserName);
-            
+                ((ApiAuthenticationStateProvider) _authenticationStateProvider).MarkUserAsAuthenticated(input.UserName);
+       
             return response;
         }
         
 
-        public async Task<UserDto> SignUpAsync(CreateUpdateUserDto input)
+        public async Task<UserDto> SignUpAsync(CreateUserDto input)
         {
             return await RequestClient.PostAPIAsync<UserDto>("user/sign-up", input);
         }

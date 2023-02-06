@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using Blazorise;
 using Contract.Identity.RoleManager;
@@ -51,7 +52,8 @@ namespace WebClient.Pages.Admin
         }
          async Task CopyToClipboard(Guid id)
         {
-            await _clipboardService.CopyToClipboard(id.ToString());
+            string pathBase = Path.Combine(_navigationManager.BaseUri,$"bv-199/unit-review/{id.ToString()}");
+            await _clipboardService.CopyToClipboard(pathBase);
             NotifyMessage(NotificationSeverity.Success,"Copied",2000);
         }
 

@@ -1,5 +1,6 @@
 ﻿@page "/abzzzs2"
 @using WebClient.Service.Users
+@using Core.Enum
 @layout DefaultLayout
 @inject NavigationManager _navigationManager;
 @inject UserManagerService _userManagerService;
@@ -19,6 +20,18 @@
                 <ValidationMessage For="@(() => UserDto.UserName)"/>
             </div>
             <div class="form-group">
+                <label for="email">First Name</label>
+                <InputText Id="email" class="form-control" @bind-Value="UserDto.FirstName"/>
+                <ValidationMessage For="@(() => UserDto.FirstName)"/>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Last Name</label>
+                <InputText Id="email" class="form-control" @bind-Value="UserDto.LastName"/>
+                <ValidationMessage For="@(() => UserDto.LastName)"/>
+            </div>
+            
+            <div class="form-group">
                 <label for="password">Password</label>
                 <InputText Id="password" type="password" class="form-control" @bind-Value="UserDto.Password"/>
                 <ValidationMessage For="@(() => UserDto.Password)"/>
@@ -28,9 +41,35 @@
                 <InputText Id="password" type="password" class="form-control" @bind-Value="UserDto.PasswordConfirm"/>
                 <ValidationMessage For="@(() => UserDto.PasswordConfirm)"/>
             </div>
+            
+            <div class="form-group">
+                <label for="email">User Code</label>
+                <InputText Id="email" class="form-control" @bind-Value="UserDto.EmployeeCode"/>
+                <ValidationMessage For="@(() => UserDto.EmployeeCode)"/>
+            </div>
+            
+            
+                  <RadzenRadioButtonList @bind-Value="UserDto.Gender">
+                      <Items>
+                          @foreach (var item in (Gender[])Enum.GetValues(typeof(Gender)))
+                          {
+                              <RadzenRadioButtonListItem Text="@(item.GetDisplayDescription())" Value="item" />
+                          }
+                      </Items>
+                  </RadzenRadioButtonList>
+
+
+            <div class="form-group">
+                <label for="email">Phone Number</label>
+                <InputText Id="email" class="form-control" @bind-Value="UserDto.PhoneNumber"/>
+                <ValidationMessage For="@(() => UserDto.PhoneNumber)"/>
+            </div>
+
+
+     
+
+
             <button type="submit" class="btn btn-primary">Submit</button>
         </EditForm>
     </div>
 </div>
-
-

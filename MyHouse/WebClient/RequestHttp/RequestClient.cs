@@ -41,7 +41,6 @@ namespace WebClient.RequestHttp
         {
             Config = configuration;
             _client.BaseAddress = new Uri(Config["RemoteServices:BaseUrl"]);
-            // _client.BaseAddress = new Uri(AppSetting.API_Base_ADRESS);
         }
 
         public static void SetLocalStorageService(ILocalStorageService localStorage)
@@ -175,7 +174,7 @@ namespace WebClient.RequestHttp
 
             if (httpResponseMessage.StatusCode == HttpStatusCode.BadGateway)
             {
-                throw new InvalidOperationException("connection-error");
+                throw new DbConnectionException("connection-error");
             }
 
             if (httpResponseMessage.StatusCode == HttpStatusCode.BadRequest)
@@ -251,7 +250,7 @@ namespace WebClient.RequestHttp
 
             if (httpResponseMessage.StatusCode == HttpStatusCode.BadGateway)
             {
-                throw new InvalidOperationException("connection-error");
+                throw new DbConnectionException("connection-error");
             }
 
             if (httpResponseMessage.StatusCode == HttpStatusCode.BadRequest)

@@ -100,7 +100,10 @@
 
                 <div style="margin-top: 5px"></div>
 
-                <RZInputFile Event="async (e) => { await OnChangeFileAtNewModal(e); }"></RZInputFile>
+                <RZInputFile Icon="upload_file" 
+                             Accept="image/png, image/jpeg, image/gif" Text="Choose File"
+                             Style="display: flex;align-items: center;min-width:123px;max-width: 130px;margin-bottom: 0;cursor: pointer;background-color: indigo"
+                             Event="async (e) => { await OnChangeFileAtNewModal(e); }"></RZInputFile>
 
 
             </ModalBody>
@@ -148,7 +151,11 @@
                 <RadzenSwitch @bind-Value=@EditUnit.IsActive />
                 <ValidationMessage For="@(() => EditUnit.IsActive)"/>
                 <div style="margin-top: 5px"></div>
-                <RZInputFile Event="async (e) => { await OnChangeFileAtEditModal(e); }"></RZInputFile>
+                <RZInputFile Icon="upload_file" 
+                             Accept="image/png, image/jpeg, image/gif" 
+                             Text="Choose File" 
+                             Style="display: flex;align-items: center;min-width:123px;max-width: 130px;margin-bottom: 0;cursor: pointer;background-color: indigo"
+                             Event="async (e) => { await OnChangeFileAtEditModal(e); }"></RZInputFile>
 
                 @* <InputFile class="file-input" OnChange="OnChangeFileAtEditModal" accept="image/png, image/jpeg, image/gif" /> *@
             </ModalBody>

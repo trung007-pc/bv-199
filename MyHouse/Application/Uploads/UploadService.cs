@@ -33,15 +33,20 @@ namespace Application.Uploads
 
         public async Task<FileDto> UploadFile(IFormFile file)
         {
-           
-            
             throw new Exception();
         }
 
         public async Task<FileDto> UploadImage(IFormFile file)
         {
             string pathBase = Path.Combine(_environment.WebRootPath,_configuration["Media:BASE_IMAGE_PATH"]);
-            var fileModel = await FileHelper.UploadImage(file, pathBase, _configuration["Media:BASE_IMAGE_URL"]);
+            var fileModel = await FileHelper.UploadFile(file, pathBase,new List<string>(){".jpg,.png"}, _configuration["Media:BASE_IMAGE_URL"]);
+            return new FileDto(){FileName = fileModel.FileName , Path = fileModel.Path,Url = fileModel.Url};
+        }
+
+        public async Task<FileDto> UploadExcelFileOfUsers(IFormFile file)
+        {
+            string pathBase = Path.Combine(_environment.WebRootPath,_configuration["Media:BASE_EXCEL_USER_FILE_PATH"]);
+            var fileModel = await FileHelper.UploadFile(file, pathBase,new List<string>(){".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"});
             return new FileDto(){FileName = fileModel.FileName , Path = fileModel.Path,Url = fileModel.Url};
         }
     }

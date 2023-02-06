@@ -61,7 +61,7 @@ namespace Application.UnitTypes
             var trimedName = name.Trim();
             var exist = await _unitTypeRepository.GetQueryable().AnyAsync(x => x.Name == trimedName);
 
-            if (exist) throw new GlobalException(HttpMessage.DuplicateName, HttpStatusCode.BadRequest);
+            if (exist) throw new GlobalException(HttpMessage.Duplicate.DuplicateName, HttpStatusCode.BadRequest);
         }
         
         private async Task _checkDuplicateNameAtUpdating(string name,Guid id)
@@ -70,7 +70,7 @@ namespace Application.UnitTypes
             var exist = await _unitTypeRepository.GetQueryable().
                 AnyAsync(x => x.Name == trimedName && x.Id != id);
 
-            if (exist) throw new GlobalException(HttpMessage.DuplicateName, HttpStatusCode.BadRequest);
+            if (exist) throw new GlobalException(HttpMessage.Duplicate.DuplicateName, HttpStatusCode.BadRequest);
         }
 
         public async Task DeleteAsync(Guid id)

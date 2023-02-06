@@ -20,8 +20,10 @@ namespace Application
     {
         public AutoMapperProfile()
         {
-            CreateMap<CreateUpdateUserDto,User>().ReverseMap();
+            CreateMap<CreateUserDto,User>().ReverseMap();
+            CreateMap<UpdateUserDto, User>().ReverseMap();
             CreateMap<User,UserDto>().ReverseMap();
+            CreateMap<CreateUpdateUseDto, User>().ReverseMap();
             CreateMap<Role,RoleDto>().ReverseMap();
             CreateMap<RoleDto,CreateUpdateRoleDto>().ReverseMap();
             CreateMap<Role,CreateUpdateRoleDto>().ReverseMap();

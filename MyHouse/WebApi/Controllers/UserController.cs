@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Application.Identity.UserManager;
 using Contract;
 using Contract.Identity.UserManager;
+using Contract.Uploads;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -27,26 +28,41 @@ namespace WebApi.Controllers
 
         [HttpGet]   
         [Route("get-list-with-nav")]
-        public async Task<List<UserWithNavigationDto>> GetListWithNavigationAsync()
+        public async Task<List<UserWithNavigationPropertiesDto>> GetListWithNavigationAsync()
         {
            return  await _userManagerService.GetListWithNavigationAsync();
         }
 
         [HttpPost]
-        [Route("create-with-nav")]
-        public async Task<CreateUpdateUserWithNavDto> CreateWithNavigationAsync(CreateUpdateUserWithNavDto input)
+        [Route("create-user-with-roles")]
+        public async Task<UserDto> CreateUserWithRolesAsync(CreateUserDto input)
         {
-            return await _userManagerService.CreateWithNavigationAsync(input);
+            return await _userManagerService.CreateUserWithRolesAsync(input);
         }
-
         
         [HttpPost]
-        [Route("update-username-with-nav/{id}")]
-        public async Task<UserDto> UpdateUserNameWithNavigationAsync(UpdateUserNameWithNavDto input, Guid id)
+        [Route("update-user-with-roles/{id}")]
+        public async Task<UserDto> UpdateUserWithRolesAsync(UpdateUserDto input, Guid id)
         {
-            return await _userManagerService.UpdateUserNameWithNavigationAsync(input,id);
+            return await _userManagerService.UpdateUserWithRolesAsync(input,id);
         }
-        
+
+        [HttpPost]
+        [Route("update-user-with-roles-by-phone-number/{phoneNumber}")]
+        public Task<UserDto> UpdateUserWithRolesByPhoneNumberAsync(UpdateUserDto input, string phoneNumber)
+        {
+            throw new NotImplementedException();
+        }
+
+        [HttpPost]
+        [Route("create-users-from-csv-file")]
+        [AllowAnonymous]
+        public async Task<ExcelValidator> CreateUsersFromCSVFile(FileDto file)
+        {
+            return await _userManagerService.CreateUsersFromCSVFile(file);
+        }
+
+
         [HttpPost]
         [Route("delete-with-nav")]
         public async  Task DeleteWithNavigationAsync(Guid id)
@@ -61,14 +77,14 @@ namespace WebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<UserDto> CreateAsync(CreateUpdateUserDto input)
+        public async Task<UserDto> CreateAsync(CreateUserDto input)
         {
             return await _userManagerService.CreateAsync(input);
         }
 
         [HttpPut]
         [Route("{id}")]
-        public async Task<UserDto> UpdateAsync(CreateUpdateUserDto input, Guid id)
+        public async Task<UserDto> UpdateAsync(UpdateUserDto input, Guid id)
         {
             return await _userManagerService.UpdateAsync(input, id);
         }
@@ -93,7 +109,7 @@ namespace WebApi.Controllers
         [HttpPost]
         [Route("sign-up")]
         [AllowAnonymous]
-        public async Task<UserDto> SignUpAsync(CreateUpdateUserDto input)
+        public async Task<UserDto> SignUpAsync(CreateUserDto input)
         {
             return await _userManagerService.SignUpAsync(input);
         }

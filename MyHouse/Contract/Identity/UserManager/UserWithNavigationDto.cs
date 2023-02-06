@@ -3,7 +3,7 @@ using Contract.Identity.RoleManager;
 
 namespace Contract.Identity.UserManager
 {
-    public class UserWithNavigationDto
+    public class UserWithNavigationPropertiesDto
     {
         public int Index { get; set;}
         public UserDto UserDto { get; set; }

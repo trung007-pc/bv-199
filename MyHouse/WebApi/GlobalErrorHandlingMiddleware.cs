@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data.Common;
 using System.Net;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -64,7 +65,7 @@ namespace WebApi
                 stackTrace = exception.StackTrace;
             }
 
-            else if (exception is SystemException)
+            else if (exception is DbException )
             {
                 var globalException =  exception;
                 message = globalException.Message;

@@ -24,15 +24,17 @@
 
 
 <RadzenCard>
-    <RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" AllowAlternatingRows="false"  AllowSorting="true" PageSize="5" AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true"
-                    Data="@Roles" TItem="RoleDto" ColumnWidth="300px" 
-                    
+    <RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" AllowAlternatingRows="false" AllowSorting="true" PageSize="5" AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true"
+                    Data="@Roles" TItem="RoleDto" ColumnWidth="300px"
+
                     FilterMode="FilterMode.Simple"
                     LogicalFilterOperator="LogicalFilterOperator.Or"
                     FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
                     Style="width: 100%">
         <Columns>
-            <RadzenDataGridColumn TItem="RoleDto" Property="Name"  TextAlign="TextAlign.Center" Title="Name" Frozen="true" Width="160px"/>
+            <RadzenDataGridColumn TItem="RoleDto" Property="Name" TextAlign="TextAlign.Center" Title="Name" Frozen="true" Width="160px"/>
+            <RadzenDataGridColumn TItem="RoleDto" Property="RoleCode" TextAlign="TextAlign.Center" Title="Role Code" Frozen="true" Width="160px"/>
+
             <RadzenDataGridColumn TItem="RoleDto" Property="Name" Title="Action" Frozen="true" Width="160px" Filterable="false">
                 <Template Context="data">
                     <RadzenButton Click="async () => { await ShowEditModal(data); }" Icon="edit" ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat" Size="ButtonSize.Medium">
@@ -60,7 +62,11 @@
                 <RadzenTextBox Class="w-100" @bind-Value="NewRole.Name"/>
                 <ValidationMessage For="@(() => NewRole.Name)"/>
 
-                <RadzenCheckBoxList @bind-Value=@Claims TValue="string"  AllowSelectAll="true" SelectAllText="Select all items" Class="mb-5" Style="outline:none">
+                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Role Code</RadzenText>
+                <RadzenTextBox Class="w-100" @bind-Value="NewRole.RoleCode"/>
+                <ValidationMessage For="@(() => NewRole.RoleCode)"/>
+
+                <RadzenCheckBoxList @bind-Value=@Claims TValue="string" AllowSelectAll="true" SelectAllText="Select all items" Class="mb-5" Style="outline:none">
                     <Items >
                         <RadzenCheckBoxListItem Text="@ClaimNameTypes.READ" Value="@ClaimNameTypes.READ"/>
                         <RadzenCheckBoxListItem Text="@ClaimNameTypes.WRITE" Value="@ClaimNameTypes.WRITE"/>
@@ -88,7 +94,11 @@
                 <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Name</RadzenText>
                 <RadzenTextBox Class="w-100" @bind-Value="EditRole.Name"/>
                 <ValidationMessage For="@(() => EditRole.Name)"/>
-                  <RadzenCheckBoxList @bind-Value=@Claims TValue="string"  AllowSelectAll="true" SelectAllText="Select all items" Class="mb-5" Style="outline:none">
+
+                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Role Code</RadzenText>
+                <RadzenTextBox Class="w-100" @bind-Value="EditRole.RoleCode"/>
+                <ValidationMessage For="@(() => EditRole.RoleCode)"/>
+                <RadzenCheckBoxList @bind-Value=@Claims TValue="string" AllowSelectAll="true" SelectAllText="Select all items" Class="mb-5" Style="outline:none">
                     <Items >
                         <RadzenCheckBoxListItem Text="@ClaimNameTypes.READ" Value="@ClaimNameTypes.READ"/>
                         <RadzenCheckBoxListItem Text="@ClaimNameTypes.WRITE" Value="@ClaimNameTypes.WRITE"/>

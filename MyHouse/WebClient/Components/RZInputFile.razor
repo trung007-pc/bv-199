@@ -1,17 +1,9 @@
-﻿<InputFile class="file-input" OnChange="async (e) => {await OnChangeFileAtEditModal(e);}" accept="image/png, image/jpeg, image/gif" id="@FileID"  hidden/>
+﻿<InputFile class="file-input" OnChange="async (e) => { await OnChangeFileAtEditModal(e); }" accept="@Accept" id="@FileID" hidden/>
 
-@* <div style="display: flex;align-items: center;width:123px;"  class="file-label">     *@
-@*     <label for="@FileID" style="margin-bottom: 0">Choose File</label> *@
-@*     <RadzenIcon Icon="upload_file" ></RadzenIcon> *@
-@* </div> *@
-
-
-<div >    
-    <label for="@FileID"  style="display: flex;align-items: center;width:123px;margin-bottom: 0;cursor: pointer"  class="file-label">
-        <p style="margin-bottom: 0">Choose File</p>
-        <RadzenIcon Icon="upload_file" ></RadzenIcon>
-
+<div >
+    <label for="@FileID" style="@Style" class="file-label">
+        <RadzenIcon Icon="@Icon"></RadzenIcon>
+        <p style="margin-bottom: 0">@Text</p>
     </label>
 </div>
-<span id="file-chosen">@_fileStatus</span>
-
+<span id="file-chosen">@_fileName</span>

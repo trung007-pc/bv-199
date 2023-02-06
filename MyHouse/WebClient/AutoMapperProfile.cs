@@ -15,8 +15,9 @@ namespace WebClient
         public AutoMapperProfile()
         {
             CreateMap<RoleDto, CreateUpdateRoleDto>().ReverseMap();
-            CreateMap<UserDto, CreateUpdateUserDto>().ReverseMap();
-            CreateMap<UserWithNavigationDto, CreateUpdateUserWithNavDto>().ReverseMap();
+            CreateMap<UserDto, CreateUserDto>().ReverseMap();
+            CreateMap<UserDto, UpdateUserDto>().ReverseMap();
+            CreateMap<UserWithNavigationPropertiesDto, CreateUserDto>().ReverseMap();
 
             CreateMap<CreateUpdateUnitDto,UnitDto>().ReverseMap();
             CreateMap<UnitReviewDetailDto, CreateUpdateUnitReviewDetailDto>().ReverseMap();
@@ -24,7 +25,7 @@ namespace WebClient
             CreateMap<UnitReviewDto, CreateUpdateUnitReviewDto>().ReverseMap();
             CreateMap<UnitWithNavPropertiesDto, UnitReview.ReviewWithNavPropertiesModel>();
 
-            CreateMap<UserDto, UpdateUserNameWithNavDto>().ReverseMap();
+            CreateMap<UserDto, CreateUserDto>().ReverseMap();
 
             CreateMap<UnitReview.ReviewWithNavPropertiesModel, CreateUpdateUnitReviewDto>();
 

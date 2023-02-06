@@ -12,12 +12,7 @@ namespace Core.Helper
 {
     public static class FileHelper
     {
-        private static List<string> validImgExtensions = new List<string>()
-        {
-            ".jpg",
-            ".png"
-        };
-        public static async Task<FileModel> UploadImage(IFormFile file,string basePath,string baseUri ="")
+        public static async Task<FileModel> UploadFile(IFormFile file,string basePath,List<string> ExtensionsConstraint,string baseUri = "")
         {
             string directoryPath = "";
             var filePath = "";
@@ -26,7 +21,7 @@ namespace Core.Helper
                 {
                     var ext = Path.GetExtension(file.FileName);
     
-                    if (!validImgExtensions.Any(x => x.Contains(ext)))
+                    if (!ExtensionsConstraint.Any(x => x.Contains(ext)))
                     {
                         throw new GlobalException(HttpMessage.InvalidExtension, HttpStatusCode.BadRequest);
                     }
@@ -47,7 +42,10 @@ namespace Core.Helper
 
                     fileDto.Path = filePath;
                     fileDto.FileName =Path.Combine(directory , fileName);
-                    fileDto.Url = baseUri + fileDto.FileName;
+                    if (baseUri != "")
+                    {
+                        fileDto.Url = baseUri + fileDto.FileName;
+                    }
                     return fileDto;
                 }
                 else
