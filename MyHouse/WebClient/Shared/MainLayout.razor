@@ -1,4 +1,5 @@
-﻿@inherits LayoutComponentBase
+﻿@using System.Security.Claims
+@inherits LayoutComponentBase
 @inject NavigationManager _navManager
     
 <RadzenLayout class="rz-shadow-3">
@@ -13,8 +14,8 @@
                                <RadzenProfileMenu>
                                    <Template>
                                        <div class="box">
-                                           <h3 class="text-black fw-bolder">
-                                               @context.User.Identity.Name
+                                           <h3 >
+                                               @context.User.Claims.FirstOrDefault(x=>x.Type == ClaimTypes.Surname).Value
                                            </h3>
                                            <RadzenGravatar Email="user@example.com">
                                            </RadzenGravatar>

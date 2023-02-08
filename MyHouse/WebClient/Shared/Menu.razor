@@ -1,23 +1,28 @@
-﻿
-<RadzenPanelMenu >
-    <RadzenPanelMenuItem Text="Administrator" Icon="account_box">
-        <RadzenPanelMenuItem Text="User" Path="user" Icon="table_view"></RadzenPanelMenuItem>
-        <RadzenPanelMenuItem Text="Role" Path="role" Icon="table_view"></RadzenPanelMenuItem>
-    </RadzenPanelMenuItem>
-    
-    
+﻿<RadzenPanelMenu >
+
+
     <AuthorizeView>
-        @if (context.User.IsInRole("QUALITY MANAGER") 
-             ||context.User.IsInRole("ADMIN"))
-        {   
+
+        @if (context.User.IsInRole("ADMIN"))
+        {
+            <RadzenPanelMenuItem Text="Administrator" Icon="account_box">
+                <RadzenPanelMenuItem Text="User" Path="user" Icon="table_view"></RadzenPanelMenuItem>
+                <RadzenPanelMenuItem Text="Role" Path="role" Icon="table_view"></RadzenPanelMenuItem>
+            </RadzenPanelMenuItem>
+        }
+
+
+
+
+        @if (context.User.IsInRole("QUALITY MANAGER")
+             || context.User.IsInRole("ADMIN"))
+        {
             <RadzenPanelMenuItem Text="Satisfaction Survey" Icon="tab">
-                 <RadzenPanelMenuItem Text="Dashboard" Path="dashboard" Icon="dashboard"></RadzenPanelMenuItem>
+                <RadzenPanelMenuItem Text="Dashboard" Path="dashboard" Icon="dashboard"></RadzenPanelMenuItem>
                 <RadzenPanelMenuItem Text="Unit" Path="unit" Icon="table_view"></RadzenPanelMenuItem>
                 <RadzenPanelMenuItem Text="Unit Type" Path="unit-type" Icon="table_view"></RadzenPanelMenuItem>
                 <RadzenPanelMenuItem Text="Unit Review" Path="unit-review" Icon="table_view"></RadzenPanelMenuItem>
-                 <RadzenPanelMenuItem Text="TestPage" Path="demo" Icon="table_view"></RadzenPanelMenuItem>
-             </RadzenPanelMenuItem>
-            
+            </RadzenPanelMenuItem>
         }
     </AuthorizeView>
 

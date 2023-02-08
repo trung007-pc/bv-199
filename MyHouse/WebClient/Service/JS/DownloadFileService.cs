@@ -13,9 +13,9 @@ namespace WebClient.Service.JS
             _jsInterop = jsInterop;
         }
         
-        public async Task DownloadFileAsync(Byte[] bytes,string extension)
+        public async Task DownloadFileAsync(Byte[] bytes,string extension,string fileName)
         {
-            await _jsInterop.InvokeVoidAsync("saveAsFile", $"file-{DateTime.Now:yyyyMMddHHmmss}.{extension}", Convert.ToBase64String(bytes));
+            await _jsInterop.InvokeVoidAsync("saveAsFile", $"{fileName}-{DateTime.Now:yyyyMMddHHmmss}.{extension}", Convert.ToBase64String(bytes));
         }
     }
 }

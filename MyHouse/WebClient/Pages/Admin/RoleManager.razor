@@ -1,5 +1,5 @@
 ﻿@page "/role"
-@attribute [Authorize]
+@attribute [Authorize(Roles = "ADMIN")]
 @using ButtonType = Radzen.ButtonType
 @inject RoleManagerService _roleManagerService;
 @inherits BaseBlazorPage
@@ -18,24 +18,24 @@
         </RadzenBreadCrumb>
     </div>
     <div>
-        <RadzenButton Text="Create" Click="@ShowNewModal" Style="margin-bottom: 20px;"/>
+        <RadzenButton Text="Create" Click="@ShowNewModal" Icon="post_add" Style="margin-bottom: 20px;"/>
     </div>
 </div>
 
 
 <RadzenCard>
-    <RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" AllowAlternatingRows="false" AllowSorting="true" PageSize="5" AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true"
+    <RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" AllowAlternatingRows="false" AllowSorting="true" PageSize="20" AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true"
                     Data="@Roles" TItem="RoleDto" ColumnWidth="300px"
-
+                    AllowColumnPicking="true"
                     FilterMode="FilterMode.Simple"
                     LogicalFilterOperator="LogicalFilterOperator.Or"
                     FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
                     Style="width: 100%">
         <Columns>
+
             <RadzenDataGridColumn TItem="RoleDto" Property="Name" TextAlign="TextAlign.Center" Title="Name" Frozen="true" Width="160px"/>
             <RadzenDataGridColumn TItem="RoleDto" Property="RoleCode" TextAlign="TextAlign.Center" Title="Role Code" Frozen="true" Width="160px"/>
-
-            <RadzenDataGridColumn TItem="RoleDto" Property="Name" Title="Action" Frozen="true" Width="160px" Filterable="false">
+            <RadzenDataGridColumn TItem="RoleDto" Property="Name" Title="Action" TextAlign="TextAlign.Center" Frozen="true" Width="160px" Filterable="false">
                 <Template Context="data">
                     <RadzenButton Click="async () => { await ShowEditModal(data); }" Icon="edit" ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat" Size="ButtonSize.Medium">
                     </RadzenButton>

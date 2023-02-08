@@ -84,6 +84,7 @@ namespace WebClient.Pages.Admin
         {
             await InvokeAsync(async () =>
             {
+                NewUser.UserName = NewUser.PhoneNumber;
                 await _userManagerService.CreateUserWithRolesAsync(NewUser);
                 HideNewModal();
                 await GetUsers();
@@ -94,6 +95,7 @@ namespace WebClient.Pages.Admin
         {
             await InvokeAsync(async () =>
             {
+                EditUser.UserName = EditUser.PhoneNumber;
                 await _userManagerService.UpdateUserWithRolesAsync(EditUser, EditUserId);
                 await GetUsers();
                 await HideEditModal();
@@ -238,7 +240,7 @@ namespace WebClient.Pages.Admin
                 await InvokeAsync(async () =>
                 {
                     var fileDto = await _uploadService.UploadExcelFileOfUsers(EnclosedFile);
-                    ExcelValidator = await _userManagerService.CreateUsersFromCSVFile(fileDto);
+                    ExcelValidator = await _userManagerService.CreateUsersFromCSVFileAndDefineRoles(fileDto);
                     if (ExcelValidator.IsSuccessful)
                     {
                         HideImportExcelFileModal();
@@ -261,14 +263,19 @@ namespace WebClient.Pages.Admin
         {
             string pathBase = Path.Combine(_webHostEnvironment.WebRootPath,@"excels\userExcelSample\sample.csv");
             var bytes = await FileHelper.GetBytesOfExcelFile(pathBase);
-            await _downloadFile.DownloadFileAsync(bytes,"csv");
+            await _downloadFile.DownloadFileAsync(bytes,"csv","sample");
         }
 
         public async Task DownloadInstructionFileOfCreatingUser()
         {
             string pathBase = Path.Combine(_webHostEnvironment.WebRootPath,@"excels\userExcelSample\instruction.csv");
             var bytes = await FileHelper.GetBytesOfExcelFile(pathBase);
-            await _downloadFile.DownloadFileAsync(bytes,"csv");
+            await _downloadFile.DownloadFileAsync(bytes,"csv","instruction");
+        }
+        
+        void PickedColumnsChanged(DataGridPickedColumnsChangedEventArgs<UserWithNavigationPropertiesDto> args)
+        {
+        
         }
 
     }

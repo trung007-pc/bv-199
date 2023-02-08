@@ -2,10 +2,12 @@
 @attribute [Authorize(Roles = "ADMIN,QUALITY MANAGER")]
 @inherits BaseBlazorPage
 @inject UnitReviewService _unitReviewService;
+@inject UnitReviewDetailService _unitReviewDetailService;
 @inject NavigationManager _navigationManager
-@using ButtonType = Radzen.ButtonType
 @using Contract.UnitReviews
+@using WebClient.Service.UnitReviewDetails
 @using WebClient.Service.UnitReviews
+@using Contract.UnitReviewDetails
 
 
 <h3>@HeaderTitle</h3>
@@ -13,108 +15,86 @@
 <div style="display: flex;justify-content: space-between;align-items: center">
     <div>
         <RadzenBreadCrumb >
-                <RadzenBreadCrumbItem Path="/" Icon="home" Style="font-size: 20px"/>
-                <RadzenBreadCrumbItem Text="@HeaderTitle" Style="font-weight: 300"/>
-            </RadzenBreadCrumb>
+            <RadzenBreadCrumbItem Path="/" Icon="home" Style="font-size: 20px"/>
+            <RadzenBreadCrumbItem Text="@HeaderTitle" Style="font-weight: 300"/>
+        </RadzenBreadCrumb>
     </div>
     <div>
-            @* <RadzenButton Text="Create" Click="@ShowNewModal" Icon="add" /> *@
+
     </div>
 </div>
 
 <RZBR></RZBR>
 <RadzenCard>
-    <RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" AllowAlternatingRows="false"  PageSize="5" AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true"
+    <RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" AllowAlternatingRows="false" PageSize="20" AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true"
                     Data="@UnitReviews" TItem="UnitReviewDto" ColumnWidth="300px"
                     AllowSorting="true"
                     FilterMode="FilterMode.Simple"
                     FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
-                    LogicalFilterOperator="LogicalFilterOperator.Or" 
+                    LogicalFilterOperator="LogicalFilterOperator.Or"
+                    AllowColumnPicking="true"
                     Style="width: 100%">
         <Columns>
-            <RadzenDataGridColumn TItem="UnitReviewDto" Property="Note"  Title="Note" Frozen="true" Width="80px" TextAlign="TextAlign.Center"/>
-            <RadzenDataGridColumn TItem="UnitReviewDto" Property="CreationDate"  Title="Creation Date" Frozen="true" Width="80px" TextAlign="TextAlign.Center"/>
-    
-            <RadzenDataGridColumn TItem="UnitReviewDto" Property="AveragePoint" Filterable="false"  Title="Average Point" Frozen="true" Width="80px" TextAlign="TextAlign.Center">
-                <Template Context="data">
-                    @data.AveragePoint   <RadzenIcon Icon="star"  Style="color:gold"/>
+
+            <RadzenDataGridColumn TItem="UnitReviewDto" Property="CreationDate" Title="Creation Date" Frozen="true" Width="80px" TextAlign="TextAlign.Center">
+            <Template Context="data">
+                @($"{data.CreationDate:dd/MM/yyyy hh:mm tt}")
                 </Template>
             </RadzenDataGridColumn>
-            
-                   <RadzenDataGridColumn TItem="UnitReviewDto" Property="ImageUrl" Title="Enclosed Image" Frozen="true" Width="120px" TextAlign="TextAlign.Center" Filterable="false">
-                       <Template Context="data">
-                           @if (data.ImageUrl != null)
-                           {
-                               <RadzenImage Path="@data.ImageUrl" class="rz-gravatar" Style="width: 64px;height: 64px"/>
-                           }
-                       </Template>
-                       </RadzenDataGridColumn>
-                
-            <RadzenDataGridColumn TItem="UnitReviewDto" Property="AveragePoint" Title="Action" Frozen="true" Width="160px" Filterable="false">
+
+            <RadzenDataGridColumn TItem="UnitReviewDto" Property="AveragePoint" Filterable="false" Title="Average Point" Frozen="true" Width="80px" TextAlign="TextAlign.Center">
                 <Template Context="data">
-                    <RadzenButton Click="async () => { await NavigateToDetails(data.Id); }" ButtonStyle="ButtonStyle.Primary" Icon="visibility" Variant="Variant.Flat" Shade="Shade.Lighter" Size="ButtonSize.Medium" Class="my-1 ms-1">  </RadzenButton>
+                    @data.AveragePoint <RadzenIcon Icon="star" Style="color:gold"/>
+                </Template>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="UnitReviewDto" Property="ImageUrl" Title="Enclosed Image" Frozen="true" Width="80px" TextAlign="TextAlign.Center" Filterable="false">
+                <Template Context="data">
+                    @if (data.ImageUrl != null)
+                    {
+                        <RadzenImage Path="@data.ImageUrl" class="rz-gravatar" Style="width: 64px;height: 64px"/>
+                    }
+                </Template>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="UnitReviewDto" Property="Note" Title="Note" Frozen="true" Width="200px" Resizable="true" TextAlign="TextAlign.Center" CssClass="resize-base-on-content"/>
+            <RadzenDataGridColumn TItem="UnitReviewDto" Property="AveragePoint" Title="Action" TextAlign="TextAlign.Center" Frozen="true" Width="80px" Filterable="false">
+                <Template Context="data">
+                    <RadzenButton Click="async () => { await ShowViewDetailModal(data.Id); }" ButtonStyle="ButtonStyle.Primary" Icon="visibility" Variant="Variant.Flat" Shade="Shade.Lighter" Size="ButtonSize.Medium" Class="my-1 ms-1"> </RadzenButton>
                     <RadzenButton Click="async () => { await ShowConfirmMessage(data.Id); }" ButtonStyle="ButtonStyle.Danger" Icon="delete" Variant="Variant.Flat" Shade="Shade.Lighter" Size="ButtonSize.Medium" Class="my-1 ms-1">
                     </RadzenButton>
                 </Template>
             </RadzenDataGridColumn>
+
+
         </Columns>
     </RadzenDataGrid>
 </RadzenCard>
 
 
+<Modal @ref="ViewDetailModal">
+    <ModalContent Size="ModalSize.Large" Centered="true">
+        <ModalHeader>
+            <ModalTitle>Review Details</ModalTitle>
+        </ModalHeader>
+        <EditForm Model="DefaultModal">
+            <ModalBody>
+                <RadzenDataGrid AllowFiltering="false" AllowColumnResize="true" AllowAlternatingRows="false" FilterMode="FilterMode.Advanced" AllowSorting="false" PageSize="20" AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true"
+                                Data="@Details" TItem="UnitReviewDetailDto" LogicalFilterOperator="LogicalFilterOperator.Or">
+                    <Columns>
+                        <RadzenDataGridColumn TItem="UnitReviewDetailDto" Property="UnitName" Filterable="false" Title="Unit" Width="80px" TextAlign="TextAlign.Center"/>
+                        <RadzenDataGridColumn TItem="UnitReviewDetailDto" Property="Rate" Title="Rating" Width="160px">
+                            <Template Context="data">
+                                <RadzenRating ReadOnly="true" Stars="5" @bind-Value=@data.Rate />
+                            </Template>
+                        </RadzenDataGridColumn>
+                    </Columns>
+                </RadzenDataGrid>
 
-@* <Modal @ref="CreateModal"> *@
-@*     <ModalContent Size="ModalSize.ExtraLarge"> *@
-@*         <ModalHeader> *@
-@*             <ModalTitle>Part Review</ModalTitle> *@
-@*         </ModalHeader> *@
-@*         <EditForm Model="NewReview" OnValidSubmit="async () => { await CreateUnitReview(); }"> *@
-@*             <ModalBody> *@
-@* *@
-@*                 <DataAnnotationsValidator/> *@
-@*                 <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Note</RadzenText> *@
-@*                 <RadzenTextArea Placeholder="Enter here..." @bind-Value="NewReview.Note" Class="w-100"/> *@
-@*                 <ValidationMessage For="@(() => NewReview.Note)"/> *@
-@* *@
-@*                 <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Parts</RadzenText> *@
-@*                 <RadzenDropDown AllowClear="true" Class="w-100" *@
-@*                                 Data=Parts *@
-@*                                 @bind-Value=@SelectedNewPartId *@
-@*                                 TextProperty="Name" ValueProperty="Id" Change=OnCreateSelectedPart/> *@
-@* *@
-@*                 <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Ratting</RadzenText> *@
-@* *@
-@*                 <RadzenRating Stars="5" @bind-Value=@NewReview.Rating/> *@
-@* *@
-@*             </ModalBody> *@
-@*             <ModalFooter> *@
-@*                 <RadzenButton ButtonStyle="ButtonStyle.Secondary" Clicked="@HideNewModal">Close</RadzenButton> *@
-@*                 <RadzenButton Text="Save Changes" ButtonType="ButtonType.Submit"/> *@
-@*             </ModalFooter> *@
-@*         </EditForm> *@
-@*     </ModalContent> *@
-@* </Modal> *@
-@* *@
-@* *@
-@* <Modal @ref="EditModal"> *@
-@*     <ModalContent Size="ModalSize.ExtraLarge"> *@
-@*         <ModalHeader> *@
-@*             <ModalTitle>Part Review</ModalTitle> *@
-@*         </ModalHeader> *@
-@*         <EditForm Model="EditReview" OnValidSubmit="async () => { await UpdateUnitReview(); }"> *@
-@* *@
-@*             <ModalBody> *@
-@*                 <DataAnnotationsValidator/> *@
-@*                 <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Note</RadzenText> *@
-@*                 <RadzenTextBox Class="w-100" @bind-Value="EditReview.Note"/> *@
-@*                 <ValidationMessage For="@(() => EditReview.Note)"/> *@
-@*                 <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Ratting</RadzenText> *@
-@*                 <RadzenRating Stars="5" @bind-Value=@EditReview.Rating/> *@
-@*             </ModalBody> *@
-@*             <ModalFooter> *@
-@*                 <Button Color="Color.Secondary" Clicked="@HideEditModal">Close</Button> *@
-@*                 <RadzenButton Text="Save Changes" ButtonType="ButtonType.Submit"/> *@
-@*             </ModalFooter> *@
-@*         </EditForm> *@
-@*     </ModalContent> *@
-@* </Modal> *@
+            </ModalBody>
+            <ModalFooter>
+                <RadzenButton ButtonStyle="ButtonStyle.Dark" Click="@HideViewDetailModal">Close</RadzenButton>
+            </ModalFooter>
+        </EditForm>
+    </ModalContent>
+</Modal>

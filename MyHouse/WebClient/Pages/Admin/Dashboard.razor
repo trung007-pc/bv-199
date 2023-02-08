@@ -55,7 +55,7 @@
         <Strong>Total Reviews : <span style="color:#b02a37">@Stat.TotalReview</span></Strong>
         <RadzenChart SeriesClick=@OnSeriesClick Style="width: 500px;margin: 0 auto">
 
-            <RadzenPieSeries Data="@DetailUnitReviewdataItems" Title="Total" CategoryProperty="Label" ValueProperty="Value">
+            <RadzenPieSeries Data="@DetailUnitReviewdataItems" Title="Total" CategoryProperty="LabelWithValue" ValueProperty="Value">
                 <TooltipTemplate Context="data">
                     <div>
                         <span>

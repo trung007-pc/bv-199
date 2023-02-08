@@ -155,7 +155,7 @@ namespace Application.Identity.UserManager
             return ObjectMapper.Map<User, UserDto>(item);
         }
 
-        public async Task<ExcelValidator> CreateUsersFromCSVFile(FileDto file)
+        public async Task<ExcelValidator> CreateUsersFromCSVFileAndDefineRoles(FileDto file)
         {
             if (!File.Exists(file.Path))
             {
@@ -640,39 +640,13 @@ namespace Application.Identity.UserManager
 
         public async Task<UserPasswordUpdateModel> ChangePasswordAsync(UserPasswordUpdateModel userDto)
         {
-            // var user = await _userManager.FindByNameAsync(userDto.UserName);
-            // if (user == null)
-            // {
-            //     return new ApiResponseBase()
-            //         {IsSuccess = false, StatusCode = HttpStatusCode.BadRequest, Message = HttpMessage.CheckInformation};
-            // }
-            //
-            // var result = await _userManager.ChangePasswordAsync(user, userDto.CurrentPassword, userDto.NewPassword);
-            //
-            // return GetApiResponse(result);
+
             return null;
         }
 
         public async Task<UserDto> SetPasswordAsync(UserModel input)
         {
-            // var user = await _userManager.FindByNameAsync(input.UserName);
-            //
-            // if (user == null)
-            // {
-            //     return new ApiResponseBase()
-            //         {IsSuccess = false, StatusCode = HttpStatusCode.BadRequest, Message = HttpMessage.CheckInformation};
-            // }
-            //
-            // var result = await _userManager.RemovePasswordAsync(user);
-            // if (!result.Succeeded)
-            // {
-            //     return new ApiResponseBase()
-            //         {IsSuccess = false, StatusCode = HttpStatusCode.BadRequest, Message = HttpMessage.CheckInformation};
-            // }
-            //
-            // var nextResult = await _userManager.AddPasswordAsync(user, input.Password);
-            //
-            // return GetApiResponse(nextResult);
+     
             return null;
         }
 
@@ -728,8 +702,9 @@ namespace Application.Identity.UserManager
             {
                 claims.Add(new Claim(ClaimTypes.Role, item));
             }
-
+            
             claims.Add(new Claim(ClaimTypes.Name, user.UserName));
+            claims.Add(new Claim(ClaimTypes.Surname,user.FirstName +" "+ user.LastName));
 
             var tokeOptions = new JwtSecurityToken(
                 issuer: _configuration["Jwt:Issuer"],

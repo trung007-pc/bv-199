@@ -24,7 +24,7 @@
 
 <RZBR></RZBR>
 
-<RadzenDataGrid AllowFiltering="false" AllowColumnResize="true" AllowAlternatingRows="false" FilterMode="FilterMode.Advanced" AllowSorting="false" PageSize="5" AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true"
+<RadzenDataGrid AllowFiltering="false" AllowColumnResize="true" AllowAlternatingRows="false" FilterMode="FilterMode.Advanced" AllowSorting="false" PageSize="20" AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true"
                 Data="@Details" TItem="UnitReviewDetailDto" ColumnWidth="300px" LogicalFilterOperator="LogicalFilterOperator.Or" Style="width: 50%">
     <Columns>
         <RadzenDataGridColumn TItem="UnitReviewDetailDto" Property="UnitName" Filterable="false" Title="Unit" Frozen="true" Width="80px" TextAlign="TextAlign.Center"/>
@@ -38,8 +38,6 @@
             <Template Context="data">
                 <RadzenButton Click="async () => { await ShowEditModal(data); }" Icon="edit" ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat" Size="ButtonSize.Medium">
                 </RadzenButton>
-                @* <RadzenButton ButtonStyle="ButtonStyle.Info" Click="async () => { await ShowEditModal(data); }" Text="Edit" Size="ButtonSize.Medium"/> *@
-                @* <RadzenButton ButtonStyle="ButtonStyle.Dark" Click="async () => { await DeleteDetail(data.Id); }" Text="Delete" Size="ButtonSize.Medium"/> *@
             </Template>
         </RadzenDataGridColumn>
     </Columns>

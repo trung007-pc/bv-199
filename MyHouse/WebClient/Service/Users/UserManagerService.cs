@@ -47,7 +47,7 @@ namespace WebClient.Service.Users
             throw new NotImplementedException();
         }
         
-        public async Task<ExcelValidator> CreateUsersFromCSVFile(FileDto file)
+        public async Task<ExcelValidator> CreateUsersFromCSVFileAndDefineRoles(FileDto file)
         {
             return await RequestClient.PostAPIAsync<ExcelValidator>($"user/create-users-from-csv-file", file);
         }

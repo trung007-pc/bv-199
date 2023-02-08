@@ -42,7 +42,7 @@ namespace Application.Identity.RoleManager
         {
             var role = ObjectMapper.Map<CreateUpdateRoleDto, Role>(input);
             role.Name = role.Name.Trim().ToUpper();
-            if (await _roleManager.Roles.AnyAsync(x => x.RoleCode == role.RoleCode))
+            if (await _roleManager.Roles.AnyAsync(x => x.RoleCode == role.RoleCode && input.RoleCode!=null))
                 throw new GlobalException(HttpMessage.Duplicate.DuplicateRoleCode, HttpStatusCode.BadRequest);
             role.RoleCode = role.RoleCode?.ToUpper();
             var result = await _roleManager.CreateAsync(role);
@@ -64,7 +64,7 @@ namespace Application.Identity.RoleManager
                 throw new GlobalException(HttpMessage.NotFound, HttpStatusCode.BadRequest);
             }
             
-            if (await _roleManager.Roles.AnyAsync(x => x.RoleCode == input.RoleCode && x.Id != item.Id))
+            if (await _roleManager.Roles.AnyAsync(x =>input.RoleCode!=null && x.RoleCode == input.RoleCode && x.Id != item.Id))
                 throw new GlobalException(HttpMessage.Duplicate.DuplicateRoleCode, HttpStatusCode.BadRequest);
             input.RoleCode = input.RoleCode?.ToUpper();
             var role = ObjectMapper.Map(input, item);

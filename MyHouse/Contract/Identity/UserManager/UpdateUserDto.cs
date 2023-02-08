@@ -10,9 +10,6 @@ namespace Contract.Identity.UserManager
 {
     public class UpdateUserDto
     {
-        [MinLength(4)]
-        [Required(ErrorMessage = "UserName is required")]
-        [RegularExpression(ContentRegularExpression.USER_NAME,ErrorMessage = "Username must not have spaces")]
         public string UserName { get; set; }
         
         

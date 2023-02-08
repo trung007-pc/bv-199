@@ -21,25 +21,25 @@
         </RadzenBreadCrumb>
     </div>
     <div>
-        <RadzenButton Text="Create" Click="@ShowNewModal" Style="margin-bottom: 20px;"/>
+        <RadzenButton Text="Create" Icon="post_add" Click="@ShowNewModal" Style="margin-bottom: 20px;"/>
     </div>
 </div>
 
 
 <RadzenCard>
-    <RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" AllowAlternatingRows="false" AllowSorting="true" PageSize="5" AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true"
+    <RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" AllowAlternatingRows="false" AllowSorting="true" PageSize="20" AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true"
                     Data="@UnitTypes" TItem="UnitTypeDto" ColumnWidth="300px"
-
                     FilterMode="FilterMode.Simple"
                     LogicalFilterOperator="LogicalFilterOperator.Or"
                     FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                    AllowColumnPicking="true"
                     Style="width: 100%">
         <Columns>
-            <RadzenDataGridColumn TItem="UnitTypeDto"  TextAlign="TextAlign.Center" Property="Name" Title="Name" Frozen="true" Width="160px"/>
-            <RadzenDataGridColumn TItem="UnitTypeDto" Property="Name" Title="Action" Frozen="true" Width="160px" Filterable="false">
+            <RadzenDataGridColumn TItem="UnitTypeDto" TextAlign="TextAlign.Center" Property="Name" Title="Name" Frozen="true" Width="160px"/>
+            <RadzenDataGridColumn TItem="UnitTypeDto" Property="Name" TextAlign="TextAlign.Center" Title="Action" Frozen="true" Width="160px" Filterable="false">
                 <Template Context="data">
-                    
-                    <RadzenButton MouseEnter="ShowTooltip" Click="async () => { await CopyToClipboard(data.Id); }"  Icon="content_copy" ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat" Size="ButtonSize.Medium">
+
+                    <RadzenButton MouseEnter="ShowTooltip" Click="async () => { await CopyToClipboard(data.Id); }" Icon="content_copy" ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat" Size="ButtonSize.Medium">
                     </RadzenButton>
                     <RadzenButton Click="async () => { await ShowEditModal(data); }" Icon="edit" ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat" Size="ButtonSize.Medium">
                     </RadzenButton>

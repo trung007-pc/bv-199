@@ -58,6 +58,12 @@ namespace WebClient.Pages.Admin
                 UnitReviewdataItems = Stat.UnitReviewItems;
                 UnitReviewdataItems.Add(new DataItem(){Label = "",Value = 0});
                 DetailUnitReviewdataItems = Stat.DetailUnitReviewItems;
+
+                foreach (var item in DetailUnitReviewdataItems)
+                {
+                    item.LabelWithValue = $"{item.Label}: {item.Value}";
+                }
+                
                 IsLoading = false;
         }
         

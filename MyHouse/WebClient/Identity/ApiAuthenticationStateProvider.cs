@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 
 using System.Security.Claims;
@@ -45,7 +45,7 @@ namespace WebClient.Identity
             }
             RequestClient.AttachToken(savedToken);
             
-            return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(ParseClaimsFromJwt(savedToken), "jwt")));
+            return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(ParseClaimsFromJwt1(savedToken), "jwt")));
         }
         catch (Exception e)
         {
@@ -111,35 +111,10 @@ namespace WebClient.Identity
     
     private IEnumerable<Claim> ParseClaimsFromJwt1(string jwt)
     {
-        var claims = new List<Claim>();
-        var payload = jwt.Split('.')[1];
-        var jsonBytes = ParseBase64WithoutPadding(payload);
-        var keyValuePairs = JsonSerializer.Deserialize<Dictionary<string, object>>(jsonBytes);
+        var handler = new JwtSecurityTokenHandler();
 
-        keyValuePairs.TryGetValue(ClaimTypes.Role, out object roles);
-
-        if (roles != null)
-        {
-            if (roles.ToString().Trim().StartsWith("["))
-            {
-                var parsedRoles = JsonSerializer.Deserialize<string[]>(roles.ToString());
-
-                foreach (var parsedRole in parsedRoles)
-                {
-                    claims.Add(new Claim(ClaimTypes.Role, parsedRole));
-                }
-            }
-            else 
-            {
-                claims.Add(new Claim(ClaimTypes.Role, roles.ToString()));
-            }
-
-            keyValuePairs.Remove(ClaimTypes.Role);
-        }
-        
-        claims.AddRange(keyValuePairs.Select(kvp => new Claim(kvp.Key, kvp.Value.ToString())));
-
-        return claims;
+        var decodedValue = handler.ReadJwtToken(jwt);
+        return decodedValue.Claims;
     }
 
     private byte[] ParseBase64WithoutPadding(string base64)

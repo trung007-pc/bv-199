@@ -57,9 +57,9 @@ namespace WebApi.Controllers
         [HttpPost]
         [Route("create-users-from-csv-file")]
         [AllowAnonymous]
-        public async Task<ExcelValidator> CreateUsersFromCSVFile(FileDto file)
+        public async Task<ExcelValidator> CreateUsersFromCSVFileAndDefineRoles(FileDto file)
         {
-            return await _userManagerService.CreateUsersFromCSVFile(file);
+            return await _userManagerService.CreateUsersFromCSVFileAndDefineRoles(file);
         }
 
 
@@ -114,13 +114,7 @@ namespace WebApi.Controllers
             return await _userManagerService.SignUpAsync(input);
         }
 
-        // [HttpPost]
-        // [Route("update-roles-for-user")]
-        // public async Task<ApiResponseBase> UpdateRolesForUser(string userName, List<string> roles)
-        // {
-        //     return await _userManagerService.UpdateRolesForUser(userName,roles);
-        // }
-
+        
         [HttpPost]
         [Route("update-profile")]
         public async Task<UserProfileModel> UpdateUserProfileAsync(UserProfileModel userProfileModel)

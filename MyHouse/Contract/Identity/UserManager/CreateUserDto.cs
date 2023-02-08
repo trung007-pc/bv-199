@@ -10,14 +10,11 @@ using Core.Enum;
 
 namespace Contract.Identity.UserManager
 {
-    public  class CreateUserDto 
+    public  class CreateUserDto
     {
-        [MinLength(4)]
-        [Required(ErrorMessage = "UserName is required")]
-        [RegularExpression(ContentRegularExpression.USER_NAME,ErrorMessage = "Username must not have spaces")]
-
-        public string UserName { get; set; }
         
+        public string UserName { get; set; }
+
         [Required(ErrorMessage = "First Name is required")]
         [RegularExpression(ContentRegularExpression.NAME,ErrorMessage = "First Name must be in text format")]
         [MinLength(2,ErrorMessage = "First Name is at least 2 character")]

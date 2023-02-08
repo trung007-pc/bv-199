@@ -165,9 +165,13 @@ namespace WebClient.Pages.Admin
             EditFile = null;
             
             EditUnitId = unitDto.Id;
-            EditUnit.UnitTypeId = type.Id;
-            
-            OnEditSelectedTypeId = type.Id;
+
+            if (type.Id != Guid.Empty)
+            {
+                EditUnit.UnitTypeId = type.Id;
+                OnEditSelectedTypeId = type.Id;
+            }
+         
             return EditModal.Show();
         }
 
@@ -183,7 +187,7 @@ namespace WebClient.Pages.Admin
         
         public void OnEditSelectedTypes(object value)
         {
-            EditUnit.UnitTypeId = (Guid)value;
+            EditUnit.UnitTypeId = (Guid?)value;
         }
         
         

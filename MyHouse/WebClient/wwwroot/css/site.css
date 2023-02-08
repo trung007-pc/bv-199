@@ -95,6 +95,10 @@ a, .btn-link {
  justify-content: center;   
 }
 
+.resize-base-on-content span{
+    white-space: normal !important;
+}
+
 @keyframes Fade-in{
     
     from{
