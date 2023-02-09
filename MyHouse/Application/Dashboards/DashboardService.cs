@@ -46,7 +46,7 @@ namespace Application.Dashboards
                     {
                         Label = items.Unit.Name,
                         Value = (details.Count() != 0
-                            ? details.Sum(x => x.Rate) / details.Count()
+                            ? (double)details.Sum(x => x.Rate) / details.Count()
                             : 0)
                     });
                 }

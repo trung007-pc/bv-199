@@ -1,5 +1,5 @@
 ﻿@page "/dashboard"
-@attribute [Authorize]
+@attribute [Authorize(Roles = "ADMIN,QUALITY MANAGER")]
 @inherits BaseBlazorPage
 @using WebClient.Service.Dashboards
 @using Core.Const
@@ -81,11 +81,11 @@
 
                 <TooltipTemplate Context="data">
                     <div>
-                        Part:<strong>@data.Label</strong>
+                        Unit:<strong>@data.Label</strong>
                         <br/>
                         Rating:
                         <strong>
-                            @data.Value<RadzenIcon Icon="star" Style="color:gold"/>
+                            @data.Value.ToString("0.0")<RadzenIcon Icon="star" Style="color:gold"/>
                         </strong>
                     </div>
                 </TooltipTemplate>

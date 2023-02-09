@@ -1,5 +1,5 @@
 ﻿@page "/unit-type"
-@attribute [Authorize]
+@attribute [Authorize(Roles = "ADMIN,QUALITY MANAGER")]
 @using WebClient.Service.UnitTypes
 @using ButtonType = Radzen.ButtonType
 @inject UnitTypeService _unitTypeService;
