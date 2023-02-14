@@ -1,4 +1,4 @@
-﻿@page "/unit-type"
+@page "/unit-types"
 @attribute [Authorize(Roles = "ADMIN,QUALITY MANAGER")]
 @using WebClient.Service.UnitTypes
 @using ButtonType = Radzen.ButtonType
@@ -67,8 +67,8 @@
 
             </ModalBody>
             <ModalFooter>
-                <RadzenButton ButtonStyle="ButtonStyle.Dark" Click="@HideNewModal">Close</RadzenButton>
-                <RadzenButton Text="Save Changes" ButtonType="ButtonType.Submit"/>
+                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Click="@HideNewModal" Text="Cancel"/>
+                <RadzenButton Text="Save Changes" Icon="save" ButtonType="ButtonType.Submit"/>
             </ModalFooter>
         </EditForm>
     </ModalContent>
@@ -88,8 +88,8 @@
 
             </ModalBody>
             <ModalFooter>
-                <Button Color="Color.Secondary" Clicked="@HideEditModal">Close</Button>
-                <RadzenButton Text="Save Changes" ButtonType="ButtonType.Submit"/>
+                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Click="@HideEditModal" Text="Cancel"/>
+                <RadzenButton Text="Save Changes" Icon="save" ButtonType="ButtonType.Submit"/>
             </ModalFooter>
         </EditForm>
     </ModalContent>

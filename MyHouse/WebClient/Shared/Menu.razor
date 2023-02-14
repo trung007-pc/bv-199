@@ -2,16 +2,13 @@
 
 
     <AuthorizeView>
-
         @if (context.User.IsInRole("ADMIN"))
         {
             <RadzenPanelMenuItem Text="Administrator" Icon="account_box">
-                <RadzenPanelMenuItem Text="User" Path="user" Icon="table_view"></RadzenPanelMenuItem>
-                <RadzenPanelMenuItem Text="Role" Path="role" Icon="table_view"></RadzenPanelMenuItem>
+                <RadzenPanelMenuItem Text="Users" Path="users" Icon="table_view"></RadzenPanelMenuItem>
+                <RadzenPanelMenuItem Text="Roles" Path="roles" Icon="table_view"></RadzenPanelMenuItem>
             </RadzenPanelMenuItem>
         }
-
-
 
 
         @if (context.User.IsInRole("QUALITY MANAGER")
@@ -19,11 +16,22 @@
         {
             <RadzenPanelMenuItem Text="Satisfaction Survey" Icon="tab">
                 <RadzenPanelMenuItem Text="Dashboard" Path="dashboard" Icon="dashboard"></RadzenPanelMenuItem>
-                <RadzenPanelMenuItem Text="Unit" Path="unit" Icon="table_view"></RadzenPanelMenuItem>
-                <RadzenPanelMenuItem Text="Unit Type" Path="unit-type" Icon="table_view"></RadzenPanelMenuItem>
-                <RadzenPanelMenuItem Text="Unit Review" Path="unit-review" Icon="table_view"></RadzenPanelMenuItem>
+                <RadzenPanelMenuItem Text="Units" Path="units" Icon="table_view"></RadzenPanelMenuItem>
+                <RadzenPanelMenuItem Text="Unit Types" Path="unit-types" Icon="table_view"></RadzenPanelMenuItem>
+                <RadzenPanelMenuItem Text="Unit Reviews" Path="unit-reviews" Icon="table_view"></RadzenPanelMenuItem>
             </RadzenPanelMenuItem>
         }
+        @if (context.User.IsInRole("ADMIN"))
+        {
+            <RadzenPanelMenuItem Text="Catalogue" Icon="view_list">
+                <RadzenPanelMenuItem Text="Positions" Path="positions" Icon="table_view"></RadzenPanelMenuItem>
+                <RadzenPanelMenuItem Text="Departments" Path="departments" Icon="table_view"></RadzenPanelMenuItem>
+            </RadzenPanelMenuItem>
+        }
+
+
+
+
     </AuthorizeView>
 
 

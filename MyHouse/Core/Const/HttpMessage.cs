@@ -24,6 +24,9 @@
         public  string DuplicatePhoneNumber = "Duplicate PhoneNumber";
         public string DuplicateEmployeeCode = "Duplicate Employee Code";
         public string DuplicateRoleCode = "Duplicate Code Role";
+        public string DuplicateCode = "Duplicate Code";
+
+
 
     }
     

@@ -11,11 +11,18 @@ namespace Contract.Identity.UserManager
         public string EmployeeCode { get; set;}
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public Gender? Gender { get; set; } = Core.Enum.Gender.Unknown; 
+        public Gender Gender { get; set; } = Gender.Unknown; 
         public DateTime? DOB { get; set; } 
         public string PhoneNumber { get; set; }
         public string? Email { get; set; }
+        
+        public List<string> DepartmentCodes { get; set; } =  new List<string>();
+        public string PositionCode { get; set; }
+        public List<string> RoleCodes { get; set; } = new List<string>();
+        
+        
+        
         public int Row { get; set; }
-        public List<string> Roles { get; set; } = new List<string>();
+
     }
 }

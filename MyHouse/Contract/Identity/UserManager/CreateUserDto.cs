@@ -48,15 +48,21 @@ namespace Contract.Identity.UserManager
         [Required(ErrorMessage = "Phone Number is required")]
         [RegularExpression(ContentRegularExpression.NUMBER_PHONE,ErrorMessage = "Phone Number has to 10 number")]
         public string PhoneNumber { get; set; }
-        
-        
-  
-        [RegularExpression(ContentRegularExpression.EMAIL,ErrorMessage = "Email has to @gmail.com format")]
-        public string? Email { get; set; }
+
+
+
+        [RegularExpression(ContentRegularExpression.EMAIL, ErrorMessage = "Email has to @gmail.com format")]
+        public string? Email { get; set; } 
         
         public List<string> Roles { get; set; } = new List<string>();
+        
+        
+        public Guid? PositionId { get; set; }
 
-        
-        
+        public List<Guid> DepartmentIds { get; set; } = new List<Guid>();
+
+
+
+
     }
 }

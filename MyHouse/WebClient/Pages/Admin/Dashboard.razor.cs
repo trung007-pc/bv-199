@@ -26,6 +26,7 @@ namespace WebClient.Pages.Admin
 
         public DashboardFilter Filter { get; set; }
         public List<UnitTypeDto> Types { get; set; }
+        public bool showDataLabels = false;
 
 
         public Dashboard()
@@ -90,6 +91,11 @@ namespace WebClient.Pages.Admin
         {
             Filter.UnitTypeId = (Guid?)value;
             await GetUnitStatisticsByReviewDateRange();
+        }
+        
+        string FormatAsNumber(object value)
+        {
+            return ((double)value).ToString("0.0");
         }
     }
    

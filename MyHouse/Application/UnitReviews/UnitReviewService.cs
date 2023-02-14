@@ -23,24 +23,22 @@ namespace Application.UnitReviews
         private readonly UnitReviewRepository _unitReviewRepository;
 
         private readonly UnitReviewDetailRepository _unitReviewDetailRepository;
-        private readonly UnitRepository _unitRepository;
         
 
 
         public UnitReviewService(UnitReviewRepository unitReviewRepository,
-            UnitReviewDetailRepository unitReviewDetailRepository,
-            UnitRepository unitRepository)
+            UnitReviewDetailRepository unitReviewDetailRepository)
         {
             _unitReviewRepository = unitReviewRepository;
             _unitReviewDetailRepository = unitReviewDetailRepository;
-            _unitRepository = unitRepository;
+           
         }
 
-        public async Task<List<UnitReviewDto>> GetListWithCalculatingAverageAsync()
+        public async Task<List<UnitReviewDto>> GetListWithCalculatingAverageAsync(UnitReviewFilter input)
         {
-            var reviewsWithNav = await _unitReviewRepository.GetListWithNavigationPropertiesAsync();
+            var reviewsWithNav = await _unitReviewRepository.GetListWithNavigationPropertiesAsync(input);
             var reviewsWithNavDto = new List<UnitReviewDto>();
-
+            
             foreach (var item in reviewsWithNav)
             {
                 var dto = ObjectMapper.Map<UnitReview, UnitReviewDto>(item);

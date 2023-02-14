@@ -1,9 +1,12 @@
-﻿@page "/user"
+﻿@page "/users"
 @attribute [Authorize(Roles = "ADMIN")]
 @using ButtonType = Radzen.ButtonType
 @inject UserManagerService _userManagerService;
 @inherits BaseBlazorPage
 @inject RoleManagerService _roleManagerService;
+@inject PositionService _positionService;
+@inject DepartmentService _departmentService;
+
 @inject UploadService _uploadService;
 @inject IWebHostEnvironment _webHostEnvironment;
 @inject DownloadFileService _downloadFile;
@@ -16,6 +19,9 @@
 @using WebClient.Service.Upload
 @using WebClient.Service.Users
 @using Contract.Common.Excels;
+@using Contract.Departments
+@using WebClient.Service.Departments
+@using WebClient.Service.Positions
 
 <h3>@HeaderTitle</h3>
 
@@ -28,32 +34,13 @@
     </div>
 
     <div style="display: flex;gap: 5px">
-        <RadzenButton Text="Import Excel File" Icon="upload" Click="@ShowImportExcelFileModal"/>
+        <RadzenButton Text="Import Excel File" ButtonStyle="ButtonStyle.Success" Icon="upload" Click="@ShowImportExcelFileModal"/>
         <RadzenButton Text="Create" Icon="person_add" Click="@ShowNewModal"/>
     </div>
 
 </div>
 
 <RZBR/>
-
-
-<RadzenCard>
-    <Row Style="display:flex;align-items: center">
-        <Column ColumnSize="ColumnSize.Is2">
-            <RadzenIcon Icon="calendar_today"/>
-        </Column>
-
-        <Column ColumnSize="ColumnSize.Is7">
-            <RadzenTextBox Placeholder="Search..." Class="w-100"/>
-        </Column>
-
-        <Column ColumnSize="ColumnSize.Is3">
-            <RadzenButton Text="Search" Icon="search"/>
-        </Column>
-
-    </Row>
-</RadzenCard>
-
 <RZBR/>
 
 
@@ -69,23 +56,38 @@
                     Sort="ShowLoading"
                     AllowColumnPicking="true"
                     PickedColumnsChanged="PickedColumnsChanged"
+                    PageSizeOptions="PageSizeOptions"
                     Style="width: 100%">
         <Columns>
-            <RadzenDataGridColumn TItem="UserWithNavigationPropertiesDto" Property="UserDto.UserName" TextAlign="TextAlign.Center" Title="User Name" Width="160px"/>
-            <RadzenDataGridColumn TItem="UserWithNavigationPropertiesDto" Property="UserDto.EmployeeCode" TextAlign="TextAlign.Center" Title="Employee Code" Width="160px"/>
-            <RadzenDataGridColumn TItem="UserWithNavigationPropertiesDto" Property="UserDto.FirstName" TextAlign="TextAlign.Center" Title="First Name" Width="160px"/>
-            <RadzenDataGridColumn TItem="UserWithNavigationPropertiesDto" Property="UserDto.LastName" TextAlign="TextAlign.Center" Title="Last Name" Width="160px"/>
-            <RadzenDataGridColumn TItem="UserWithNavigationPropertiesDto" Property="UserDto.Gender" TextAlign="TextAlign.Center" Title="Gender" Width="160px"/>
-            <RadzenDataGridColumn TItem="UserWithNavigationPropertiesDto" Property="UserDto.DOB"  FormatString="{0:d}"  TextAlign="TextAlign.Center" Title="DOB" Width="160px">
-                   <Template Context="data">
-                                @($"{data.UserDto.DOB:dd/MM/yyyy}")</Template>
-             </RadzenDataGridColumn>
-            
-            <RadzenDataGridColumn TItem="UserWithNavigationPropertiesDto" Property="UserDto.PhoneNumber" TextAlign="TextAlign.Center" Title="Phone Number" Width="160px"/>
-            <RadzenDataGridColumn TItem="UserWithNavigationPropertiesDto" Property="UserDto.Email" TextAlign="TextAlign.Center" Title="Email" Width="160px"/>
+            <RadzenDataGridColumn TItem="UserWithNavigationPropertiesDto" Property="User.UserName" TextAlign="TextAlign.Center" Title="User Name" Width="160px"/>
+            <RadzenDataGridColumn TItem="UserWithNavigationPropertiesDto" Property="User.EmployeeCode" TextAlign="TextAlign.Center" Title="Employee Code" Width="160px"/>
+            <RadzenDataGridColumn TItem="UserWithNavigationPropertiesDto" Property="User.FirstName" TextAlign="TextAlign.Center" Title="First Name" Width="160px"/>
+            <RadzenDataGridColumn TItem="UserWithNavigationPropertiesDto" Property="User.LastName" TextAlign="TextAlign.Center" Title="Last Name" Width="160px"/>
+            <RadzenDataGridColumn TItem="UserWithNavigationPropertiesDto" Property="User.Gender" TextAlign="TextAlign.Center" Title="Gender" Width="160px"/>
+            <RadzenDataGridColumn TItem="UserWithNavigationPropertiesDto" Property="User.DOB" FormatString="{0:d}" TextAlign="TextAlign.Center" Title="DOB" Width="160px">
+                <Template Context="data">
+                    @($"{data.User.DOB:dd/MM/yyyy}")
+                </Template>
+            </RadzenDataGridColumn>
 
-            <RadzenDataGridColumn TItem="UserWithNavigationPropertiesDto"   Resizable="true" Property="RoleNames" Sortable="false"  Filterable="false" Title="Roles">
-                <Template Context="data" >
+            <RadzenDataGridColumn TItem="UserWithNavigationPropertiesDto" Property="User.PhoneNumber" TextAlign="TextAlign.Center" Title="Phone Number" Width="160px"/>
+            <RadzenDataGridColumn TItem="UserWithNavigationPropertiesDto" Property="User.Email" TextAlign="TextAlign.Center" Title="Email" Width="160px"/>
+            <RadzenDataGridColumn TItem="UserWithNavigationPropertiesDto" Property="Position.Name" TextAlign="TextAlign.Center" Title="Position" Width="160px"/>
+            <RadzenDataGridColumn TItem="UserWithNavigationPropertiesDto" Property="Position.Name" TextAlign="TextAlign.Center" Title="Department" >
+
+                <Template Context="data">
+                    @{ int i = 0; }
+                    @foreach (var item in data.Departments)
+                    {
+                        <RadzenBadge BadgeStyle="ChooseColorByNumber(i)" IsPill="@true" Text="@item.Name" Class="ml-2"/>
+                        i++;
+                    }
+                </Template>
+            </RadzenDataGridColumn>
+
+
+            <RadzenDataGridColumn TItem="UserWithNavigationPropertiesDto" Resizable="true" Property="RoleNames"   Sortable="false" Filterable="false" Title="Roles">
+                <Template Context="data">
                     @{ int i = 0; }
                     @foreach (var item in data.RoleNames)
                     {
@@ -96,11 +98,11 @@
                 </Template>
             </RadzenDataGridColumn>
 
-            <RadzenDataGridColumn TItem="UserWithNavigationPropertiesDto" Filterable="false" Property="UserDto.UserName" TextAlign="TextAlign.Center" Frozen="true" Title="Action" Width="160px">
+            <RadzenDataGridColumn TItem="UserWithNavigationPropertiesDto" Filterable="false" Property="User.UserName" TextAlign="TextAlign.Center" Frozen="true" Title="Action" Width="160px">
                 <Template Context="data">
                     <RadzenButton Click="() => { ShowEditModal(data); }" Icon="edit" ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat" Size="ButtonSize.Medium">
                     </RadzenButton>
-                    <RadzenButton Click="async () => { await ShowConfirmMessage(data.UserDto.Id); }" ButtonStyle="ButtonStyle.Danger" Icon="delete" Variant="Variant.Flat" Shade="Shade.Lighter" Size="ButtonSize.Medium" Class="my-1 ms-1">
+                    <RadzenButton Click="async () => { await ShowConfirmMessage(data.User.Id); }" ButtonStyle="ButtonStyle.Danger" Icon="delete" Variant="Variant.Flat" Shade="Shade.Lighter" Size="ButtonSize.Medium" Class="my-1 ms-1">
                     </RadzenButton>
                 </Template>
             </RadzenDataGridColumn>
@@ -117,65 +119,109 @@
         </ModalHeader>
         <EditForm Model="NewUser" OnValidSubmit="async () => { await CreateUser(); }">
             <ModalBody Style="overflow: auto;padding: 20px">
-                <DataAnnotationsValidator/>
+                <RadzenTabs RenderMode="TabRenderMode.Client">
+                    <Tabs>
+                        <RadzenTabsItem Text="User">
+                            <DataAnnotationsValidator/>
+                            <Row>
+                                <Column ColumnSize="ColumnSize.Is6.OnDesktop">
+                                    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3"> First Name </RadzenText>
+                                    <RadzenTextBox Class="w-100" @bind-Value="NewUser.FirstName"/>
+                                    <ValidationMessage For="@(() => NewUser.FirstName)"/>
 
-                <Row>
-                    <Column ColumnSize="ColumnSize.Is6.OnDesktop">
-                        <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3"> First Name </RadzenText>
-                        <RadzenTextBox Class="w-100" @bind-Value="NewUser.FirstName"/>
-                        <ValidationMessage For="@(() => NewUser.FirstName)"/>
+                                    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3"> Last Name </RadzenText>
+                                    <RadzenTextBox Class="w-100" @bind-Value="NewUser.LastName"/>
+                                    <ValidationMessage For="@(() => NewUser.LastName)"/>
 
-                        <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3"> Last Name </RadzenText>
-                        <RadzenTextBox Class="w-100" @bind-Value="NewUser.LastName"/>
-                        <ValidationMessage For="@(() => NewUser.LastName)"/>
+                                    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Employee Code </RadzenText>
+                                    <RadzenTextBox Class="w-100" @bind-Value="NewUser.EmployeeCode"/>
+                                    <ValidationMessage For="@(() => NewUser.EmployeeCode)"/>
 
-                        <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Employee Code </RadzenText>
-                        <RadzenTextBox Class="w-100" @bind-Value="NewUser.EmployeeCode"/>
-                        <ValidationMessage For="@(() => NewUser.EmployeeCode)"/>
+                                    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Phone Number </RadzenText>
+                                    <RadzenTextBox Class="w-100" @bind-Value="NewUser.PhoneNumber"/>
+                                    <ValidationMessage For="@(() => NewUser.PhoneNumber)"/>
 
-                        <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Phone Number </RadzenText>
-                        <RadzenTextBox Class="w-100" @bind-Value="NewUser.PhoneNumber"/>
-                        <ValidationMessage For="@(() => NewUser.PhoneNumber)"/>
-
-                        <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Password</RadzenText>
-                        <RadzenPassword Class="w-100" @bind-Value="NewUser.Password"/>
-                        <ValidationMessage For="@(() => NewUser.Password)"/>
-                    </Column>
-                    <Column ColumnSize="ColumnSize.Is6.OnDesktop">
-                        <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Enter again Password </RadzenText>
-                        <RadzenPassword Class="w-100" @bind-Value="NewUser.PasswordConfirm"/>
-                        <ValidationMessage For="@(() => NewUser.PasswordConfirm)"/>
+                                    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Password</RadzenText>
+                                    <RadzenPassword Class="w-100" @bind-Value="NewUser.Password"/>
+                                    <ValidationMessage For="@(() => NewUser.Password)"/>
 
 
-                        <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Email</RadzenText>
-                        <RadzenTextBox Class="w-100" @bind-Value="NewUser.Email"/>
-                        <ValidationMessage For="@(() => NewUser.Email)"/>
-                        <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Date Of Birth</RadzenText>
-                        <RadzenDatePicker @bind-Value=@NewUser.DOB DateFormat="dd/MM/yyyy" Class="w-100"/>
-                        <ValidationMessage For="@(() => NewUser.DOB)"/>
-                        <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Gender</RadzenText>
-                        <RadzenRadioButtonList @bind-Value="NewUser.Gender" Style="display:flex;margin-bottom: 10px">
-                            <Items>
-                                @foreach (var item in (Gender[]) Enum.GetValues(typeof(Gender)))
-                                {
-                                    <RadzenRadioButtonListItem Text="@(item.GetDisplayDescription())" Value="item"/>
-                                }
-                            </Items>
-                        </RadzenRadioButtonList>
+                                </Column>
+                                <Column ColumnSize="ColumnSize.Is6.OnDesktop">
+                                    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Enter again Password </RadzenText>
+                                    <RadzenPassword Class="w-100" @bind-Value="NewUser.PasswordConfirm"/>
+                                    <ValidationMessage For="@(() => NewUser.PasswordConfirm)"/>
 
 
-                        <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Roles</RadzenText>
-                        <RadzenDropDown AllowClear="true" AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
-                                        @bind-Value=@SelectedRoles Multiple="true" Placeholder="Select..." Data=@RoleNames
-                                        Change="OnCreateSelectedRoles" Class="w-100"/>
-                    </Column>
-                </Row>
+                                    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Email</RadzenText>
+                                    <RadzenTextBox Class="w-100" @bind-Value="NewUser.Email"/>
+                                    <ValidationMessage For="@(() => NewUser.Email)"/>
+                                    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Date Of Birth</RadzenText>
+                                    <RadzenDatePicker @bind-Value=@NewUser.DOB DateFormat="dd/MM/yyyy" Class="w-100"/>
+                                    <ValidationMessage For="@(() => NewUser.DOB)"/>
+                                    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Gender</RadzenText>
+                                    <RadzenRadioButtonList @bind-Value="NewUser.Gender" Style="display:flex;margin-bottom: 10px">
+                                        <Items>
+                                            @foreach (var item in (Gender[]) Enum.GetValues(typeof(Gender)))
+                                            {
+                                                <RadzenRadioButtonListItem Text="@(item.GetDisplayDescription())" Value="item"/>
+                                            }
+                                        </Items>
+                                    </RadzenRadioButtonList>
+
+
+                                    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Roles</RadzenText>
+                                    <RadzenDropDown AllowClear="true" AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                                    @bind-Value=@SelectedRoles Multiple="true" Placeholder="Select..." Data=@RoleNames
+                                                    Change="OnCreateSelectedRoles" Class="w-100"/>
+
+
+                                    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Positions</RadzenText>
+                                    <RadzenDropDown AllowClear="true" AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                                    @bind-Value=@SelectedPositionId Multiple="false"
+                                                    TextProperty="Name"
+                                                    ValueProperty="Id"
+                                                    Placeholder="Select..."
+                                                    Data=@Positions
+                                                    Class="w-100"/>
+
+
+                                </Column>
+                            </Row>
+
+
+                        </RadzenTabsItem>
+                        <RadzenTabsItem Text="Department">
+
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Departments</RadzenText>
+                            <RadzenTree Data=@HierarchicalDepartments Style="width:100%"
+                                        AllowCheckBoxes="true"
+                                        @bind-CheckedValues="SelectedDepartments">
+                                <RadzenTreeLevel TextProperty="Name" ChildrenProperty="ChildDepartment"
+                                                 Expanded="@(value => true)"
+                                                 HasChildren=@(e => (e as DepartmentDto).ChildDepartment.Any())>
+                                    <Template Context="data">
+                                        <div style="display: flex;width:100%;justify-content: space-between;align-items: center">
+                                            <div style="display: flex">
+                                                <img src="https://upload.wikimedia.org/wikipedia/commons/4/44/BMW.svg" style="width: 20px; margin-right: 8px;"/>
+                                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3" Style="margin-bottom: 0">@data.Text</RadzenText>
+                                            </div>
+
+                                        </div>
+
+                                    </Template>
+                                </RadzenTreeLevel>
+                            </RadzenTree>
+                        </RadzenTabsItem>
+                    </Tabs>
+
+                </RadzenTabs>
 
 
             </ModalBody>
             <ModalFooter>
-                <RadzenButton ButtonStyle="ButtonStyle.Secondary" Clicked="@HideNewModal">Close</RadzenButton>
-                <RadzenButton Text="Save Changes" ButtonType="ButtonType.Submit"/>
+                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Click="@HideNewModal" Text="Cancel"/>
+                <RadzenButton Text="Save Changes" Icon="save" ButtonType="ButtonType.Submit"/>
             </ModalFooter>
         </EditForm>
     </ModalContent>
@@ -187,80 +233,114 @@
             <ModalTitle>User</ModalTitle>
         </ModalHeader>
         <EditForm Model="EditUser" OnValidSubmit="async () => { await UpdateUser(); }">
+         <ModalBody Style="padding: 20px">
+            <RadzenTabs RenderMode="TabRenderMode.Client">
+                <Tabs>
+                    <RadzenTabsItem Text="User">
+                        <DataAnnotationsValidator/>
+                        <Row>
+                            <Column ColumnSize="ColumnSize.Is6.OnDesktop">
 
-            <ModalBody>
-                <DataAnnotationsValidator/>
-                <Row>
-                    <Column ColumnSize="ColumnSize.Is6.OnDesktop">
+                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3"> First Name </RadzenText>
+                                <RadzenTextBox Class="w-100" @bind-Value="EditUser.FirstName"/>
+                                <ValidationMessage For="@(() => EditUser.FirstName)"/>
 
-                        <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3"> First Name </RadzenText>
-                        <RadzenTextBox Class="w-100" @bind-Value="EditUser.FirstName"/>
-                        <ValidationMessage For="@(() => EditUser.FirstName)"/>
+                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3"> Last Name </RadzenText>
+                                <RadzenTextBox Class="w-100" @bind-Value="EditUser.LastName"/>
+                                <ValidationMessage For="@(() => EditUser.LastName)"/>
 
-                        <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3"> Last Name </RadzenText>
-                        <RadzenTextBox Class="w-100" @bind-Value="EditUser.LastName"/>
-                        <ValidationMessage For="@(() => EditUser.LastName)"/>
-
-                        <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Employee Code </RadzenText>
-                        <RadzenTextBox Class="w-100" @bind-Value="EditUser.EmployeeCode"/>
-                        <ValidationMessage For="@(() => EditUser.EmployeeCode)"/>
-
-
-                        <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Phone Number </RadzenText>
-                        <RadzenTextBox Class="w-100" @bind-Value="EditUser.PhoneNumber"/>
-                        <ValidationMessage For="@(() => EditUser.PhoneNumber)"/>
-
-                    </Column>
-
-                    <Column ColumnSize="ColumnSize.Is6.OnDesktop">
+                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Employee Code </RadzenText>
+                                <RadzenTextBox Class="w-100" @bind-Value="EditUser.EmployeeCode"/>
+                                <ValidationMessage For="@(() => EditUser.EmployeeCode)"/>
 
 
-                        <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Email</RadzenText>
-                        <RadzenTextBox Class="w-100" @bind-Value="EditUser.Email"/>
-                        <ValidationMessage For="@(() => EditUser.Email)"/>
-                        <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Date Of Birth</RadzenText>
-                        <RadzenDatePicker @bind-Value=@EditUser.DOB DateFormat="dd/MM/yyyy" Class="w-100"/>
-                        <ValidationMessage For="@(() => EditUser.DOB)"/>
+                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Phone Number </RadzenText>
+                                <RadzenTextBox Class="w-100" @bind-Value="EditUser.PhoneNumber"/>
+                                <ValidationMessage For="@(() => EditUser.PhoneNumber)"/>
+                            </Column>
 
-                        <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Gender</RadzenText>
-                        <RadzenRadioButtonList @bind-Value="EditUser.Gender" Style="display:flex;margin-bottom: 10px">
-                            <Items>
-                                @foreach (var item in (Gender[]) Enum.GetValues(typeof(Gender)))
+                            <Column ColumnSize="ColumnSize.Is6.OnDesktop">
+
+
+                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Email</RadzenText>
+                                <RadzenTextBox Class="w-100" @bind-Value="EditUser.Email"/>
+                                <ValidationMessage For="@(() => EditUser.Email)"/>
+                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Date Of Birth</RadzenText>
+                                <RadzenDatePicker @bind-Value=@EditUser.DOB DateFormat="dd/MM/yyyy" Class="w-100"/>
+                                <ValidationMessage For="@(() => EditUser.DOB)"/>
+
+                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Gender</RadzenText>
+                                <RadzenRadioButtonList @bind-Value="EditUser.Gender" Style="display:flex;margin-bottom: 10px">
+                                    <Items>
+                                        @foreach (var item in (Gender[]) Enum.GetValues(typeof(Gender)))
+                                        {
+                                            <RadzenRadioButtonListItem Text="@(item.GetDisplayDescription())" Value="item"/>
+                                        }
+                                    </Items>
+                                </RadzenRadioButtonList>
+
+
+                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Roles</RadzenText>
+                                <RadzenDropDown AllowClear="true" AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                                @bind-Value=@SelectedRoles Multiple="true" Placeholder="Select..." Data=@RoleNames
+                                                Change="OnEditSelectedRoles" Class="w-100"/>
+
+                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Positions</RadzenText>
+                                <RadzenDropDown AllowClear="true" AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                                @bind-Value=@SelectedPositionId
+                                                TextProperty="Name"
+                                                ValueProperty="Id"
+                                                Multiple="false" Placeholder="Select..." Data=@Positions
+                                                Class="w-100"/>
+
+                                <RZBR></RZBR>
+
+                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3" Style="display: inline">Set New Password</RadzenText>
+                                <RadzenSwitch @bind-Value=@EditUser.IsSetPassword/>
+
+                                @if (EditUser.IsSetPassword)
                                 {
-                                    <RadzenRadioButtonListItem Text="@(item.GetDisplayDescription())" Value="item"/>
+                                    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3" Style="margin-top: 25px">Password</RadzenText>
+                                    <RadzenPassword Class="w-100" @bind-Value="EditUser.Password"/>
+                                    <ValidationMessage For="@(() => EditUser.Password)"/>
+                                    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Enter again Password </RadzenText>
+                                    <RadzenPassword Class="w-100" @bind-Value="EditUser.PasswordConfirm"/>
+                                    <ValidationMessage For="@(() => EditUser.PasswordConfirm)"/>
                                 }
-                            </Items>
-                        </RadzenRadioButtonList>
+                            </Column>
+                        </Row>
 
+                    </RadzenTabsItem>
+                    <RadzenTabsItem Text="Departments">
+                        <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Departments</RadzenText>
+                        <RadzenTree Data=@HierarchicalDepartments AllowCheckBoxes="true"  
+                                    @bind-CheckedValues="SelectedDepartments" 
+                                    
+                                    Style="width:100%">
+                                <RadzenTreeLevel TextProperty="Name" ChildrenProperty="ChildDepartment"
+                                                 Expanded="@(value => true)"
+                                                 HasChildren=@(e => (e as DepartmentDto).ChildDepartment.Any())>
+                                    <Template Context="data">
+                                        <div style="display: flex;width:100%;justify-content: space-between;align-items: center">
+                                            <div style="display: flex">
+                                                <img src="https://upload.wikimedia.org/wikipedia/commons/4/44/BMW.svg" style="width: 20px; margin-right: 8px;"/>
+                                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3" Style="margin-bottom: 0">@data.Text</RadzenText>
+                                            </div>
+                                        </div>
 
-                        <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Roles</RadzenText>
-                        <RadzenDropDown AllowClear="true" AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
-                                        @bind-Value=@SelectedRoles Multiple="true" Placeholder="Select..." Data=@RoleNames
-                                        Change="OnEditSelectedRoles" Class="w-100"/>
+                                    </Template>
+                                </RadzenTreeLevel>
+                            </RadzenTree>
+                     
+                    </RadzenTabsItem>
+                </Tabs>
 
-
-                        <RZBR></RZBR>
-
-                        <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3" Style="display: inline">Set New Password</RadzenText>
-                        <RadzenSwitch @bind-Value=@EditUser.IsSetPassword/>
-
-                        @if (EditUser.IsSetPassword)
-                        {
-                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3" Style="margin-top: 25px">Password</RadzenText>
-                            <RadzenPassword Class="w-100" @bind-Value="EditUser.Password"/>
-                            <ValidationMessage For="@(() => EditUser.Password)"/>
-                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Enter again Password </RadzenText>
-                            <RadzenPassword Class="w-100" @bind-Value="EditUser.PasswordConfirm"/>
-                            <ValidationMessage For="@(() => EditUser.PasswordConfirm)"/>
-                        }
-                    </Column>
-                </Row>
-
-
+            </RadzenTabs>
+            
             </ModalBody>
             <ModalFooter>
-                <Button Color="Color.Secondary" Clicked="@HideEditModal">Close</Button>
-                <RadzenButton Text="Save Changes" ButtonType="ButtonType.Submit"/>
+                <RadzenButton ButtonStyle="ButtonStyle.Light" Text="Cancel" Icon="cancel" Click="@HideEditModal"/>
+                <RadzenButton Text="Save Changes" Icon="save" ButtonType="ButtonType.Submit"/>
             </ModalFooter>
         </EditForm>
     </ModalContent>
@@ -295,15 +375,15 @@
                 }
 
 
-                @if (!ExcelValidator.IsSuccessful)
+                @if (!UserValidatorExcel.IsSuccessful)
                 {
-                    if (ExcelValidator.InvalidCells.Count > 0)
+                    if (UserValidatorExcel.InvalidCells.Count > 0)
                     {
                         <RadzenAlert AlertStyle="AlertStyle.Danger" ShowIcon="true" Variant="Variant.Flat" Shade="Shade.Lighter">
                             Invalid Format
                         </RadzenAlert>
                         <RadzenDataGrid AllowColumnResize="true" AllowAlternatingRows="false" PageSize="5" AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true"
-                                        Data="@ExcelValidator.InvalidCells" TItem="Cell" ColumnWidth="300px"
+                                        Data="@UserValidatorExcel.InvalidCells" TItem="Cell" ColumnWidth="300px"
                                         Style="width: 100%">
                             <Columns>
                                 <RadzenDataGridColumn TItem="Cell" Property="Row" TextAlign="TextAlign.Center" Title="Row" Frozen="true" Width="160px"/>
@@ -313,12 +393,12 @@
                             </Columns>
                         </RadzenDataGrid>
                     }
-                    if (ExcelValidator.InvalidLogics.Count > 0)
+                    if (UserValidatorExcel.InvalidLogics.Count > 0)
                     {
                         <RadzenAlert AlertStyle="AlertStyle.Warning" ShowIcon="true" Variant="Variant.Flat" Shade="Shade.Lighter">
                             Invalid Logics :
                             <ul>
-                                @foreach (var item in ExcelValidator.InvalidLogics)
+                                @foreach (var item in UserValidatorExcel.InvalidLogics)
                                 {
                                     <li>@item</li>
                                 }
@@ -341,3 +421,6 @@
         </EditForm>
     </ModalContent>
 </Modal>
+
+
+

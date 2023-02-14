@@ -15,6 +15,7 @@ namespace SqlServ4r.RepGenerationPatten
         List<T> ToList();
         Task<long> GetCountAsync();
         void Update(T entity);
+        Task UpdateAsync(T entity);
         void UpdateRange(IEnumerable<T> entities);
         void Add(T entity);
         Task AddAsync(T entity);

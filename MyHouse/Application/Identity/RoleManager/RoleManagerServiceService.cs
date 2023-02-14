@@ -40,11 +40,11 @@ namespace Application.Identity.RoleManager
 
         public async Task<RoleDto> CreateAsync(CreateUpdateRoleDto input)
         {
+            
+            input.Name = input.Name.Trim().ToUpper();
+            input.Code = input.Code?.Trim().ToUpper();
             var role = ObjectMapper.Map<CreateUpdateRoleDto, Role>(input);
-            role.Name = role.Name.Trim().ToUpper();
-            if (await _roleManager.Roles.AnyAsync(x => x.RoleCode == role.RoleCode && input.RoleCode!=null))
-                throw new GlobalException(HttpMessage.Duplicate.DuplicateRoleCode, HttpStatusCode.BadRequest);
-            role.RoleCode = role.RoleCode?.ToUpper();
+            
             var result = await _roleManager.CreateAsync(role);
             if (!result.Succeeded)
             {
@@ -57,6 +57,8 @@ namespace Application.Identity.RoleManager
 
         public async Task<RoleDto> UpdateAsync(CreateUpdateRoleDto input, Guid id)
         {
+            input.Name = input.Name.Trim().ToUpper();
+            input.Code = input.Code?.Trim().ToUpper();
             var item = await _roleManager.FindByIdAsync(id.ToString());
 
             if (item == null)
@@ -64,11 +66,7 @@ namespace Application.Identity.RoleManager
                 throw new GlobalException(HttpMessage.NotFound, HttpStatusCode.BadRequest);
             }
             
-            if (await _roleManager.Roles.AnyAsync(x =>input.RoleCode!=null && x.RoleCode == input.RoleCode && x.Id != item.Id))
-                throw new GlobalException(HttpMessage.Duplicate.DuplicateRoleCode, HttpStatusCode.BadRequest);
-            input.RoleCode = input.RoleCode?.ToUpper();
             var role = ObjectMapper.Map(input, item);
-            role.Name = role.Name.Trim().ToUpper();
             var result = await _roleManager.UpdateAsync(role);
             
             if (!result.Succeeded)

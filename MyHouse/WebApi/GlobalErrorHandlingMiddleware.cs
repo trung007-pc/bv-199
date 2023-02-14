@@ -2,6 +2,7 @@
 using System.Data.Common;
 using System.Net;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Application;
 using Microsoft.Extensions.Configuration;
@@ -63,6 +64,35 @@ namespace WebApi
                 message = HttpMessage.Conflict;
                 status = HttpStatusCode.Conflict;
                 stackTrace = exception.StackTrace;
+            }
+            else if (exceptionType == typeof(DbUpdateException))
+            {
+                
+                var sqlException = exception.InnerException as SqlException;
+                if (sqlException != null)
+                {
+                    switch (sqlException.Number)
+                    {
+                        case 2601:
+                            var regex = new Regex(@"IX_\w+_(\w+)");
+                            var match = regex.Match(sqlException.Message);
+                            if (match.Success)
+                            {
+                                var duplicateField = match.Groups[1].Value;
+                                message = $"Duplicated {duplicateField}";
+                                status = HttpStatusCode.BadRequest;
+                                stackTrace = exception.StackTrace;
+                            }
+                            break;
+                        default:
+                            message = HttpMessage.ServerError;
+                            status = HttpStatusCode.InternalServerError;
+                            stackTrace = exception.StackTrace;
+                            FileHelper.WriteLog(exception,_configuration["Media:LOG_PATH"]);
+                            break;
+                    }
+                }
+                ;
             }
 
             else if (exception is DbException )

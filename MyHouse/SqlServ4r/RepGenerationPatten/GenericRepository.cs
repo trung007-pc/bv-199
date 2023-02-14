@@ -11,7 +11,7 @@ namespace SqlServ4r.RepGenerationPatten
 {
     public class GenericRepository<T, Key> : IGenericRepository<T, Key> where T : class where Key : struct
     {
-        public readonly DreamContext _context; 
+        protected readonly DreamContext _context; 
 
         public GenericRepository(DreamContext context)
         {
@@ -59,6 +59,12 @@ namespace SqlServ4r.RepGenerationPatten
         {
             _context.Set<T>().Update(entity);
             _context.SaveChanges();
+        }
+        
+        public async Task UpdateAsync(T entity)
+        {
+            _context.Set<T>().Update(entity);
+            await _context.SaveChangesAsync();
         }
 
         public void UpdateRange(IEnumerable<T> entities)

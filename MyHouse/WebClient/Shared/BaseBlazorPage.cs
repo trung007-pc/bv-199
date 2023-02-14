@@ -28,8 +28,10 @@ namespace WebClient.Shared
     public abstract  class BaseBlazorPage : ComponentBase
     {
         
-          [Inject] private NavigationManager _navigationManager { get; set;}
-          [Inject] private NotificationService _notificationService { get; set;}
+        [Inject] private NavigationManager _navigationManager { get; set;}
+        [Inject] private NotificationService _notificationService { get; set;}
+        public   IEnumerable<int> PageSizeOptions = new int[] { 5,10, 20, 30 };
+
 
 
         protected IMapper ObjectMapper { get;}
@@ -129,7 +131,7 @@ namespace WebClient.Shared
                 {
                     _notificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Warning, Summary = "your token is so old. please log in again to get a new token. 4s later you automatically logout", Detail = e.Message, Duration = 4000});
                     Thread.Sleep(4000);
-                    _navigationManager.NavigateTo("login",true);
+                     _navigationManager.NavigateTo("login",true);
                 }
                 if (exceptionType == typeof(ServerErrorException))
                 {

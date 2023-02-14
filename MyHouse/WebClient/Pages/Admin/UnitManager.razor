@@ -1,4 +1,4 @@
-﻿@page "/unit"
+﻿@page "/units"
 @attribute [Authorize(Roles = "ADMIN,QUALITY MANAGER")]
 @using WebClient.Service.Upload
 @using ButtonType = Radzen.ButtonType
@@ -31,9 +31,10 @@
                     FilterMode="FilterMode.Simple"
                     FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
                     AllowColumnPicking="true"
+                    PageSizeOptions="PageSizeOptions"
                     LogicalFilterOperator="LogicalFilterOperator.Or" Style="width: 100%">
         <Columns>
-            
+
             <RadzenDataGridColumn TItem="UnitWithNavPropertiesDto" Property="Unit.ImageUrl" Title="Photo" Frozen="true" Width="80px" TextAlign="TextAlign.Center" Filterable="false">
                 <Template Context="data">
                     <RadzenImage Path="@data.Unit.ImageUrl" class="rz-gravatar" Style="width: 64px;height: 64px"/>
@@ -59,7 +60,7 @@
                     <RadzenButton Click="async () => { await ShowConfirmMessage(data.Unit.Id); }" ButtonStyle="ButtonStyle.Danger" Icon="delete" Variant="Variant.Flat" Shade="Shade.Lighter" Size="ButtonSize.Medium" Class="my-1 ms-1">
                     </RadzenButton>
                 </Template>
-            </RadzenDataGridColumn> 
+            </RadzenDataGridColumn>
         </Columns>
     </RadzenDataGrid>
 </RadzenCard>
@@ -110,8 +111,8 @@
 
             </ModalBody>
             <ModalFooter>
-                <RadzenButton ButtonStyle="ButtonStyle.Dark" Click="@HideNewModal">Close</RadzenButton>
-                <RadzenButton Text="Save Changes" ButtonType="ButtonType.Submit"/>
+                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Click="@HideNewModal" Text="Cancel"/>
+                <RadzenButton Text="Save Changes" Icon="save" ButtonType="ButtonType.Submit"/>
             </ModalFooter>
         </EditForm>
     </ModalContent>
@@ -151,7 +152,7 @@
                 <div style="margin-top: 8px"></div>
                 <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3" Style="display: inline">IsActive</RadzenText>
                 <RadzenSwitch @bind-Value=@EditUnit.IsActive />
-                <ValidationMessage For="@(() => EditUnit.IsActive)"/>
+                <ValidationMessage For="@(() => EditUnit.IsActive)" />
                 <div style="margin-top: 5px"></div>
                 <RZInputFile Icon="upload_file"
                              Accept="image/png, image/jpeg, image/gif"
@@ -159,12 +160,11 @@
                              Style="display: flex;align-items: center;min-width:123px;max-width: 130px;margin-bottom: 0;cursor: pointer;background-color: indigo"
                              Event="async (e) => { await OnChangeFileAtEditModal(e); }">
                 </RZInputFile>
-
-                @* <InputFile class="file-input" OnChange="OnChangeFileAtEditModal" accept="image/png, image/jpeg, image/gif" /> *@
             </ModalBody>
+            
             <ModalFooter>
-                <Button Color="Color.Secondary" Clicked="@HideEditModal">Close</Button>
-                <RadzenButton Text="Save Changes" ButtonType="ButtonType.Submit"/>
+                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Click="@HideEditModal" Text="Cancel"/>
+                <RadzenButton Text="Save Changes" Icon="save" ButtonType="ButtonType.Submit"/>
             </ModalFooter>
         </EditForm>
     </ModalContent>

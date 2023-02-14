@@ -54,5 +54,9 @@ namespace Contract.Identity.UserManager
         public string? Email { get; set; }
         
         public List<string> Roles { get; set; } = new List<string>();
+        
+        public Guid? PositionId { get; set; }
+
+        public List<Guid> DepartmentIds { get; set; } = new List<Guid>();
     }
 }

@@ -37,7 +37,7 @@ namespace WebClient.Pages.Admin
         public Guid? OnEditSelectedTypeId { get; set; }
 
 
-        public string HeaderTitle { get; set; } = "Part";
+        public string HeaderTitle { get; set; } = "Unit";
         
         public UnitManager()
         {

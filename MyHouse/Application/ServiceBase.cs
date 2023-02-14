@@ -1,5 +1,10 @@
-﻿using AutoMapper;
+﻿using System.Threading.Tasks;
+using AutoMapper;
+using Contract;
+using Contract.Identity.RoleManager;
+using Contract.Identity.UserManager;
 using Microsoft.AspNetCore.Mvc;
+using SqlServ4r.Repository;
 
 namespace Application
 {
@@ -31,4 +36,8 @@ namespace Application
 
         
     }
+
+
+
+ 
 }

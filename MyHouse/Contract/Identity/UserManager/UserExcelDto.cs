@@ -16,7 +16,9 @@ namespace Contract.Identity.UserManager
         public string? PhoneNumber { get; set; }
         public string? Email { get; set; }
         public int Row { get; set; }
-        public List<string> Roles { get; set; }
+        public List<string> RoleCodes { get; set; } = new List<string>();
+        public List<string> DepartmentCodes { get; set; }  = new List<string>();
+        public string PositionCode { get; set; } 
     }
 
     // public class ConvertedUserExcel

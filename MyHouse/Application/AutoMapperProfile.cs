@@ -1,14 +1,18 @@
 ﻿using System.Collections.Generic;
 using AutoMapper;
+using Contract.Departments;
 using Contract.Identity.RoleManager;
 using Contract.Identity.UserManager;
+using Contract.Positions;
 using Contract.UnitReviewDetails;
 using Contract.UnitReviews;
 using Contract.Units;
 using Contract.UnitTypes;
+using Domain.Departments;
 using Domain.Identity.Roles;
 using Domain.Identity.UnitTypes;
 using Domain.Identity.Users;
+using Domain.Positions;
 using Domain.UnitReviewDetails;
 using Domain.UnitReviews;
 using Domain.Units;
@@ -20,8 +24,11 @@ namespace Application
     {
         public AutoMapperProfile()
         {
+            CreateMap<UserWithNavigationProperties, UserWithNavigationPropertiesDto>().ReverseMap();
             CreateMap<CreateUserDto,User>().ReverseMap();
             CreateMap<UpdateUserDto, User>().ReverseMap();
+            CreateMap<CreateUpdateUseDto, CreateUserDto>();
+            CreateMap<CreateUpdateUseDto, UpdateUserDto>();
             CreateMap<User,UserDto>().ReverseMap();
             CreateMap<CreateUpdateUseDto, User>().ReverseMap();
             CreateMap<Role,RoleDto>().ReverseMap();
@@ -45,6 +52,14 @@ namespace Application
             CreateMap<UnitType, UnitTypeDto>().ReverseMap();
             CreateMap<CreateUpdateUnitTypeDto, UnitType>().ReverseMap();
 
+            
+            
+            CreateMap<Position,PositionDto>().ReverseMap();
+            CreateMap<CreateUpdatePositionDto,Position>().ReverseMap();
+
+
+            CreateMap<Department,DepartmentDto>().ReverseMap();
+            CreateMap<CreateUpdateDepartmentDto,Department>().ReverseMap();
         }
     }
 }

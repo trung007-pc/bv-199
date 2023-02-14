@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper.Internal.Mappers;
+using BlazorDateRangePicker;
 using Blazorise;
 using Contract.Identity.RoleManager;
 using Contract.Identity.UserManager;
@@ -12,6 +13,7 @@ using Contract.Units;
 using Core.Enum;
 using Microsoft.AspNetCore.Components;
 using Radzen;
+using WebClient.Helper;
 using WebClient.Shared;
 
 namespace WebClient.Pages.Admin
@@ -30,8 +32,10 @@ namespace WebClient.Pages.Admin
         
         public List<UnitReviewDetailDto> Details = new List<UnitReviewDetailDto>();
 
-        
-        
+        public Dictionary<string, DateRange> DateRanges { get; set; } = new Dictionary<string, DateRange>();
+        public (DateTimeOffset? StartDay, DateTimeOffset? EndDay) Timeline = (null, null);
+
+        public UnitReviewFilter Filter { get; set; } = new UnitReviewFilter();
 
 
         public UnitReviewManager()
@@ -50,6 +54,7 @@ namespace WebClient.Pages.Admin
             {
                 await InvokeAsync(async () =>
                 {
+                    DateRanges = await GetDateRangePickers();
                     await GetUnitReviews();
                     StateHasChanged();
                 }, ActionType.GetList, false);
@@ -59,7 +64,7 @@ namespace WebClient.Pages.Admin
 
         public async Task GetUnitReviews()
         {
-            UnitReviews = await _unitReviewService.GetListWithCalculatingAverageAsync();
+            UnitReviews = await _unitReviewService.GetListWithCalculatingAverageAsync(Filter);
             UnitReviews = UnitReviews.OrderByDescending(x => x.CreationDate).ToList();
         }
         
@@ -92,7 +97,38 @@ namespace WebClient.Pages.Admin
             ViewDetailModal.Hide();
         }
         
+        public async Task OnChangedDate()
+        {
+            (Filter.StartDay, Filter.EndDay) = GetDateTimeFromOffSet(Timeline.StartDay,Timeline.EndDay);
+            await GetUnitReviews();
+        }
         
+        public async Task DownloadExcelReport()
+        {
+            var rows = new List<UnitReviewRow>();
+
+            foreach (var item in UnitReviews)
+            {
+                rows.Add(new UnitReviewRow()
+                {
+                    Note = item.Note,
+                    CreationDate = item.CreationDate.ToString(),
+                    AveragePoint = item.AveragePoint.ToString(),
+                    ImageUrl = item.ImageUrl
+                });
+            }
+            
+            var bytes =  ExportHelper.GeneratePostsExcelBytes(rows);
+            await _downloadFile.DownloadFileAsync(bytes,"xlsx","unit-review-report");
+        }
         
+    }
+
+    public class UnitReviewRow
+    {
+        public string CreationDate { get; set; }
+        public string AveragePoint { get; set;}
+        public string? ImageUrl { get; set; }
+        public string Note { get; set; }
     }
 }

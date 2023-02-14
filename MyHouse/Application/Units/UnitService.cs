@@ -34,9 +34,7 @@ namespace Application.Units
 
         public async Task<UnitDto> CreateAsync(CreateUpdateUnitDto input)
         {
-
-            await _checkDuplicateNameAtCreating(input.Name);
-            
+            input.Name = input.Name.Trim();
             var unit = ObjectMapper.Map<CreateUpdateUnitDto, Unit>(input);
             if (unit.ImageUrl == null)
             {
@@ -47,36 +45,17 @@ namespace Application.Units
             return ObjectMapper.Map<Unit,UnitDto>(unit);
         }
 
-        private async Task _checkDuplicateNameAtCreating(string name)
-        {
-            var trimedName = name.Trim();
-            var exist = _unitRepository.GetQueryable().Any(x => x.Name == trimedName && !x.IsDeleted);
-
-            if (exist) throw new GlobalException(HttpMessage.Duplicate.DuplicateName, HttpStatusCode.BadRequest);
-        }
         
-        private async Task _checkDuplicateNameAtUpdating(string name,Guid id)
-        {
-           
-            var trimedName = name.Trim();
-            var exist = await _unitRepository.GetQueryable().
-                AnyAsync(x => x.Name == trimedName && x.Id != id);
-
-            if (exist) throw new GlobalException(HttpMessage.Duplicate.DuplicateName, HttpStatusCode.BadRequest);
-        }
-
-
         public async Task<UnitDto> UpdateAsync(CreateUpdateUnitDto input, Guid id)
         {
 
+            input.Name = input.Name.Trim();
             var unit = await _unitRepository.FirstOrDefaultAsync(x => x.Id == id);
             if (unit == null)
             {
                 throw new GlobalException(HttpMessage.NotFound, HttpStatusCode.BadRequest);
             }
             
-            await _checkDuplicateNameAtUpdating(input.Name,id);
-
             unit = ObjectMapper.Map(input, unit);
             _unitRepository.Update(unit);
             

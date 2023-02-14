@@ -5,7 +5,7 @@ using Core.Enum;
 
 namespace Contract.Identity.UserManager
 {
-    public class ExcelValidator
+    public class UserValidatorExcel
     {
         public List<Cell> InvalidCells { get; set; } = new List<Cell>();
         public List<string> InvalidLogics { get; set; } = new List<string>();

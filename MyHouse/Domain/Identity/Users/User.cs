@@ -1,6 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Core.Enum;
+using Domain.Departments;
+using Domain.Positions;
+using Domain.UserDepartments;
 using Microsoft.AspNetCore.Identity;
 
 namespace Domain.Identity.Users
@@ -17,5 +21,17 @@ namespace Domain.Identity.Users
         public bool IsActive { get; set; } = true;
         public string? RefreshToken { get; set;}
         
+        
+
+        
+        public Guid? PositionId { get; set; }
+        
+        
+        
+        
+        //naviagation
+        public Position Position { get; set; }
+        public List<UserDepartment> UserDepartments { get; set;}
+
     }
 }

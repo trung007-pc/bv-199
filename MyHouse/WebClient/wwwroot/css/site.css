@@ -112,3 +112,9 @@ a, .btn-link {
 .rz-datatable-loading{
     background-color: unset !important;
 }
+.rz-treenode-label{
+    width: 100%;
+}
+.rz-paginator label{
+    margin-bottom: 0;
+}

@@ -31,13 +31,13 @@ namespace WebClient.Service.Users
              return await RequestClient.GetAPIAsync<List<UserWithNavigationPropertiesDto>>("user/get-list-with-nav");
         }
 
-        public async Task<UserDto> CreateUserWithRolesAsync(CreateUserDto input)
+        public async Task<UserDto> CreateUserWithNavigationPropertiesAsync(CreateUserDto input)
         {
             return await RequestClient.PostAPIAsync<UserDto>("user/create-user-with-roles", input);
 
         }
 
-        public async Task<UserDto> UpdateUserWithRolesAsync(UpdateUserDto input, Guid id)
+        public async Task<UserDto> UpdateUserWithNavigationPropertiesAsync(UpdateUserDto input, Guid id)
         {
             return await RequestClient.PostAPIAsync<UserDto>($"user/update-user-with-roles/{id}", input);
         }
@@ -47,9 +47,9 @@ namespace WebClient.Service.Users
             throw new NotImplementedException();
         }
         
-        public async Task<ExcelValidator> CreateUsersFromCSVFileAndDefineRoles(FileDto file)
+        public async Task<UserValidatorExcel> CreateUsersFromCSVFileAndDefineRoles(FileDto file)
         {
-            return await RequestClient.PostAPIAsync<ExcelValidator>($"user/create-users-from-csv-file", file);
+            return await RequestClient.PostAPIAsync<UserValidatorExcel>($"user/create-users-from-csv-file", file);
         }
 
         public async Task DeleteWithNavigationAsync(Guid id)

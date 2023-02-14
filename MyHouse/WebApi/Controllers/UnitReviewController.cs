@@ -24,11 +24,11 @@ namespace WebApi.Controllers
             UnitReviewService = unitReviewService;
         }
         
-        [HttpGet]
+        [HttpPost]
         [Route("get-list-with-navigation")]
-        public async Task<List<UnitReviewDto>> GetListWithCalculatingAverageAsync()
+        public async Task<List<UnitReviewDto>> GetListWithCalculatingAverageAsync(UnitReviewFilter input)
         {
-           return await UnitReviewService.GetListWithCalculatingAverageAsync();
+           return await UnitReviewService.GetListWithCalculatingAverageAsync(input);
         }
         
 

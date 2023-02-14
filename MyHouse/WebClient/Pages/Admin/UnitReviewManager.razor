@@ -1,4 +1,4 @@
-﻿@page "/unit-review"
+﻿@page "/unit-reviews"
 @attribute [Authorize(Roles = "ADMIN,QUALITY MANAGER")]
 @inherits BaseBlazorPage
 @inject UnitReviewService _unitReviewService;
@@ -8,6 +8,9 @@
 @using WebClient.Service.UnitReviewDetails
 @using WebClient.Service.UnitReviews
 @using Contract.UnitReviewDetails
+@using Core.Const
+@using WebClient.Service.JS
+@inject DownloadFileService _downloadFile;
 
 
 <h3>@HeaderTitle</h3>
@@ -20,11 +23,27 @@
         </RadzenBreadCrumb>
     </div>
     <div>
+        <RadzenButton Text="Export Excel File" ButtonStyle="ButtonStyle.Success" Icon="download" Click="@DownloadExcelReport"/>
 
     </div>
 </div>
 
 <RZBR></RZBR>
+
+<RadzenCard>
+    <Row Style="display:flex;align-items: center">
+        <Column ColumnSize="ColumnSize.Is2" Style="display:flex;align-items: center">
+            <RadzenIcon Icon="calendar_today" Style="margin-right: 7px;font-size: 28px;color: deeppink"/>
+            <DateRangePicker @bind-StartDate="Timeline.StartDay"  @bind-EndDate="Timeline.EndDay" Ranges="DateRanges" DateFormat="@DateFormatType.DateFormat" OnClosed="OnChangedDate" class="form-control form-control-md" placeholder="Select Date...">
+            </DateRangePicker>
+        </Column>
+        
+    </Row>
+</RadzenCard>
+
+
+
+
 <RadzenCard>
     <RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" AllowAlternatingRows="false" PageSize="20" AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true"
                     Data="@UnitReviews" TItem="UnitReviewDto" ColumnWidth="300px"
@@ -33,6 +52,8 @@
                     FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
                     LogicalFilterOperator="LogicalFilterOperator.Or"
                     AllowColumnPicking="true"
+                    PageSizeOptions="PageSizeOptions"
+                    
                     Style="width: 100%">
         <Columns>
 

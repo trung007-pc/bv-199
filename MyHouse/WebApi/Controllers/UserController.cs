@@ -30,34 +30,28 @@ namespace WebApi.Controllers
         [Route("get-list-with-nav")]
         public async Task<List<UserWithNavigationPropertiesDto>> GetListWithNavigationAsync()
         {
+            
            return  await _userManagerService.GetListWithNavigationAsync();
         }
 
         [HttpPost]
         [Route("create-user-with-roles")]
-        public async Task<UserDto> CreateUserWithRolesAsync(CreateUserDto input)
+        public async Task<UserDto> CreateUserWithNavigationPropertiesAsync(CreateUserDto input)
         {
-            return await _userManagerService.CreateUserWithRolesAsync(input);
+            return await _userManagerService.CreateUserWithNavigationPropertiesAsync(input);
         }
         
         [HttpPost]
         [Route("update-user-with-roles/{id}")]
-        public async Task<UserDto> UpdateUserWithRolesAsync(UpdateUserDto input, Guid id)
+        public async Task<UserDto> UpdateUserWithNavigationPropertiesAsync(UpdateUserDto input, Guid id)
         {
-            return await _userManagerService.UpdateUserWithRolesAsync(input,id);
-        }
-
-        [HttpPost]
-        [Route("update-user-with-roles-by-phone-number/{phoneNumber}")]
-        public Task<UserDto> UpdateUserWithRolesByPhoneNumberAsync(UpdateUserDto input, string phoneNumber)
-        {
-            throw new NotImplementedException();
+            return await _userManagerService.UpdateUserWithNavigationPropertiesAsync(input,id);
         }
 
         [HttpPost]
         [Route("create-users-from-csv-file")]
         [AllowAnonymous]
-        public async Task<ExcelValidator> CreateUsersFromCSVFileAndDefineRoles(FileDto file)
+        public async Task<UserValidatorExcel> CreateUsersFromCSVFileAndDefineRoles(FileDto file)
         {
             return await _userManagerService.CreateUsersFromCSVFileAndDefineRoles(file);
         }

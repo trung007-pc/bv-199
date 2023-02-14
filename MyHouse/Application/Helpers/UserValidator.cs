@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Text.RegularExpressions;
 using Core.Const;
+using Core.Enum;
 
 namespace Application.Helpers
 {
@@ -35,17 +36,25 @@ namespace Application.Helpers
 
         }
 
-        public bool ValidateGender(string input,out int result)
+        public bool ValidateGender(string input)
         {
-            result = 0;
-
-            if (input.IsNullOrWhiteSpace()) return false;
-            if (int.TryParse(input,out result))
+            try
             {
+                if (!input.IsNullOrWhiteSpace())
+                {
+                    Gender gender = (Gender) Enum.Parse(typeof(Gender), input);
+                    return true;
+                }
                 return true;
+        
+            }
+            catch (Exception e)
+            {
+                return false;
             }
 
             return false;
+
         }
 
         public bool ValidatePassword(string input)
@@ -62,32 +71,41 @@ namespace Application.Helpers
         
         public bool ValidateEmail(string input)
         {
-            if (input.IsNullOrWhiteSpace()) return false;
+            if (!input.IsNullOrWhiteSpace())
+            {
+                Regex re = new Regex(ContentRegularExpression.EMAIL);
+            
+                if (re.IsMatch(input))
+                    return (true);
+                else
+                    return (false);
+            }
 
-            Regex re = new Regex(ContentRegularExpression.EMAIL);
-            
-            if (re.IsMatch(input))
-                return (true);
-            else
-                return (false);
-            
+            return true;
+
+
+
+
+
         }
 
-        public bool ValidateDate(string input,out DateTime result)
+        public bool ValidateDate(string input)
         {
-            result = default;
-            
-            if (input.IsNullOrWhiteSpace()) return false;
+            DateTime result = default;
 
-            if (DateTime.TryParseExact(input, "dd/MM/yyyy", 
-                CultureInfo.InvariantCulture, 
-                DateTimeStyles.None, out result))
+            if (!input.IsNullOrWhiteSpace())
             {
-                return true;
-            }
+                if (DateTime.TryParseExact(input, "dd/MM/yyyy", 
+                    CultureInfo.InvariantCulture, 
+                    DateTimeStyles.None, out result))
+                {
+                    return true;
+                }
             
-            return false;
-           
+                return false;
+            }
+
+            return true;
         }
         
         

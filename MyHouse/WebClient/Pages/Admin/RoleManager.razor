@@ -1,4 +1,4 @@
-﻿@page "/role"
+﻿@page "/roles"
 @attribute [Authorize(Roles = "ADMIN")]
 @using ButtonType = Radzen.ButtonType
 @inject RoleManagerService _roleManagerService;
@@ -30,11 +30,13 @@
                     FilterMode="FilterMode.Simple"
                     LogicalFilterOperator="LogicalFilterOperator.Or"
                     FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                    PageSizeOptions="PageSizeOptions"
+
                     Style="width: 100%">
         <Columns>
 
             <RadzenDataGridColumn TItem="RoleDto" Property="Name" TextAlign="TextAlign.Center" Title="Name" Frozen="true" Width="160px"/>
-            <RadzenDataGridColumn TItem="RoleDto" Property="RoleCode" TextAlign="TextAlign.Center" Title="Role Code" Frozen="true" Width="160px"/>
+            <RadzenDataGridColumn TItem="RoleDto" Property="Code" TextAlign="TextAlign.Center" Title="Code" Frozen="true" Width="160px"/>
             <RadzenDataGridColumn TItem="RoleDto" Property="Name" Title="Action" TextAlign="TextAlign.Center" Frozen="true" Width="160px" Filterable="false">
                 <Template Context="data">
                     <RadzenButton Click="async () => { await ShowEditModal(data); }" Icon="edit" ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat" Size="ButtonSize.Medium">
@@ -63,8 +65,8 @@
                 <ValidationMessage For="@(() => NewRole.Name)"/>
 
                 <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Role Code</RadzenText>
-                <RadzenTextBox Class="w-100" @bind-Value="NewRole.RoleCode"/>
-                <ValidationMessage For="@(() => NewRole.RoleCode)"/>
+                <RadzenTextBox Class="w-100" @bind-Value="NewRole.Code"/>
+                <ValidationMessage For="@(() => NewRole.Code)"/>
 
                 <RadzenCheckBoxList @bind-Value=@Claims TValue="string" AllowSelectAll="true" SelectAllText="Select all items" Class="mb-5" Style="outline:none">
                     <Items >
@@ -75,8 +77,8 @@
                 </RadzenCheckBoxList>
             </ModalBody>
             <ModalFooter>
-                <RadzenButton ButtonStyle="ButtonStyle.Dark" Click="@HideNewModal">Close</RadzenButton>
-                <RadzenButton Text="Save Changes" ButtonType="ButtonType.Submit"/>
+                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Click="@HideNewModal" Text="Cancel"/>
+                <RadzenButton Text="Save Changes" Icon="save" ButtonType="ButtonType.Submit"/>
             </ModalFooter>
         </EditForm>
     </ModalContent>
@@ -96,8 +98,8 @@
                 <ValidationMessage For="@(() => EditRole.Name)"/>
 
                 <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Role Code</RadzenText>
-                <RadzenTextBox Class="w-100" @bind-Value="EditRole.RoleCode"/>
-                <ValidationMessage For="@(() => EditRole.RoleCode)"/>
+                <RadzenTextBox Class="w-100" @bind-Value="EditRole.Code"/>
+                <ValidationMessage For="@(() => EditRole.Code)"/>
                 <RadzenCheckBoxList @bind-Value=@Claims TValue="string" AllowSelectAll="true" SelectAllText="Select all items" Class="mb-5" Style="outline:none">
                     <Items >
                         <RadzenCheckBoxListItem Text="@ClaimNameTypes.READ" Value="@ClaimNameTypes.READ"/>
@@ -107,8 +109,9 @@
                 </RadzenCheckBoxList>
             </ModalBody>
             <ModalFooter>
-                <Button Color="Color.Secondary" Clicked="@HideEditModal">Close</Button>
-                <RadzenButton Text="Save Changes" ButtonType="ButtonType.Submit"/>
+                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Click="@HideEditModal" Text="Cancel"/>
+                <RadzenButton Text="Save Changes" Icon="save" ButtonType="ButtonType.Submit"/>
+
             </ModalFooter>
         </EditForm>
     </ModalContent>

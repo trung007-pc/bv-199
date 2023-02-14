@@ -7,8 +7,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using Blazorise;
 using Blazorise.States;
+using Contract.Departments;
 using Contract.Identity.RoleManager;
 using Contract.Identity.UserManager;
+using Contract.Positions;
 using Core.Enum;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
@@ -28,20 +30,31 @@ namespace WebClient.Pages.Admin
         public List<RoleDto> Roles = new List<RoleDto>();
         public List<string> RoleNames = new List<string>();
         public List<string> SelectedRoles = new List<string>();
+
+        public List<PositionDto> Positions { get; set; } = new List<PositionDto>();
+        public Guid? SelectedPositionId { get; set; }
+        public IEnumerable<DepartmentDto> HierarchicalDepartments { get; set; } = new List<DepartmentDto>();
+        public List<DepartmentDto> Departments { get; set; } = new List<DepartmentDto>();
+
+        public IEnumerable<object> SelectedDepartments = new List<DepartmentDto>();
+        
         public Guid EditUserId { get; set; }
 
         public Modal CreateModal = new Modal();
         public Modal EditModal = new Modal();
         public Modal ImportFileModal = new Modal();
-        public Modal Create1Modal = new Modal();
+       
         public IBrowserFile? EnclosedFile { get; set; }
 
-        public ExcelValidator ExcelValidator { get; set; } = new ExcelValidator();
+        public UserValidatorExcel UserValidatorExcel { get; set; } = new UserValidatorExcel();
 
         public string HeaderTitle = "User";
         public bool IsLoading { get; set; } = true;
 
         public bool TriggeredWithoutFile { get; set; } = false;
+      
+        public bool IsLoading1 { get; set; } = true;
+
 
         public UserManager()
         {
@@ -50,7 +63,7 @@ namespace WebClient.Pages.Admin
 
         protected override async Task OnInitializedAsync()
         {
-
+        
         }
 
         protected override async void OnAfterRender(bool firstRender)
@@ -61,6 +74,8 @@ namespace WebClient.Pages.Admin
                 {
                     await GetUsers();
                     await GetRoles();
+                    await GetPositions();
+                    await GetDepartments();
                     IsLoading = false;
                     StateHasChanged();
                 }, ActionType.GetList, false);
@@ -69,6 +84,25 @@ namespace WebClient.Pages.Admin
             }
         }
 
+        public async Task GetPositions()
+        {
+            Positions = await _positionService.GetListAsync();
+        }
+
+        public async Task GetDepartments()
+        {
+            Departments = await _departmentService.GetListAsync();
+            HierarchicalDepartments = Departments;
+            foreach (var item in HierarchicalDepartments)
+            {
+                var childDepartments = 
+                    HierarchicalDepartments.Where(x => x.ParentCode == item.Id).ToList();
+                item.ChildDepartment = childDepartments;
+            }
+            HierarchicalDepartments = HierarchicalDepartments.Where(x => x.ParentCode == null);
+            
+        }
+        
         public async Task GetUsers()
         {
             UsersWithNav = await _userManagerService.GetListWithNavigationAsync();
@@ -85,7 +119,12 @@ namespace WebClient.Pages.Admin
             await InvokeAsync(async () =>
             {
                 NewUser.UserName = NewUser.PhoneNumber;
-                await _userManagerService.CreateUserWithRolesAsync(NewUser);
+                NewUser.PositionId = SelectedPositionId;
+
+                NewUser.DepartmentIds = (SelectedDepartments.OfType<DepartmentDto>())
+                    .Where(x=>x.ChildDepartment.Count == 0)
+                    .Select(x=>x.Id).ToList();
+                await _userManagerService.CreateUserWithNavigationPropertiesAsync(NewUser);
                 HideNewModal();
                 await GetUsers();
             }, ActionType.Create, true);
@@ -96,7 +135,13 @@ namespace WebClient.Pages.Admin
             await InvokeAsync(async () =>
             {
                 EditUser.UserName = EditUser.PhoneNumber;
-                await _userManagerService.UpdateUserWithRolesAsync(EditUser, EditUserId);
+                EditUser.PositionId = SelectedPositionId;
+                
+                EditUser.DepartmentIds = (SelectedDepartments.OfType<DepartmentDto>())
+                    .Where(x=>x.ChildDepartment.Count == 0)
+                    .Select(x=>x.Id).ToList();
+                
+                await _userManagerService.UpdateUserWithNavigationPropertiesAsync(EditUser, EditUserId);
                 await GetUsers();
                 await HideEditModal();
                 
@@ -126,6 +171,9 @@ namespace WebClient.Pages.Admin
         {
             NewUser = new CreateUserDto();
             SelectedRoles = new List<string>();
+            SelectedPositionId = null;
+            SelectedDepartments = new List<DepartmentDto>();
+
             CreateModal.Show();
         }
 
@@ -135,7 +183,7 @@ namespace WebClient.Pages.Admin
         {
             EnclosedFile = null;
             UserExcel = new CreateUserDto();
-            ExcelValidator = new ExcelValidator();
+            UserValidatorExcel = new UserValidatorExcel();
             TriggeredWithoutFile = false;
             return ImportFileModal.Show();
         }
@@ -150,21 +198,37 @@ namespace WebClient.Pages.Admin
             NewUser = new CreateUserDto();
             CreateModal.Hide();
         }
+        
+     
 
-
-        public Task ShowEditModal(UserWithNavigationPropertiesDto userWithNavigationPropertiesDto)
+        public void ShowEditModal(UserWithNavigationPropertiesDto userWithNavigationPropertiesDto)
         {
+            
+            UpdateSelectedDepartments(userWithNavigationPropertiesDto);
+            
             EditUser = new UpdateUserDto();
             SelectedRoles = new List<string>();
+            SelectedPositionId = null;
             
             SelectedRoles = userWithNavigationPropertiesDto.RoleNames;
-            
-            EditUserId = userWithNavigationPropertiesDto.UserDto.Id;
-            EditUser = ObjectMapper.Map<UserDto, UpdateUserDto>(userWithNavigationPropertiesDto.UserDto);
+            SelectedPositionId = userWithNavigationPropertiesDto.Position?.Id;
+            EditUserId = userWithNavigationPropertiesDto.User.Id;
+            EditUser = ObjectMapper.Map<UserDto, UpdateUserDto>(userWithNavigationPropertiesDto.User);
             EditUser.Roles = userWithNavigationPropertiesDto.RoleNames;
-            
-            return EditModal.Show();
+            EditModal.Show();
         }
+
+        private void UpdateSelectedDepartments(UserWithNavigationPropertiesDto userWithNavigationPropertiesDto)
+        {
+            var tempt = new List<DepartmentDto>();
+            foreach (var item in userWithNavigationPropertiesDto.Departments)
+            {
+                tempt.Add(Departments.FirstOrDefault(x => x.Id == item.Id));
+            }
+
+            SelectedDepartments = tempt;
+        }
+
 
         public BadgeStyle ChooseColorByNumber(int i)
         {
@@ -195,10 +259,7 @@ namespace WebClient.Pages.Admin
             }
         }
 
-        public void OnChooseFile()
-        {
-            this.StateHasChanged();
-        }
+  
 
 
         void OnEditSelectedRoles(object value)
@@ -240,8 +301,8 @@ namespace WebClient.Pages.Admin
                 await InvokeAsync(async () =>
                 {
                     var fileDto = await _uploadService.UploadExcelFileOfUsers(EnclosedFile);
-                    ExcelValidator = await _userManagerService.CreateUsersFromCSVFileAndDefineRoles(fileDto);
-                    if (ExcelValidator.IsSuccessful)
+                    UserValidatorExcel = await _userManagerService.CreateUsersFromCSVFileAndDefineRoles(fileDto);
+                    if (UserValidatorExcel.IsSuccessful)
                     {
                         HideImportExcelFileModal();
                         await GetUsers();
@@ -278,5 +339,19 @@ namespace WebClient.Pages.Admin
         
         }
 
+
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+        
+        
     }
 }

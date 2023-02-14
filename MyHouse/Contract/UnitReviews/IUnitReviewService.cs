@@ -8,7 +8,7 @@ namespace Contract.UnitReviews
 {
     public interface IUnitReviewService
     {
-        Task<List<UnitReviewDto>> GetListWithCalculatingAverageAsync();
+        Task<List<UnitReviewDto>> GetListWithCalculatingAverageAsync(UnitReviewFilter input);
         Task<UnitReviewDto> CreateAsync(CreateUpdateUnitReviewDto input);
         Task<UnitReviewDto> UpdateAsync(CreateUpdateUnitReviewDto input,Guid Id);
         Task<UnitReviewDto> CreateReviewWithDetailsAsync(List<CreateUpdateUnitReviewDetailDto> inputs);

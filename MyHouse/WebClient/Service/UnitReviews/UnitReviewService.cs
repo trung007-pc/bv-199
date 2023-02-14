@@ -17,9 +17,9 @@ namespace WebClient.Service.UnitReviews
             return await RequestClient.GetAPIAsync<List<UnitDto>>($"unit-review/look-up-units");
         }
 
-        public async Task<List<UnitReviewDto>> GetListWithCalculatingAverageAsync()
+        public async Task<List<UnitReviewDto>> GetListWithCalculatingAverageAsync(UnitReviewFilter input)
         {
-            return await RequestClient.GetAPIAsync<List<UnitReviewDto>>($"unit-review/get-list-with-navigation");
+            return await RequestClient.PostAPIAsync<List<UnitReviewDto>>($"unit-review/get-list-with-navigation",input);
         }
 
         public async Task<List<UnitReviewDetailDto>> GetDetailsAsync(Guid reviewId)

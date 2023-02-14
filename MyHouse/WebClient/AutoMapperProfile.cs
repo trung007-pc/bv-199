@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using Contract.Departments;
 using Contract.Identity.RoleManager;
 using Contract.Identity.UserManager;
+using Contract.Positions;
 using Contract.UnitReviewDetails;
 using Contract.UnitReviews;
 using Contract.Units;
@@ -33,8 +35,9 @@ namespace WebClient
 
 
 
+            CreateMap<CreateUpdatePositionDto, PositionDto>().ReverseMap();
 
-
+            CreateMap<DepartmentDto, CreateUpdateDepartmentDto>().ReverseMap();
 
 
 

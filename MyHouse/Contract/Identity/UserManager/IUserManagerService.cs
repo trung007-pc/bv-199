@@ -8,11 +8,10 @@ namespace Contract.Identity.UserManager
     public interface IUserManagerService
     {
         public Task<List<UserWithNavigationPropertiesDto>> GetListWithNavigationAsync();
-        public Task<UserDto> CreateUserWithRolesAsync(CreateUserDto input);
-        public Task<UserDto> UpdateUserWithRolesAsync(UpdateUserDto input,Guid id);
-        public Task<UserDto> UpdateUserWithRolesByPhoneNumberAsync(UpdateUserDto input,string phoneNumber);
+        public Task<UserDto> CreateUserWithNavigationPropertiesAsync(CreateUserDto input);
+        public Task<UserDto> UpdateUserWithNavigationPropertiesAsync(UpdateUserDto input,Guid id);
         
-        public Task<ExcelValidator> CreateUsersFromCSVFileAndDefineRoles(FileDto file);
+        public Task<UserValidatorExcel> CreateUsersFromCSVFileAndDefineRoles(FileDto file);
         public Task DeleteWithNavigationAsync(Guid id);
         public Task<List<UserDto>> GetListAsync();
         public Task<UserDto> CreateAsync(CreateUserDto input);
