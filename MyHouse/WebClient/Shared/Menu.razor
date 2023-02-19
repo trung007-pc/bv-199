@@ -2,13 +2,7 @@
 
 
     <AuthorizeView>
-        @if (context.User.IsInRole("ADMIN"))
-        {
-            <RadzenPanelMenuItem Text="Administrator" Icon="account_box">
-                <RadzenPanelMenuItem Text="Users" Path="users" Icon="table_view"></RadzenPanelMenuItem>
-                <RadzenPanelMenuItem Text="Roles" Path="roles" Icon="table_view"></RadzenPanelMenuItem>
-            </RadzenPanelMenuItem>
-        }
+       
 
 
         @if (context.User.IsInRole("QUALITY MANAGER")
@@ -21,7 +15,7 @@
                 <RadzenPanelMenuItem Text="Unit Reviews" Path="unit-reviews" Icon="table_view"></RadzenPanelMenuItem>
             </RadzenPanelMenuItem>
         }
-        @if (context.User.IsInRole("ADMIN"))
+        @if (context.User.IsInRole("ADMIN") || context.User.IsInRole("ManageCategories"))
         {
             <RadzenPanelMenuItem Text="Catalogue" Icon="view_list">
                 <RadzenPanelMenuItem Text="Positions" Path="positions" Icon="table_view"></RadzenPanelMenuItem>
@@ -32,7 +26,23 @@
                 <RadzenPanelMenuItem Text="Document Files" Path="document-file" Icon="table_view"></RadzenPanelMenuItem>
             </RadzenPanelMenuItem>
         }
-
+         @if (context.User.IsInRole("ADMIN") || context.User.IsInRole("REPORTS"))
+        {
+            <RadzenPanelMenuItem Text="Reports" Icon="view_list">
+                <RadzenPanelMenuItem Text="Positions" Path="positions" Icon="table_view"></RadzenPanelMenuItem>
+                <RadzenPanelMenuItem Text="Departments" Path="departments" Icon="table_view"></RadzenPanelMenuItem>
+              
+            </RadzenPanelMenuItem>
+        }
+         @if (context.User.IsInRole("ADMIN"))
+        {
+            <RadzenPanelMenuItem Text="Administrator" Icon="account_box">
+                <RadzenPanelMenuItem Text="Users" Path="users" Icon="table_view"></RadzenPanelMenuItem>
+                <RadzenPanelMenuItem Text="Roles" Path="roles" Icon="table_view"></RadzenPanelMenuItem>
+                 <RadzenPanelMenuItem Text="App Config" Path="roles" Icon="table_view"></RadzenPanelMenuItem>
+                   <RadzenPanelMenuItem Text="App History" Path="roles" Icon="table_view"></RadzenPanelMenuItem>
+            </RadzenPanelMenuItem>
+        }
 
 
 
