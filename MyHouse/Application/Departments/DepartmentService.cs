@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Contract.Departments;
@@ -7,6 +8,7 @@ using Core.Const;
 using Core.Enum;
 using Core.Exceptions;
 using Domain.Departments;
+using Microsoft.EntityFrameworkCore;
 using SqlServ4r.Repository.Departments;
 using SqlServ4r.Repository.UserDepartments;
 using Volo.Abp.DependencyInjection;
@@ -95,7 +97,8 @@ namespace Application.Departments
 
         public async Task<List<DepartmentDto>> GetListAsync()
         {
-            var departments = await _departmentRepository.ToListAsync();
+            var departments = await _departmentRepository.GetQueryable().
+                OrderBy(x=>x.ODX).ToListAsync();
             return ObjectMapper.Map<List<Department>, List<DepartmentDto>>(departments);
         }
         

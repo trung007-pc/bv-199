@@ -12,13 +12,13 @@ namespace WebClient.Pages.Admin
     {
         public List<PositionDto> Positions = new List<PositionDto>();
         public CreateUpdatePositionDto NewPosition = new CreateUpdatePositionDto();
-        public CreateUpdatePositionDto EditPosition = new CreateUpdatePositionDto();
+        public CreateUpdatePositionDto EditingPosition = new CreateUpdatePositionDto();
         public Guid EditPositionId { get; set; }
          [Inject]  IMessageService _messageService { get; set; }
 
 
         public Modal CreateModal;
-        public Modal EditModal;
+        public Modal EditingModal;
         public string HeaderTitle = "Position";
 
         public IEnumerable<string> Claims = new List<string>();
@@ -60,7 +60,7 @@ namespace WebClient.Pages.Admin
         {
             await InvokeAsync(async () =>
             {
-                await _positionService.UpdateAsync(EditPosition, EditPositionId);
+                await _positionService.UpdateAsync(EditingPosition, EditPositionId);
                 HideEditModal();
                 await GetPositions();
             },ActionType.Update,true);
@@ -98,17 +98,17 @@ namespace WebClient.Pages.Admin
         }
 
 
-        public Task ShowEditModal(PositionDto roleModel)
+        public Task ShowEditingModal(PositionDto position)
         {
-            EditPosition = new CreateUpdatePositionDto();
-            EditPosition = ObjectMapper.Map<PositionDto, CreateUpdatePositionDto>(roleModel);
-            EditPositionId = roleModel.Id;
-            return EditModal.Show();
+            EditingPosition = new CreateUpdatePositionDto();
+            EditingPosition = ObjectMapper.Map<PositionDto, CreateUpdatePositionDto>(position);
+            EditPositionId = position.Id;
+            return EditingModal.Show();
         }
 
         public void HideEditModal()
         {
-            EditModal.Hide();
+            EditingModal.Hide();
         }
         
         

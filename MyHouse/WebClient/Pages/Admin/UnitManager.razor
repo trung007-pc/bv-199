@@ -55,7 +55,7 @@
 
             <RadzenDataGridColumn TItem="UnitWithNavPropertiesDto" TextAlign="TextAlign.Center" Property="Unit.Note" Title="Action" Frozen="true" Width="160px" Filterable="false">
                 <Template Context="data">
-                    <RadzenButton Click="() => { ShowEditModal(data); }" Icon="edit" ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat" Size="ButtonSize.Medium">
+                    <RadzenButton Click="() => { ShowEditingModal(data); }" Icon="edit" ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat" Size="ButtonSize.Medium">
                     </RadzenButton>
                     <RadzenButton Click="async () => { await ShowConfirmMessage(data.Unit.Id); }" ButtonStyle="ButtonStyle.Danger" Icon="delete" Variant="Variant.Flat" Shade="Shade.Lighter" Size="ButtonSize.Medium" Class="my-1 ms-1">
                     </RadzenButton>
@@ -119,27 +119,27 @@
 </Modal>
 
 
-<Modal @ref="EditModal">
+<Modal @ref="EditingModal">
     <ModalContent Size="ModalSize.Large" Centered="true">
         <ModalHeader>
             <ModalTitle>Unit</ModalTitle>
         </ModalHeader>
-        <EditForm Model="EditUnit" OnValidSubmit="async () => { await UpdateUnit(); }">
+        <EditForm Model="EditingUnit" OnValidSubmit="async () => { await UpdateUnit(); }">
 
             <ModalBody>
                 <DataAnnotationsValidator/>
                 <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Name</RadzenText>
-                <RadzenTextBox Class="w-100" @bind-Value="EditUnit.Name"/>
-                <ValidationMessage For="@(() => EditUnit.Name)"/>
+                <RadzenTextBox Class="w-100" @bind-Value="EditingUnit.Name"/>
+                <ValidationMessage For="@(() => EditingUnit.Name)"/>
 
 
                 <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Note</RadzenText>
-                <RadzenTextBox Class="w-100" @bind-Value="EditUnit.Note"/>
-                <ValidationMessage For="@(() => EditUnit.Note)"/>
+                <RadzenTextBox Class="w-100" @bind-Value="EditingUnit.Note"/>
+                <ValidationMessage For="@(() => EditingUnit.Note)"/>
 
                 <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Odx</RadzenText>
-                <RadzenNumeric TValue="int" @bind-Value="EditUnit.Odx" Class="w-100"/>
-                <ValidationMessage For="@(() => EditUnit.Odx)"/>
+                <RadzenNumeric TValue="int" @bind-Value="EditingUnit.Odx" Class="w-100"/>
+                <ValidationMessage For="@(() => EditingUnit.Odx)"/>
 
                 <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Type</RadzenText>
                 <RadzenDropDown AllowClear="true" AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
@@ -151,8 +151,8 @@
 
                 <div style="margin-top: 8px"></div>
                 <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3" Style="display: inline">IsActive</RadzenText>
-                <RadzenSwitch @bind-Value=@EditUnit.IsActive />
-                <ValidationMessage For="@(() => EditUnit.IsActive)" />
+                <RadzenSwitch @bind-Value=@EditingUnit.IsActive />
+                <ValidationMessage For="@(() => EditingUnit.IsActive)" />
                 <div style="margin-top: 5px"></div>
                 <RZInputFile Icon="upload_file"
                              Accept="image/png, image/jpeg, image/gif"
@@ -163,7 +163,7 @@
             </ModalBody>
             
             <ModalFooter>
-                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Click="@HideEditModal" Text="Cancel"/>
+                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Click="@HideEditingModal" Text="Cancel"/>
                 <RadzenButton Text="Save Changes" Icon="save" ButtonType="ButtonType.Submit"/>
             </ModalFooter>
         </EditForm>

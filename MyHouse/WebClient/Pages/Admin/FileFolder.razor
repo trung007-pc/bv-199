@@ -1,0 +1,166 @@
+﻿@page "/file-folders"
+@attribute [Authorize(Roles = "ADMIN")]
+@using ButtonType = Radzen.ButtonType
+@inject FileFolderService _fileFolderService;
+@inherits BaseBlazorPage
+@using Core.Const
+@using WebClient.Service.FileFolders
+@using Contract.FileFolders;
+
+<h3>File Folder</h3>
+
+
+<div style="display: flex;justify-content: space-between;align-items: center;margin-bottom: 10px">
+    <div>
+        <RadzenBreadCrumb >
+            <RadzenBreadCrumbItem Path="/" Icon="home" Style="font-size: 20px"/>
+            <RadzenBreadCrumbItem Text="@HeaderTitle" Style="font-weight: 300"/>
+        </RadzenBreadCrumb>
+    </div>
+    <div>
+        <RadzenButton Text="Create" Click="@ShowNewModal" Icon="post_add" />
+    </div>
+</div>
+
+
+<RadzenCard>
+    <RadzenTree Data=@HierarchicalFolders Style="width:100%">
+        <RadzenTreeLevel TextProperty="Name" ChildrenProperty="ChildFolders"
+                         HasChildren=@(e => (e as FileFolderDto).ChildFolders.Any())
+                         Expanded="@(value => true)">
+            <Template >
+                <div style="display: flex;width:100%;justify-content: space-between;align-items: center">
+                    <div style="display: flex">
+                        <RadzenIcon Icon="folder" />
+                        <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3" Style="margin-bottom: 0">@context.Text</RadzenText>
+                    </div>
+
+                    <div>
+                        <RadzenButton Icon="edit" Click="async () => { await ShowEditingModal(context.Value); }" ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat" Size="ButtonSize.Medium">
+                        </RadzenButton>
+                        <RadzenButton Click="async () => { await ShowConfirmMessage(context.Value); }" ButtonStyle="ButtonStyle.Danger" Icon="delete" Variant="Variant.Flat" Shade="Shade.Lighter" Size="ButtonSize.Medium" Class="my-1 ms-1">
+                        </RadzenButton>
+                    </div>
+                </div>
+
+            </Template>
+        </RadzenTreeLevel>
+    </RadzenTree>
+</RadzenCard>
+
+
+<Modal @ref="CreateModal">
+    <ModalContent Size="ModalSize.Large" Centered="true">
+        <ModalHeader>
+            <ModalTitle>File Folder</ModalTitle>
+        </ModalHeader>
+        <EditForm Model="NewFileFolder" OnValidSubmit="async () => { await CreateFileFolder(); }">
+
+
+            <ModalBody>
+
+                <RadzenTabs RenderMode="TabRenderMode.Client">
+                    <Tabs>
+                        <RadzenTabsItem Text="Folder Information">
+                            <DataAnnotationsValidator/>
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Name</RadzenText>
+                            <RadzenTextBox Class="w-100" @bind-Value="NewFileFolder.Name"/>
+                            <ValidationMessage For="@(() => NewFileFolder.Name)"/>
+
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">File Folder Code</RadzenText>
+                            <RadzenTextBox Class="w-100" @bind-Value="NewFileFolder.Code"/>
+                            <ValidationMessage For="@(() => NewFileFolder.Code)"/>
+
+                            <RZBR></RZBR>
+                           <RZBR></RZBR>
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">ODX</RadzenText>
+                            <RadzenNumeric Class="w-100" @bind-Value="NewFileFolder.ODX"/>
+                            <ValidationMessage For="@(() => NewFileFolder.ODX)"/>
+                        </RadzenTabsItem>
+
+                        <RadzenTabsItem Text="Folders">
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Parent File Folder</RadzenText>
+                            <RadzenTree Data=@HierarchicalFolders Style="width:100%" Change="OnChangeNewFileFolder">
+                                <RadzenTreeLevel TextProperty="Name" ChildrenProperty="ChildFolders"
+                                                 Expanded="(value) => true"
+                                                 HasChildren=@(e => (e as FileFolderDto).ChildFolders.Any())>
+                                    <Template Context="data">
+                                        <div style="display: flex;width:100%;justify-content: space-between;align-items: center">
+                                            <div style="display: flex">
+                                                <RadzenIcon Icon="folder" />
+                                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3" Style="margin-bottom: 0">@data.Text</RadzenText>
+                                            </div>
+                                        </div>
+
+                                    </Template>
+                                </RadzenTreeLevel>
+                            </RadzenTree>
+
+                        </RadzenTabsItem>
+                    </Tabs>
+                </RadzenTabs>
+
+
+            </ModalBody>
+            <ModalFooter>
+                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Click="@HideNewModal" Text="Cancel"/>
+                <RadzenButton Text="Save Changes" Icon="save" ButtonType="ButtonType.Submit"/>
+            </ModalFooter>
+        </EditForm>
+    </ModalContent>
+</Modal>
+
+<Modal @ref="EditModal">
+    <ModalContent Size="ModalSize.Large" Centered="true">
+        <ModalHeader>
+            <ModalTitle>Edit File Folder</ModalTitle>
+        </ModalHeader>
+        <EditForm Model="EditingFileFolder" OnValidSubmit="async () => { await UpdateFileFolder(); }">
+
+            <ModalBody>
+
+                <RadzenTabs RenderMode="TabRenderMode.Client">
+                    <Tabs>
+                        <RadzenTabsItem Text="Folder Information">
+                            <DataAnnotationsValidator/>
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Name</RadzenText>
+                            <RadzenTextBox Class="w-100" @bind-Value="EditingFileFolder.Name"/>
+                            <ValidationMessage For="@(() => EditingFileFolder.Name)"/>
+
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">File Folder Code</RadzenText>
+                            <RadzenTextBox Class="w-100" @bind-Value="EditingFileFolder.Code"/>
+                            <ValidationMessage For="@(() => EditingFileFolder.Code)"/>
+                            <RZBR></RZBR>
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">ODX</RadzenText>
+                            <RadzenNumeric Class="w-100" @bind-Value="EditingFileFolder.ODX"/>
+                            <ValidationMessage For="@(() => EditingFileFolder.ODX)"/>
+
+                        </RadzenTabsItem>
+                        <RadzenTabsItem Text="Folders">
+                            <RadzenTree Data=@HierarchicalFolders Style="width:100%" Change="OnChangeUpdateFileFolder">
+                                <RadzenTreeLevel TextProperty="Name" ChildrenProperty="ChildFolders"
+                                                 HasChildren=@(e => (e as FileFolderDto).ChildFolders.Any())
+                                                 Selected="(value) => (value as FileFolderDto).Id == EditingFileFolderId"
+                                                 Expanded="(value) => true">
+                                    <Template Context="data">
+                                        <div style="display: flex;width:100%;justify-content: space-between;align-items: center">
+                                            <div style="display: flex">
+                                                <RadzenIcon Icon="folder" />
+                                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3" Style="margin-bottom: 0">@data.Text</RadzenText>
+                                            </div>
+                                        </div>
+
+                                    </Template>
+                                </RadzenTreeLevel>
+                            </RadzenTree>
+                        </RadzenTabsItem>
+                    </Tabs>
+                </RadzenTabs>
+            </ModalBody>
+            <ModalFooter>
+                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Click="@HideEditModal" Text="Cancel"/>
+                <RadzenButton Text="Save Changes" Icon="save" ButtonType="ButtonType.Submit"/>
+            </ModalFooter>
+        </EditForm>
+    </ModalContent>
+</Modal>

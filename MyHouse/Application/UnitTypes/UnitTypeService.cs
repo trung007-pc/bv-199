@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Contract.UnitTypes;
 using Core.Const;
 using Core.Exceptions;
-using Domain.Identity.UnitTypes;
+using Domain.UnitTypes;
 using Microsoft.EntityFrameworkCore;
 using SqlServ4r.Repository.Units;
 using SqlServ4r.Repository.UnitTypes;

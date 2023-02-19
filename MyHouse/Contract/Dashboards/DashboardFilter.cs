@@ -1,11 +1,11 @@
 ﻿using System;
+using Contract.Base;
 
 namespace Contract.Dashboards
 {
-    public class DashboardFilter
+    public class DashboardFilter : FilterBase
     {
-        public DateTime? StartDay { get; set;}
-        public DateTime? EndDay { get; set; }
+
         public Guid? UnitTypeId { get; set; }
     }
 }

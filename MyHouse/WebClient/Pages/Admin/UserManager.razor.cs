@@ -23,10 +23,10 @@ namespace WebClient.Pages.Admin
     public partial class UserManager
     {
         [Inject] IMessageService _messageService { get; set; }
-        public List<UserWithNavigationPropertiesDto> UsersWithNav { get; set; } = new List<UserWithNavigationPropertiesDto>();
+        public List<UserWithNavigationPropertiesDto> Users { get; set; } = new List<UserWithNavigationPropertiesDto>();
         public CreateUserDto NewUser { get; set; } = new CreateUserDto();
         public CreateUserDto UserExcel { get; set; } = new CreateUserDto();
-        public UpdateUserDto EditUser { get; set; } = new UpdateUserDto();
+        public UpdateUserDto EditingUser { get; set; } = new UpdateUserDto();
         public List<RoleDto> Roles = new List<RoleDto>();
         public List<string> RoleNames = new List<string>();
         public List<string> SelectedRoles = new List<string>();
@@ -38,10 +38,10 @@ namespace WebClient.Pages.Admin
 
         public IEnumerable<object> SelectedDepartments = new List<DepartmentDto>();
         
-        public Guid EditUserId { get; set; }
+        public Guid EditingUserId { get; set; }
 
         public Modal CreateModal = new Modal();
-        public Modal EditModal = new Modal();
+        public Modal EditingModal = new Modal();
         public Modal ImportFileModal = new Modal();
        
         public IBrowserFile? EnclosedFile { get; set; }
@@ -53,7 +53,6 @@ namespace WebClient.Pages.Admin
 
         public bool TriggeredWithoutFile { get; set; } = false;
       
-        public bool IsLoading1 { get; set; } = true;
 
 
         public UserManager()
@@ -105,7 +104,7 @@ namespace WebClient.Pages.Admin
         
         public async Task GetUsers()
         {
-            UsersWithNav = await _userManagerService.GetListWithNavigationAsync();
+            Users = await _userManagerService.GetListWithNavigationAsync();
         }
 
         public async Task GetRoles()
@@ -134,16 +133,16 @@ namespace WebClient.Pages.Admin
         {
             await InvokeAsync(async () =>
             {
-                EditUser.UserName = EditUser.PhoneNumber;
-                EditUser.PositionId = SelectedPositionId;
+                EditingUser.UserName = EditingUser.PhoneNumber;
+                EditingUser.PositionId = SelectedPositionId;
                 
-                EditUser.DepartmentIds = (SelectedDepartments.OfType<DepartmentDto>())
+                EditingUser.DepartmentIds = (SelectedDepartments.OfType<DepartmentDto>())
                     .Where(x=>x.ChildDepartment.Count == 0)
                     .Select(x=>x.Id).ToList();
                 
-                await _userManagerService.UpdateUserWithNavigationPropertiesAsync(EditUser, EditUserId);
+                await _userManagerService.UpdateUserWithNavigationPropertiesAsync(EditingUser, EditingUserId);
                 await GetUsers();
-                await HideEditModal();
+                await HideEditingModal();
                 
             }, ActionType.Update, true);
         }
@@ -201,21 +200,21 @@ namespace WebClient.Pages.Admin
         
      
 
-        public void ShowEditModal(UserWithNavigationPropertiesDto userWithNavigationPropertiesDto)
+        public void ShowEditingModal(UserWithNavigationPropertiesDto userWithNavigationPropertiesDto)
         {
             
             UpdateSelectedDepartments(userWithNavigationPropertiesDto);
             
-            EditUser = new UpdateUserDto();
+            EditingUser = new UpdateUserDto();
             SelectedRoles = new List<string>();
             SelectedPositionId = null;
             
             SelectedRoles = userWithNavigationPropertiesDto.RoleNames;
             SelectedPositionId = userWithNavigationPropertiesDto.Position?.Id;
-            EditUserId = userWithNavigationPropertiesDto.User.Id;
-            EditUser = ObjectMapper.Map<UserDto, UpdateUserDto>(userWithNavigationPropertiesDto.User);
-            EditUser.Roles = userWithNavigationPropertiesDto.RoleNames;
-            EditModal.Show();
+            EditingUserId = userWithNavigationPropertiesDto.User.Id;
+            EditingUser = ObjectMapper.Map<UserDto, UpdateUserDto>(userWithNavigationPropertiesDto.User);
+            EditingUser.Roles = userWithNavigationPropertiesDto.RoleNames;
+            EditingModal.Show();
         }
 
         private void UpdateSelectedDepartments(UserWithNavigationPropertiesDto userWithNavigationPropertiesDto)
@@ -265,7 +264,7 @@ namespace WebClient.Pages.Admin
         void OnEditSelectedRoles(object value)
         {
             var selectedRoles = ((IEnumerable<string>) value).ToList();
-            EditUser.Roles = selectedRoles;
+            EditingUser.Roles = selectedRoles;
         }
 
         void OnCreateSelectedRoles(object value)
@@ -274,9 +273,9 @@ namespace WebClient.Pages.Admin
             NewUser.Roles = selectedRoles;
         }
 
-        public Task HideEditModal()
+        public Task HideEditingModal()
         {
-            return EditModal.Hide();
+            return EditingModal.Hide();
         }
 
         async Task ShowLoading()

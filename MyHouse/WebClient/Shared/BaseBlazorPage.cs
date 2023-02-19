@@ -13,6 +13,7 @@ using Core.Enum;
 using Core.Extension;
 using FluentDateTimeOffset;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -32,7 +33,8 @@ namespace WebClient.Shared
         [Inject] private NotificationService _notificationService { get; set;}
         public   IEnumerable<int> PageSizeOptions = new int[] { 5,10, 20, 30 };
 
-
+        [CascadingParameter]
+        public Task<AuthenticationState> AuthState { get; set; }
 
         protected IMapper ObjectMapper { get;}
         
@@ -247,6 +249,26 @@ namespace WebClient.Shared
         {
             if (!fromDateOffset.HasValue || !toDateTimeOffset.HasValue) return (null, null);
             return (fromDateOffset.Value.DateTime, toDateTimeOffset.Value.DateTime);
+        }
+
+        public async Task<string> GetUserNameAsync()
+        {
+            var authState = await AuthState;
+            var user = authState.User;
+
+            return user.Identity.Name;
+        }
+
+        public async Task<bool> IsAuthenticatedAsync()
+        {
+            var authState = await AuthState;
+            var user = authState.User;
+            if (user.Identity.IsAuthenticated)
+            {
+                return true;
+            }
+
+            return false;
         }
 
      

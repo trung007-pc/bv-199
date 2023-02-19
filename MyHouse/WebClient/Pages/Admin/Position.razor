@@ -40,7 +40,7 @@
 
             <RadzenDataGridColumn TItem="PositionDto" Property="Name" Title="Action" TextAlign="TextAlign.Center" Frozen="true" Width="160px" Filterable="false">
                 <Template Context="data">
-                    <RadzenButton Click="async () => { await ShowEditModal(data); }" Icon="edit" ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat" Size="ButtonSize.Medium">
+                    <RadzenButton Click="async () => { await ShowEditingModal(data); }" Icon="edit" ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat" Size="ButtonSize.Medium">
                     </RadzenButton>
 
                     <RadzenButton Click="async () => { await ShowConfirmMessage(data.Id); }" ButtonStyle="ButtonStyle.Danger" Icon="delete" Variant="Variant.Flat" Shade="Shade.Lighter" Size="ButtonSize.Medium" Class="my-1 ms-1">
@@ -89,26 +89,26 @@
     </ModalContent>
 </Modal>
 
-<Modal @ref="EditModal">
+<Modal @ref="EditingModal">
     <ModalContent Size="ModalSize.Large" Centered="true">
         <ModalHeader>
             <ModalTitle>User</ModalTitle>
         </ModalHeader>
-        <EditForm Model="EditPosition" OnValidSubmit="async () => { await UpdatePosition(); }">
+        <EditForm Model="EditingPosition" OnValidSubmit="async () => { await UpdatePosition(); }">
 
             <ModalBody>
                 <DataAnnotationsValidator/>
                 <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Name</RadzenText>
-                <RadzenTextBox Class="w-100" @bind-Value="EditPosition.Name"/>
-                <ValidationMessage For="@(() => EditPosition.Name)"/>
+                <RadzenTextBox Class="w-100" @bind-Value="EditingPosition.Name"/>
+                <ValidationMessage For="@(() => EditingPosition.Name)"/>
 
                 <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Position Code</RadzenText>
-                <RadzenTextBox Class="w-100" @bind-Value="EditPosition.Code"/>
-                <ValidationMessage For="@(() => EditPosition.Code)"/>
+                <RadzenTextBox Class="w-100" @bind-Value="EditingPosition.Code"/>
+                <ValidationMessage For="@(() => EditingPosition.Code)"/>
 
                 <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Odx</RadzenText>
-                <RadzenNumeric Class="w-100" @bind-Value="EditPosition.ODX"/>
-                <ValidationMessage For="@(() => EditPosition.ODX)"/>
+                <RadzenNumeric Class="w-100" @bind-Value="EditingPosition.ODX"/>
+                <ValidationMessage For="@(() => EditingPosition.ODX)"/>
 
                 <RadzenCheckBoxList @bind-Value=@Claims TValue="string" AllowSelectAll="true" SelectAllText="Select all items" Class="mb-5" Style="outline:none">
                     <Items >

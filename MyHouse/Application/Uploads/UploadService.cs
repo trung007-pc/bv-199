@@ -49,5 +49,16 @@ namespace Application.Uploads
             var fileModel = await FileHelper.UploadFile(file, pathBase,new List<string>(){".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"});
             return new FileDto(){FileName = fileModel.FileName , Path = fileModel.Path,Url = fileModel.Url};
         }
+
+        public async Task<FileDto> UploadDocumentFile(IFormFile file)
+        {
+            string pathBase = Path.Combine(_environment.WebRootPath,_configuration["Media:BASE_EXCEL_USER_FILE_PATH"]);
+            var fileModel = await FileHelper.UploadFile(file, pathBase,new List<string>()
+            {
+                ".pdf, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet , application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+               
+            });
+            return new FileDto(){FileName = fileModel.FileName , Path = fileModel.Path,Url = fileModel.Url,Extension= fileModel.Extension};
+        }
     }
 }

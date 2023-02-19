@@ -1,4 +1,4 @@
-﻿using Domain.Identity.UnitTypes;
+﻿using Domain.UnitTypes;
 
 namespace Domain.Units
 {

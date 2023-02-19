@@ -12,7 +12,7 @@ using SqlServ4r.EntityFramework;
 namespace WebApi.Migrations
 {
     [DbContext(typeof(DreamContext))]
-    [Migration("20230212052148_v3")]
+    [Migration("20230216155421_v3")]
     partial class v3
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -56,6 +56,180 @@ namespace WebApi.Migrations
                         .IsUnique();
 
                     b.ToTable("Departments");
+                });
+
+            modelBuilder.Entity("Domain.DocumentFiles.DocumentFile", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("AbsolutePath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ArchiveCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Code")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("DocumentFolderId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("DocumentTypeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Extentions")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsPrint")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid?>("IssuingAgencyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Note")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Path")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("PublicationDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique()
+                        .HasFilter("[Code] IS NOT NULL");
+
+                    b.HasIndex("CreatedBy");
+
+                    b.HasIndex("DocumentFolderId");
+
+                    b.HasIndex("DocumentTypeId");
+
+                    b.HasIndex("FileName")
+                        .IsUnique();
+
+                    b.HasIndex("IssuingAgencyId");
+
+                    b.ToTable("Files");
+                });
+
+            modelBuilder.Entity("Domain.FileFolders.FileFolder", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Code")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Note")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ODX")
+                        .HasColumnType("int");
+
+                    b.Property<Guid?>("ParentCode")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique()
+                        .HasFilter("[Code] IS NOT NULL");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("FileFolders");
+                });
+
+            modelBuilder.Entity("Domain.FileTypes.FileType", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Code")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Note")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ODX")
+                        .HasColumnType("int");
+
+                    b.Property<Guid?>("ParentCode")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique()
+                        .HasFilter("[Code] IS NOT NULL");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("FileTypes");
+                });
+
+            modelBuilder.Entity("Domain.FileVersions.FileVersion", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("EditBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("FileId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Note")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EditBy");
+
+                    b.HasIndex("FileId");
+
+                    b.ToTable("FileVersions");
                 });
 
             modelBuilder.Entity("Domain.Identity.RoleClaims.RoleClaim", b =>
@@ -119,24 +293,6 @@ namespace WebApi.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("Roles", (string)null);
-                });
-
-            modelBuilder.Entity("Domain.Identity.UnitTypes.UnitType", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
-
-                    b.ToTable("UnitTypes");
                 });
 
             modelBuilder.Entity("Domain.Identity.UserClaim.UserClaim", b =>
@@ -324,6 +480,40 @@ namespace WebApi.Migrations
                     b.ToTable("UserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Domain.IssuingAgencys.IssuingAgency", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Code")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Note")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ODX")
+                        .HasColumnType("int");
+
+                    b.Property<Guid?>("ParentCode")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique()
+                        .HasFilter("[Code] IS NOT NULL");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("IssuingAgencies");
+                });
+
             modelBuilder.Entity("Domain.Positions.Position", b =>
                 {
                     b.Property<Guid>("Id")
@@ -457,6 +647,24 @@ namespace WebApi.Migrations
                     b.ToTable("Units");
                 });
 
+            modelBuilder.Entity("Domain.UnitTypes.UnitType", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("UnitTypes");
+                });
+
             modelBuilder.Entity("Domain.UserDepartments.UserDepartment", b =>
                 {
                     b.Property<Guid>("Id")
@@ -475,6 +683,59 @@ namespace WebApi.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("UserDepartments");
+                });
+
+            modelBuilder.Entity("Domain.DocumentFiles.DocumentFile", b =>
+                {
+                    b.HasOne("Domain.Identity.Users.User", "User")
+                        .WithMany("CreatedFiles")
+                        .HasForeignKey("CreatedBy")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Domain.FileFolders.FileFolder", "FileFolder")
+                        .WithMany("Files")
+                        .HasForeignKey("DocumentFolderId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Domain.FileTypes.FileType", "FileType")
+                        .WithMany("DocumentFiles")
+                        .HasForeignKey("DocumentTypeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Domain.IssuingAgencys.IssuingAgency", "IssuingAgency")
+                        .WithMany("DocumentFiles")
+                        .HasForeignKey("IssuingAgencyId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("FileFolder");
+
+                    b.Navigation("FileType");
+
+                    b.Navigation("IssuingAgency");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Domain.FileVersions.FileVersion", b =>
+                {
+                    b.HasOne("Domain.Identity.Users.User", "User")
+                        .WithMany("EditedFileVersions")
+                        .HasForeignKey("EditBy")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Domain.DocumentFiles.DocumentFile", "DocumentFile")
+                        .WithMany("FileVersions")
+                        .HasForeignKey("FileId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("DocumentFile");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Domain.Identity.RoleClaims.RoleClaim", b =>
@@ -523,7 +784,8 @@ namespace WebApi.Migrations
                 {
                     b.HasOne("Domain.Positions.Position", "Position")
                         .WithMany("Users")
-                        .HasForeignKey("PositionId");
+                        .HasForeignKey("PositionId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Position");
                 });
@@ -558,7 +820,7 @@ namespace WebApi.Migrations
 
             modelBuilder.Entity("Domain.Units.Unit", b =>
                 {
-                    b.HasOne("Domain.Identity.UnitTypes.UnitType", "UnitType")
+                    b.HasOne("Domain.UnitTypes.UnitType", "UnitType")
                         .WithMany("Units")
                         .HasForeignKey("UnitTypeId")
                         .OnDelete(DeleteBehavior.SetNull);
@@ -590,14 +852,33 @@ namespace WebApi.Migrations
                     b.Navigation("UserDepartments");
                 });
 
-            modelBuilder.Entity("Domain.Identity.UnitTypes.UnitType", b =>
+            modelBuilder.Entity("Domain.DocumentFiles.DocumentFile", b =>
                 {
-                    b.Navigation("Units");
+                    b.Navigation("FileVersions");
+                });
+
+            modelBuilder.Entity("Domain.FileFolders.FileFolder", b =>
+                {
+                    b.Navigation("Files");
+                });
+
+            modelBuilder.Entity("Domain.FileTypes.FileType", b =>
+                {
+                    b.Navigation("DocumentFiles");
                 });
 
             modelBuilder.Entity("Domain.Identity.Users.User", b =>
                 {
+                    b.Navigation("CreatedFiles");
+
+                    b.Navigation("EditedFileVersions");
+
                     b.Navigation("UserDepartments");
+                });
+
+            modelBuilder.Entity("Domain.IssuingAgencys.IssuingAgency", b =>
+                {
+                    b.Navigation("DocumentFiles");
                 });
 
             modelBuilder.Entity("Domain.Positions.Position", b =>
@@ -613,6 +894,11 @@ namespace WebApi.Migrations
             modelBuilder.Entity("Domain.Units.Unit", b =>
                 {
                     b.Navigation("UnitReviewDetails");
+                });
+
+            modelBuilder.Entity("Domain.UnitTypes.UnitType", b =>
+                {
+                    b.Navigation("Units");
                 });
 #pragma warning restore 612, 618
         }

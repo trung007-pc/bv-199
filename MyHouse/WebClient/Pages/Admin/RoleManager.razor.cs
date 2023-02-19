@@ -15,13 +15,13 @@ namespace WebClient.Pages.Admin
     {
         public List<RoleDto> Roles = new List<RoleDto>();
         public CreateUpdateRoleDto NewRole = new CreateUpdateRoleDto();
-        public CreateUpdateRoleDto EditRole = new CreateUpdateRoleDto();
-        public Guid EditRoleId { get; set; }
+        public CreateUpdateRoleDto EditingRole = new CreateUpdateRoleDto();
+        public Guid EditingRoleId { get; set; }
          [Inject]  IMessageService _messageService { get; set; }
 
 
-        public Modal CreateModal;
-        public Modal EditModal;
+        public Modal NewModal;
+        public Modal EditingModal;
         public string HeaderTitle = "Role";
 
         public IEnumerable<string> Claims = new List<string>();
@@ -63,8 +63,8 @@ namespace WebClient.Pages.Admin
         {
             await InvokeAsync(async () =>
             {
-                await _roleManagerService.UpdateAsync(EditRole, EditRoleId);
-                HideEditModal();
+                await _roleManagerService.UpdateAsync(EditingRole, EditingRoleId);
+                HideEditingModal();
                 await GetRoles();
             },ActionType.Update,true);
             
@@ -75,7 +75,7 @@ namespace WebClient.Pages.Admin
             await InvokeAsync(async () =>
             {
                 await _roleManagerService.DeleteAsync(id);
-                HideEditModal();
+                HideEditingModal();
                 await GetRoles();
             },ActionType.Delete,true);
             
@@ -92,32 +92,26 @@ namespace WebClient.Pages.Admin
         public void ShowNewModal()
         {
             NewRole = new CreateUpdateRoleDto();
-            CreateModal.Show();
+            NewModal.Show();
         }
 
         public void HideNewModal()
         {
-            CreateModal.Hide();
+            NewModal.Hide();
         }
 
 
-        public Task ShowEditModal(RoleDto roleModel)
+        public Task ShowEditingModal(RoleDto roleDto)
         {
-            EditRole = new CreateUpdateRoleDto();
-            EditRole = ObjectMapper.Map<RoleDto, CreateUpdateRoleDto>(roleModel);
-            EditRoleId = roleModel.Id;
-            return EditModal.Show();
+            EditingRole = new CreateUpdateRoleDto();
+            EditingRole = ObjectMapper.Map<RoleDto, CreateUpdateRoleDto>(roleDto);
+            EditingRoleId = roleDto.Id;
+            return EditingModal.Show();
         }
 
-        public void HideEditModal()
+        public void HideEditingModal()
         {
-            EditModal.Hide();
-        }
-        
-        
-        void OnChange(IEnumerable<int> value, string name)
-        {
-           
+            EditingModal.Hide();
         }
     }
 }

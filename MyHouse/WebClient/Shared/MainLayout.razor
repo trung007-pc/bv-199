@@ -15,7 +15,7 @@
                                    <Template>
                                        <div class="box">
                                            <h3 >
-                                               @context.User.Claims.FirstOrDefault(x=>x.Type == ClaimTypes.Surname).Value
+                                               @context.User.Claims.FirstOrDefault(x=>x.Type == ClaimTypes.Surname)?.Value
                                            </h3>
                                            <RadzenGravatar Email="user@example.com">
                                            </RadzenGravatar>

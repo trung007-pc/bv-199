@@ -13,8 +13,8 @@ namespace WebClient.Pages.Admin
 {
     public partial class Dashboard
     {
-        public List<DataItem> UnitReviewdataItems = new List<DataItem>();
-        public List<DataItem> DetailUnitReviewdataItems = new List<DataItem>();
+        public List<DataItem> UnitReviewDataItems = new List<DataItem>();
+        public List<DataItem> DetailUnitReviewDataItems = new List<DataItem>();
 
         public bool IsLoading { get; set; } = true;
         
@@ -26,7 +26,6 @@ namespace WebClient.Pages.Admin
 
         public DashboardFilter Filter { get; set; }
         public List<UnitTypeDto> Types { get; set; }
-        public bool showDataLabels = false;
 
 
         public Dashboard()
@@ -56,11 +55,11 @@ namespace WebClient.Pages.Admin
         public async Task GetUnitStatisticsByReviewDateRange()
         {
                 Stat = await _dashboardService.GetUnitReviewStatistics(Filter);
-                UnitReviewdataItems = Stat.UnitReviewItems;
-                UnitReviewdataItems.Add(new DataItem(){Label = "",Value = 0});
-                DetailUnitReviewdataItems = Stat.DetailUnitReviewItems;
+                UnitReviewDataItems = Stat.UnitReviewItems;
+                UnitReviewDataItems.Add(new DataItem(){Label = "",Value = 0});
+                DetailUnitReviewDataItems = Stat.DetailUnitReviewItems;
 
-                foreach (var item in DetailUnitReviewdataItems)
+                foreach (var item in DetailUnitReviewDataItems)
                 {
                     item.LabelWithValue = $"{item.Label}: {item.Value}";
                 }

@@ -1,21 +1,29 @@
 ﻿using System.Collections.Generic;
 using AutoMapper;
 using Contract.Departments;
+using Contract.DocumentFiles;
+using Contract.FileFolders;
+using Contract.FileTypes;
 using Contract.Identity.RoleManager;
 using Contract.Identity.UserManager;
+using Contract.IssuingAgencys;
 using Contract.Positions;
 using Contract.UnitReviewDetails;
 using Contract.UnitReviews;
 using Contract.Units;
 using Contract.UnitTypes;
 using Domain.Departments;
+using Domain.DocumentFiles;
+using Domain.FileFolders;
+using Domain.FileTypes;
 using Domain.Identity.Roles;
-using Domain.Identity.UnitTypes;
 using Domain.Identity.Users;
+using Domain.IssuingAgencys;
 using Domain.Positions;
 using Domain.UnitReviewDetails;
 using Domain.UnitReviews;
 using Domain.Units;
+using Domain.UnitTypes;
 using Microsoft.Build.Tasks.Deployment.Bootstrapper;
 
 namespace Application
@@ -60,6 +68,24 @@ namespace Application
 
             CreateMap<Department,DepartmentDto>().ReverseMap();
             CreateMap<CreateUpdateDepartmentDto,Department>().ReverseMap();
-        }
+            
+            
+            CreateMap<FileFolder,FileFolderDto>().ReverseMap();
+            CreateMap<CreateUpdateFileFolderDto,FileFolder>().ReverseMap();
+            
+            CreateMap<FileType,FileTypeDto>().ReverseMap();
+            CreateMap<CreateUpdateFileTypeDto,FileType>().ReverseMap();
+            
+                        
+            CreateMap<IssuingAgency,IssuingAgencyDto>().ReverseMap();
+            CreateMap<CreateUpdateIssuingAgencyDto,IssuingAgency>().ReverseMap();
+
+            CreateMap<DocumentFile, DocumentFileDto>().ReverseMap();
+            CreateMap<CreateUpdateDocumentFileDto, DocumentFile>().ReverseMap();
+
+
+            CreateMap<DocumentFileWithNavProperties, DocumentFileWithNavPropertiesDto>().ReverseMap();
+        }            
+
     }
 }

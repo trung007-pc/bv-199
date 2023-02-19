@@ -26,6 +26,38 @@ namespace WebApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "DocumentFolders",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Code = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ODX = table.Column<int>(type: "int", nullable: false),
+                    ParentCode = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DocumentFolders", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "IssuingAgencies",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Code = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ODX = table.Column<int>(type: "int", nullable: false),
+                    ParentCode = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_IssuingAgencies", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Positions",
                 columns: table => new
                 {
@@ -85,6 +117,28 @@ namespace WebApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "DocumentTypes",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Code = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ODX = table.Column<int>(type: "int", nullable: false),
+                    ParentCode = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    IssuingAgencyId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DocumentTypes", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_DocumentTypes_IssuingAgencies_IssuingAgencyId",
+                        column: x => x.IssuingAgencyId,
+                        principalTable: "IssuingAgencies",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
@@ -119,7 +173,8 @@ namespace WebApi.Migrations
                         name: "FK_Users_Positions_PositionId",
                         column: x => x.PositionId,
                         principalTable: "Positions",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
                 });
 
             migrationBuilder.CreateTable(
@@ -171,6 +226,58 @@ namespace WebApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Files",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Code = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    PublicationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Extentions = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AbsolutePath = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ArchiveCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsPrint = table.Column<bool>(type: "bit", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    FileName = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Path = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IssuingAgencyId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    DocumentFolderId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    DocumentTypeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    FileTypeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Files", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Files_DocumentFolders_DocumentFolderId",
+                        column: x => x.DocumentFolderId,
+                        principalTable: "DocumentFolders",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Files_DocumentTypes_FileTypeId",
+                        column: x => x.FileTypeId,
+                        principalTable: "DocumentTypes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Files_IssuingAgencies_IssuingAgencyId",
+                        column: x => x.IssuingAgencyId,
+                        principalTable: "IssuingAgencies",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                    table.ForeignKey(
+                        name: "FK_Files_Users_CreatedBy",
+                        column: x => x.CreatedBy,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "UserClaims",
                 columns: table => new
                 {
@@ -192,7 +299,7 @@ namespace WebApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "UserDepartment",
+                name: "UserDepartments",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -201,15 +308,15 @@ namespace WebApi.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserDepartment", x => new { x.Id, x.DepartmentId, x.UserId });
+                    table.PrimaryKey("PK_UserDepartments", x => new { x.Id, x.DepartmentId, x.UserId });
                     table.ForeignKey(
-                        name: "FK_UserDepartment_Departments_DepartmentId",
+                        name: "FK_UserDepartments_Departments_DepartmentId",
                         column: x => x.DepartmentId,
                         principalTable: "Departments",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_UserDepartment_Users_UserId",
+                        name: "FK_UserDepartments_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
@@ -306,6 +413,33 @@ namespace WebApi.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "FileVersions",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    FileId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    EditBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FileVersions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_FileVersions_Files_FileId",
+                        column: x => x.FileId,
+                        principalTable: "Files",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_FileVersions_Users_EditBy",
+                        column: x => x.EditBy,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Departments_Code",
                 table: "Departments",
@@ -316,6 +450,93 @@ namespace WebApi.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Departments_Name",
                 table: "Departments",
+                column: "Name",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DocumentFolders_Code",
+                table: "DocumentFolders",
+                column: "Code",
+                unique: true,
+                filter: "[Code] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DocumentFolders_Name",
+                table: "DocumentFolders",
+                column: "Name",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DocumentTypes_Code",
+                table: "DocumentTypes",
+                column: "Code",
+                unique: true,
+                filter: "[Code] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DocumentTypes_IssuingAgencyId",
+                table: "DocumentTypes",
+                column: "IssuingAgencyId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DocumentTypes_Name",
+                table: "DocumentTypes",
+                column: "Name",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Files_Code",
+                table: "Files",
+                column: "Code",
+                unique: true,
+                filter: "[Code] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Files_CreatedBy",
+                table: "Files",
+                column: "CreatedBy");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Files_DocumentFolderId",
+                table: "Files",
+                column: "DocumentFolderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Files_FileName",
+                table: "Files",
+                column: "FileName",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Files_FileTypeId",
+                table: "Files",
+                column: "FileTypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Files_IssuingAgencyId",
+                table: "Files",
+                column: "IssuingAgencyId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FileVersions_EditBy",
+                table: "FileVersions",
+                column: "EditBy");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FileVersions_FileId",
+                table: "FileVersions",
+                column: "FileId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_IssuingAgencies_Code",
+                table: "IssuingAgencies",
+                column: "Code",
+                unique: true,
+                filter: "[Code] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_IssuingAgencies_Name",
+                table: "IssuingAgencies",
                 column: "Name",
                 unique: true);
 
@@ -369,6 +590,11 @@ namespace WebApi.Migrations
                 column: "UnitReviewId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_UnitReviews_CreationDate",
+                table: "UnitReviews",
+                column: "CreationDate");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Units_Name",
                 table: "Units",
                 column: "Name",
@@ -391,13 +617,13 @@ namespace WebApi.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserDepartment_DepartmentId",
-                table: "UserDepartment",
+                name: "IX_UserDepartments_DepartmentId",
+                table: "UserDepartments",
                 column: "DepartmentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserDepartment_UserId",
-                table: "UserDepartment",
+                name: "IX_UserDepartments_UserId",
+                table: "UserDepartments",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
@@ -450,6 +676,9 @@ namespace WebApi.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "FileVersions");
+
+            migrationBuilder.DropTable(
                 name: "RoleClaims");
 
             migrationBuilder.DropTable(
@@ -459,7 +688,7 @@ namespace WebApi.Migrations
                 name: "UserClaims");
 
             migrationBuilder.DropTable(
-                name: "UserDepartment");
+                name: "UserDepartments");
 
             migrationBuilder.DropTable(
                 name: "UserLogins");
@@ -469,6 +698,9 @@ namespace WebApi.Migrations
 
             migrationBuilder.DropTable(
                 name: "UserTokens");
+
+            migrationBuilder.DropTable(
+                name: "Files");
 
             migrationBuilder.DropTable(
                 name: "UnitReviews");
@@ -483,10 +715,19 @@ namespace WebApi.Migrations
                 name: "Roles");
 
             migrationBuilder.DropTable(
+                name: "DocumentFolders");
+
+            migrationBuilder.DropTable(
+                name: "DocumentTypes");
+
+            migrationBuilder.DropTable(
                 name: "Users");
 
             migrationBuilder.DropTable(
                 name: "UnitTypes");
+
+            migrationBuilder.DropTable(
+                name: "IssuingAgencies");
 
             migrationBuilder.DropTable(
                 name: "Positions");

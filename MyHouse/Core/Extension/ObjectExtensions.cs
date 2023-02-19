@@ -17,7 +17,19 @@ namespace Core.Extension
             var serialized = JsonConvert.SerializeObject(source);
             return JsonConvert.DeserializeObject<T>(serialized);
         }
-        
+
+        public static List<T> CloneList<T>(this  IEnumerable<T> sources)
+        {
+            var cloneList =
+            new List<T>();
+            foreach (var item in sources)
+            {
+                cloneList.Add(item.Clone());
+            }
+
+            return cloneList;
+        }
+
         public static async Task<HttpRequestMessage> CloneHttpRequestMessageAsync(this HttpRequestMessage req)
         {
             HttpRequestMessage clone = new HttpRequestMessage(req.Method, req.RequestUri);

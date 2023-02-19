@@ -13,25 +13,21 @@ namespace WebClient.Pages.Admin
 {
     public partial class Department
     {
+        public List<DepartmentDto> HierarchicalDepartments = new List<DepartmentDto>();
         public List<DepartmentDto> Departments = new List<DepartmentDto>();
-        public List<DepartmentDto> AllDepartmentElements = new List<DepartmentDto>();
 
         
         public CreateUpdateDepartmentDto NewDepartment = new CreateUpdateDepartmentDto();
-        public CreateUpdateDepartmentDto EditDepartment = new CreateUpdateDepartmentDto();
+        public CreateUpdateDepartmentDto EditingDepartment = new CreateUpdateDepartmentDto();
         public Guid EditingDepartmentId { get; set; }
          [Inject]  IMessageService _messageService { get; set; }
 
 
         public Modal CreateModal;
-        public Modal EditModal;
+        public Modal EditingModal;
         public string HeaderTitle = "Department";
 
-        public IEnumerable<string> Claims = new List<string>();
-
-        public DepartmentDto SelectedDepartment = new DepartmentDto();
-
-
+        
 
         public Department()
         {
@@ -54,17 +50,17 @@ namespace WebClient.Pages.Admin
 
         public async Task GetDepartments()
         {
-            Departments = await _departmentService.GetListAsync();
+            HierarchicalDepartments = await _departmentService.GetListAsync();
 
-            AllDepartmentElements = Departments.Clone();
-            foreach (var item in Departments)
+            Departments = HierarchicalDepartments.Clone();
+            foreach (var item in HierarchicalDepartments)
             {
                 var childDepartments = 
-                    Departments.Where(x => x.ParentCode == item.Id).ToList();
+                    HierarchicalDepartments.Where(x => x.ParentCode == item.Id).ToList();
                 item.ChildDepartment = childDepartments;
             }
 
-            Departments = Departments.Where(x => x.ParentCode == null).ToList();
+            HierarchicalDepartments = HierarchicalDepartments.Where(x => x.ParentCode == null).ToList();
 
         }
 
@@ -87,7 +83,7 @@ namespace WebClient.Pages.Admin
         {
             await InvokeAsync(async () =>
             {
-                await _departmentService.UpdateAsync(EditDepartment, EditingDepartmentId);
+                await _departmentService.UpdateAsync(EditingDepartment, EditingDepartmentId);
                 HideEditModal();    
                 await GetDepartments();
             },ActionType.Update,true);
@@ -126,19 +122,19 @@ namespace WebClient.Pages.Admin
             CreateModal.Hide();
         }
 
-        public Task ShowEditModal(object value)
+        public Task ShowEditingModal(object value)
         {
             var department = (DepartmentDto)value;
 
-            EditDepartment = new CreateUpdateDepartmentDto();
-            EditDepartment = ObjectMapper.Map<DepartmentDto, CreateUpdateDepartmentDto>(department);
+            EditingDepartment = new CreateUpdateDepartmentDto();
+            EditingDepartment = ObjectMapper.Map<DepartmentDto, CreateUpdateDepartmentDto>(department);
             EditingDepartmentId = department.Id;
-            return EditModal.Show();
+            return EditingModal.Show();
         }
 
         public void HideEditModal()
         {
-            EditModal.Hide();
+            EditingModal.Hide();
         }
         
         
@@ -162,7 +158,7 @@ namespace WebClient.Pages.Admin
                 }
                 else
                 {
-                    EditDepartment.ParentCode = department.Id;
+                    EditingDepartment.ParentCode = department.Id;
                 }
             }
         }
@@ -171,7 +167,7 @@ namespace WebClient.Pages.Admin
         bool IsChildOfAssignmentDepartment(Guid assignmentId,DepartmentDto dto)
         {
             var childDepartments = new List<DepartmentDto>();
-            var department = AllDepartmentElements.FirstOrDefault(x => x.Id == assignmentId);
+            var department = Departments.FirstOrDefault(x => x.Id == assignmentId);
             GetAllChildOfDepartment(childDepartments, department);
 
             var item = childDepartments.FirstOrDefault(x => x.Id == dto.Id);
@@ -184,7 +180,7 @@ namespace WebClient.Pages.Admin
 
         void GetAllChildOfDepartment(List<DepartmentDto> childs,DepartmentDto dto)
         {
-            var items = AllDepartmentElements.Where(x => x.ParentCode == dto.Id);
+            var items = Departments.Where(x => x.ParentCode == dto.Id);
             childs.AddRange(items);
             foreach (var item in items)
             {
@@ -203,16 +199,6 @@ namespace WebClient.Pages.Admin
    
        
     }
-
-    public class DepartmentParent
-    {
-        public Guid ParentCode { get; set;}
-        public string Name { get; set; }
-    }
-
- 
-
-
     
 
 }

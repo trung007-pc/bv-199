@@ -40,6 +40,7 @@ namespace Core.Helper
                         await file.CopyToAsync(fileStream);
                     }
 
+                    fileDto.Extension = ext;
                     fileDto.Path = filePath;
                     fileDto.FileName =Path.Combine(directory , fileName);
                     if (baseUri != "")
@@ -94,7 +95,9 @@ namespace Core.Helper
     {
         public string Path { get; set; }
         public string FileName { get; set;}
+        public string Extension { get; set; }
         
         public string Url { get; set; }
+        
     }
 }

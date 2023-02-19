@@ -41,7 +41,7 @@
 
                     <RadzenButton MouseEnter="ShowTooltip" Click="async () => { await CopyToClipboard(data.Id); }" Icon="content_copy" ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat" Size="ButtonSize.Medium">
                     </RadzenButton>
-                    <RadzenButton Click="async () => { await ShowEditModal(data); }" Icon="edit" ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat" Size="ButtonSize.Medium">
+                    <RadzenButton Click="async () => { await ShowEditingModal(data); }" Icon="edit" ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat" Size="ButtonSize.Medium">
                     </RadzenButton>
                     <RadzenButton Click="async () => { await ShowConfirmMessage(data.Id); }" ButtonStyle="ButtonStyle.Danger" Icon="delete" Variant="Variant.Flat" Shade="Shade.Lighter" Size="ButtonSize.Medium" Class="my-1 ms-1">
                     </RadzenButton>
@@ -74,17 +74,17 @@
     </ModalContent>
 </Modal>
 
-<Modal @ref="EditModal">
+<Modal @ref="EditingModal">
     <ModalContent Size="ModalSize.Large" Centered="true">
         <ModalHeader>
             <ModalTitle>Unit Type</ModalTitle>
         </ModalHeader>
-        <EditForm Model="EditUnitType" OnValidSubmit="async () => { await UpdateUnitType(); }">
+        <EditForm Model="EditingUnitType" OnValidSubmit="async () => { await UpdateUnitType(); }">
             <ModalBody>
                 <DataAnnotationsValidator/>
                 <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Name</RadzenText>
-                <RadzenTextBox Class="w-100" @bind-Value="EditUnitType.Name"/>
-                <ValidationMessage For="@(() => EditUnitType.Name)"/>
+                <RadzenTextBox Class="w-100" @bind-Value="EditingUnitType.Name"/>
+                <ValidationMessage For="@(() => EditingUnitType.Name)"/>
 
             </ModalBody>
             <ModalFooter>

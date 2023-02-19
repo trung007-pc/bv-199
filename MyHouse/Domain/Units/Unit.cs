@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using Domain.Identity.UnitTypes;
 using Domain.UnitReviewDetails;
+using Domain.UnitTypes;
 
 namespace Domain.Units
 {

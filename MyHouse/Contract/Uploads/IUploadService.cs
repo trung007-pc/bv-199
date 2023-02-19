@@ -10,6 +10,8 @@ namespace Contract.Uploads
         
         public Task<FileDto>   UploadExcelFileOfUsers(IFormFile file);
 
-        
+        public Task<FileDto> UploadDocumentFile(IFormFile file);
+
+
     }
 }

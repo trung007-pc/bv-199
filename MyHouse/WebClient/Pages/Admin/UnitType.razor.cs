@@ -15,13 +15,13 @@ namespace WebClient.Pages.Admin
     {
         public List<UnitTypeDto> UnitTypes = new List<UnitTypeDto>();
         public CreateUpdateUnitTypeDto NewUnitType = new CreateUpdateUnitTypeDto();
-        public CreateUpdateUnitTypeDto EditUnitType = new CreateUpdateUnitTypeDto();
-        public Guid EditUnitId { get; set; }
+        public CreateUpdateUnitTypeDto EditingUnitType = new CreateUpdateUnitTypeDto();
+        public Guid EditingUnitId { get; set; }
         [Inject] IMessageService _messageService { get; set; }
 
 
         public Modal CreateModal;
-        public Modal EditModal;
+        public Modal EditingModal;
         
 
         public string HeaderTitle = "Unit Type";
@@ -78,7 +78,7 @@ namespace WebClient.Pages.Admin
         {
             await InvokeAsync(async () =>
             {
-                await _unitTypeService.UpdateAsync(EditUnitType, EditUnitId);
+                await _unitTypeService.UpdateAsync(EditingUnitType, EditingUnitId);
                 HideEditModal();
                 await GetUnitTypes();
             }, ActionType.Update, true);
@@ -114,23 +114,18 @@ namespace WebClient.Pages.Admin
         }
 
 
-        public Task ShowEditModal(UnitTypeDto unitTypeDto)
+        public Task ShowEditingModal(UnitTypeDto unitTypeDto)
         {
-            EditUnitType = new CreateUpdateUnitTypeDto();
-            EditUnitType = ObjectMapper.Map<UnitTypeDto, CreateUpdateUnitTypeDto>(unitTypeDto);
-            EditUnitId = unitTypeDto.Id;
-            return EditModal.Show();
+            EditingUnitType = new CreateUpdateUnitTypeDto();
+            EditingUnitType = ObjectMapper.Map<UnitTypeDto, CreateUpdateUnitTypeDto>(unitTypeDto);
+            EditingUnitId = unitTypeDto.Id;
+            return EditingModal.Show();
         }
 
         public void HideEditModal()
         {
-            EditModal.Hide();
+            EditingModal.Hide();
         }
-
-
-        void OnChange(IEnumerable<int> value, string name)
-        {
-            
-        }
+        
     }
 }

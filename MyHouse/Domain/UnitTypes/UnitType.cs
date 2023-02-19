@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using Domain.Units;
-using Microsoft.EntityFrameworkCore;
 
-namespace Domain.Identity.UnitTypes
+namespace Domain.UnitTypes
 {
     public class UnitType
     {

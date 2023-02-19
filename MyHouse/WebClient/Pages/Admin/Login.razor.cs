@@ -11,10 +11,6 @@ namespace WebClient.Pages.Admin
     public partial class Login
     {
         
-        // private UserModel UserModel { get; set; } = new UserModel();
-
-        [CascadingParameter]
-        public Task<AuthenticationState> AuthState { get; set; }
         public Login()
         {
             
@@ -22,9 +18,7 @@ namespace WebClient.Pages.Admin
 
         protected async override Task OnInitializedAsync()
         {
-            var authState = await AuthState;
-            var user = authState.User;
-            if (user.Identity.IsAuthenticated)
+            if (await IsAuthenticatedAsync())
             {
                 _navigationManager.NavigateTo("index");
             }

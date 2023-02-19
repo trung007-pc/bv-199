@@ -118,3 +118,12 @@ a, .btn-link {
 .rz-paginator label{
     margin-bottom: 0;
 }
+
+.search-input{
+    width: 100%;
+    border-radius: 2px;
+    display: flex;
+    border: 1px solid #8888;
+}
+
+

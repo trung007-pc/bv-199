@@ -1,7 +1,11 @@
 ﻿using AutoMapper;
 using Contract.Departments;
+using Contract.DocumentFiles;
+using Contract.FileFolders;
+using Contract.FileTypes;
 using Contract.Identity.RoleManager;
 using Contract.Identity.UserManager;
+using Contract.IssuingAgencys;
 using Contract.Positions;
 using Contract.UnitReviewDetails;
 using Contract.UnitReviews;
@@ -32,23 +36,17 @@ namespace WebClient
             CreateMap<UnitReview.ReviewWithNavPropertiesModel, CreateUpdateUnitReviewDto>();
 
             CreateMap<UnitTypeDto,CreateUpdateUnitTypeDto>().ReverseMap();
-
-
+            
 
             CreateMap<CreateUpdatePositionDto, PositionDto>().ReverseMap();
 
             CreateMap<DepartmentDto, CreateUpdateDepartmentDto>().ReverseMap();
 
+            CreateMap<FileFolderDto, CreateUpdateFileFolderDto>().ReverseMap();
 
-
-
-
-
-
-            // CreateMap<A, C>().ReverseMap();
-            //
-            // CreateMap<B, E>().ForMember(dest=>dest.deptrai1,
-            //     opt=>opt.MapFrom(source => source.deptrai)).ReverseMap();
+            CreateMap<FileTypeDto, CreateUpdateFileTypeDto>().ReverseMap();
+            CreateMap<IssuingAgencyDto, CreateUpdateIssuingAgencyDto>().ReverseMap();
+            CreateMap<DocumentFileDto, CreateUpdateDocumentFileDto>().ReverseMap();
 
 
         }

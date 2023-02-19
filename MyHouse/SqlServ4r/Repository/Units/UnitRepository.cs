@@ -5,9 +5,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Contract.Dashboards;
 using Contract.Units;
-using Domain.Identity.UnitTypes;
 using Domain.UnitReviewDetails;
 using Domain.Units;
+using Domain.UnitTypes;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using SqlServ4r.EntityFramework;
@@ -45,7 +45,7 @@ namespace SqlServ4r.Repository.Units
         {
             
             var query = from unit in _context.Units.Where(x => !x.IsDeleted)
-                    .WhereIf(!input.TextFilter.IsNullOrWhiteSpace(), x => x.Name.Contains(input.TextFilter))
+                    .WhereIf(!input.Text.IsNullOrWhiteSpace(), x => x.Name.Contains(input.Text))
                     .WhereIf(input.IsActive != null, x => x.IsActive == input.IsActive)
                     .WhereIf(input.UnitTypeId !=null , x=>x.UnitTypeId == input.UnitTypeId)
                     .OrderByDescending(x=>x.Odx)

@@ -22,16 +22,15 @@ namespace WebClient.Pages.Admin
         [Inject] IMessageService _messageService { get; set; }
         public List<UnitWithNavPropertiesDto> Units { get; set; }
         public Modal CreateModal = new Modal();
-        public Modal EditModal = new Modal();
+        public Modal EditingModal = new Modal();
         public CreateUpdateUnitDto NewUnit { get; set; }
 
-        public CreateUpdateUnitDto EditUnit { get; set; }
-        public Guid EditUnitId { get; set; }
+        public CreateUpdateUnitDto EditingUnit { get; set; }
+        public Guid EditingUnitId { get; set; }
 
-        public long maxFileSize = 1024 * 15;
         
         public IBrowserFile? NewFile { get; set; }
-        public IBrowserFile? EditFile { get; set; }
+        public IBrowserFile? EditingFile { get; set; }
         
         public List<UnitTypeDto> Types { get; set; }
         public Guid? OnEditSelectedTypeId { get; set; }
@@ -43,7 +42,7 @@ namespace WebClient.Pages.Admin
         {
             Units = new List<UnitWithNavPropertiesDto>();
             NewUnit = new CreateUpdateUnitDto();
-            EditUnit = new CreateUpdateUnitDto();
+            EditingUnit = new CreateUpdateUnitDto();
         }
 
 
@@ -129,7 +128,7 @@ namespace WebClient.Pages.Admin
         
         async Task OnChangeFileAtEditModal(InputFileChangeEventArgs e)
         {
-            EditFile = e.GetMultipleFiles().FirstOrDefault();
+            EditingFile = e.GetMultipleFiles().FirstOrDefault();
         }
 
         void OnChange(int value, string name)
@@ -142,42 +141,42 @@ namespace WebClient.Pages.Admin
            await  InvokeAsync(async () =>
             {
                 var fileDto = new FileDto();
-                if (EditFile != null)
+                if (EditingFile != null)
                 {
-                    fileDto = await _uploadService.UploadImage(EditFile);
-                    EditUnit.ImageUrl = fileDto.Url;
+                    fileDto = await _uploadService.UploadImage(EditingFile);
+                    EditingUnit.ImageUrl = fileDto.Url;
                 }
 
-                EditUnit.FileName = fileDto.FileName;
-                EditUnit.Path = fileDto.Path;
-                await _unitService.UpdateAsync(EditUnit, EditUnitId);
+                EditingUnit.FileName = fileDto.FileName;
+                EditingUnit.Path = fileDto.Path;
+                await _unitService.UpdateAsync(EditingUnit, EditingUnitId);
                 await GetList();
-                HideEditModal();
+                HideEditingModal();
             },ActionType.Update,true);
         }
 
-        public Task ShowEditModal(UnitWithNavPropertiesDto unitWithNavProperties)
+        public Task ShowEditingModal(UnitWithNavPropertiesDto unitWithNavProperties)
         {
             var unitDto = unitWithNavProperties.Unit;
             var type = unitWithNavProperties.UnitType;
             
-            EditUnit = ObjectMapper.Map<UnitDto, CreateUpdateUnitDto>(unitDto);
-            EditFile = null;
+            EditingUnit = ObjectMapper.Map<UnitDto, CreateUpdateUnitDto>(unitDto);
+            EditingFile = null;
             
-            EditUnitId = unitDto.Id;
+            EditingUnitId = unitDto.Id;
 
             if (type.Id != Guid.Empty)
             {
-                EditUnit.UnitTypeId = type.Id;
+                EditingUnit.UnitTypeId = type.Id;
                 OnEditSelectedTypeId = type.Id;
             }
          
-            return EditModal.Show();
+            return EditingModal.Show();
         }
 
-        public void HideEditModal()
+        public void HideEditingModal()
         {
-            EditModal.Hide();
+            EditingModal.Hide();
         }
 
         public void OnNewSelectedTypes(object value)
@@ -187,7 +186,7 @@ namespace WebClient.Pages.Admin
         
         public void OnEditSelectedTypes(object value)
         {
-            EditUnit.UnitTypeId = (Guid?)value;
+            EditingUnit.UnitTypeId = (Guid?)value;
         }
         
         

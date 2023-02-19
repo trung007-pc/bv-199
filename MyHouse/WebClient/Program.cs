@@ -2,10 +2,10 @@ using Blazored.LocalStorage;
 using Blazorise;
 using Blazorise.Bootstrap;
 using Blazorise.Icons.FontAwesome;
-
+using Domain.FileFolders;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components.Authorization;
-
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Radzen;
@@ -16,6 +16,10 @@ using WebClient.Identity;
 using WebClient.RequestHttp;
 using WebClient.Service.Dashboards;
 using WebClient.Service.Departments;
+using WebClient.Service.DocumentFiles;
+using WebClient.Service.FileFolders;
+using WebClient.Service.FileTypes;
+using WebClient.Service.IssuingAgencys;
 using WebClient.Service.JS;
 using WebClient.Service.Positions;
 using WebClient.Service.Roles;
@@ -45,6 +49,10 @@ builder.Services.AddTransient<UnitTypeService,UnitTypeService>();
 builder.Services.AddTransient<UploadService, UploadService>();
 builder.Services.AddTransient<PositionService,PositionService>();
 builder.Services.AddTransient<DepartmentService,DepartmentService>();
+builder.Services.AddTransient<FileFolderService,FileFolderService>();
+builder.Services.AddTransient<IssuingAgencyService,IssuingAgencyService>();
+builder.Services.AddTransient<FileTypeService,FileTypeService>();
+builder.Services.AddTransient<DocumentFileService,DocumentFileService>();
 
 builder.Services.AddTransient<DashboardService,DashboardService>();
 
@@ -57,6 +65,12 @@ builder.Services.AddBlazoredLocalStorage();
 builder.Services.AddAuthorizationCore();
 builder.Services.AddScoped<AuthenticationStateProvider , ApiAuthenticationStateProvider >();
 
+
+
+builder.Services.Configure<FormOptions>(options =>
+{
+    options.MultipartBodyLengthLimit = 1048576; // Giới hạn kích thước tệp tin tối đa là 1MB
+});
 
 builder.Services
     .AddBlazorise(options =>

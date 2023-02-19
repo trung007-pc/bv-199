@@ -1,6 +1,6 @@
 ﻿using System;
-using Domain.Identity.UnitTypes;
 using Domain.Units;
+using Domain.UnitTypes;
 using JetBrains.Annotations;
 using SqlServ4r.EntityFramework;
 using SqlServ4r.RepGenerationPatten;

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Core.Enum;
 using Domain.Departments;
+using Domain.DocumentFiles;
+using Domain.FileVersions;
 using Domain.Positions;
 using Domain.UserDepartments;
 using Microsoft.AspNetCore.Identity;
@@ -32,6 +34,8 @@ namespace Domain.Identity.Users
         //naviagation
         public Position Position { get; set; }
         public List<UserDepartment> UserDepartments { get; set;}
+        public List<FileVersion> EditedFileVersions { get; set; }
+        public List<DocumentFile> CreatedFiles { get; set; }
 
     }
 }

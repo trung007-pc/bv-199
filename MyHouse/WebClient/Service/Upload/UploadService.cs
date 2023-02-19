@@ -28,5 +28,11 @@ namespace WebClient.Service.Upload
         {
             return  await RequestClient.PostAPIWithFileAsync<FileDto>("upload/excel-file-of-users", file);
         }
+
+        public async Task<FileDto> UploadDocumentFile(IBrowserFile file)
+        {
+            return  await RequestClient.PostAPIWithFileAsync<FileDto>("upload/upload-document-file", file);
+        }
+
     }
 }

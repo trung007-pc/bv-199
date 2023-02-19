@@ -1,0 +1,165 @@
+﻿@page "/file-types"
+@attribute [Authorize(Roles = "ADMIN")]
+@using ButtonType = Radzen.ButtonType
+@inject FileTypeService _fileTypeService;
+@inherits BaseBlazorPage
+@using WebClient.Service.FileTypes
+@using Contract.FileTypes;
+
+<h3>File Type</h3>
+
+
+<div style="display: flex;justify-content: space-between;align-items: center;margin-bottom: 10px">
+    <div>
+        <RadzenBreadCrumb >
+            <RadzenBreadCrumbItem Path="/" Icon="home" Style="font-size: 20px"/>
+            <RadzenBreadCrumbItem Text="@HeaderTitle" Style="font-weight: 300"/>
+        </RadzenBreadCrumb>
+    </div>
+    <div>
+        <RadzenButton Text="Create" Click="@ShowNewModal" Icon="post_add" />
+    </div>
+</div>
+
+
+<RadzenCard>
+    <RadzenTree Data=@HierarchicalTypes Style="width:100%">
+        <RadzenTreeLevel TextProperty="Name" ChildrenProperty="ChildTypes"
+                         HasChildren=@(e => (e as FileTypeDto).ChildTypes.Any())
+                         Expanded="@(value => true)">
+            <Template >
+                <div style="display: flex;width:100%;justify-content: space-between;align-items: center">
+                    <div style="display: flex">
+                        <RadzenIcon Icon="dns" />
+                        <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3" Style="margin-bottom: 0">@context.Text</RadzenText>
+                    </div>
+
+                    <div>
+                        <RadzenButton Icon="edit" Click="async () => { await ShowEditingModal(context.Value); }" ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat" Size="ButtonSize.Medium">
+                        </RadzenButton>
+                        <RadzenButton Click="async () => { await ShowConfirmMessage(context.Value); }" ButtonStyle="ButtonStyle.Danger" Icon="delete" Variant="Variant.Flat" Shade="Shade.Lighter" Size="ButtonSize.Medium" Class="my-1 ms-1">
+                        </RadzenButton>
+                    </div>
+                </div>
+
+            </Template>
+        </RadzenTreeLevel>
+    </RadzenTree>
+</RadzenCard>
+
+
+<Modal @ref="CreateModal">
+    <ModalContent Size="ModalSize.Large" Centered="true">
+        <ModalHeader>
+            <ModalTitle>File Type</ModalTitle>
+        </ModalHeader>
+        <EditForm Model="NewFileType" OnValidSubmit="async () => { await CreateFileType(); }">
+
+
+            <ModalBody>
+
+                <RadzenTabs RenderMode="TabRenderMode.Client">
+                    <Tabs>
+                        <RadzenTabsItem Text="Type Information">
+                            <DataAnnotationsValidator/>
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Name</RadzenText>
+                            <RadzenTextBox Class="w-100" @bind-Value="NewFileType.Name"/>
+                            <ValidationMessage For="@(() => NewFileType.Name)"/>
+
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Code</RadzenText>
+                            <RadzenTextBox Class="w-100" @bind-Value="NewFileType.Code"/>
+                            <ValidationMessage For="@(() => NewFileType.Code)"/>
+
+                            <RZBR></RZBR>
+                           <RZBR></RZBR>
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">ODX</RadzenText>
+                            <RadzenNumeric Class="w-100" @bind-Value="NewFileType.ODX"/>
+                            <ValidationMessage For="@(() => NewFileType.ODX)"/>
+                        </RadzenTabsItem>
+
+                        <RadzenTabsItem Text="Types">
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Parent File Type</RadzenText>
+                            <RadzenTree Data=@HierarchicalTypes Style="width:100%" Change="OnChangeNewFileType">
+                                <RadzenTreeLevel TextProperty="Name" ChildrenProperty="ChildFileType"
+                                                 Expanded="(value) => true"
+                                                 HasChildren=@(e => (e as FileTypeDto).ChildTypes.Any())>
+                                    <Template Context="data">
+                                        <div style="display: flex;width:100%;justify-content: space-between;align-items: center">
+                                            <div style="display: flex">
+                                                <RadzenIcon Icon="dns" />
+                                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3" Style="margin-bottom: 0">@data.Text</RadzenText>
+                                            </div>
+                                        </div>
+
+                                    </Template>
+                                </RadzenTreeLevel>
+                            </RadzenTree>
+
+                        </RadzenTabsItem>
+                    </Tabs>
+                </RadzenTabs>
+
+
+            </ModalBody>
+            <ModalFooter>
+                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Click="@HideNewModal" Text="Cancel"/>
+                <RadzenButton Text="Save Changes" Icon="save" ButtonType="ButtonType.Submit"/>
+            </ModalFooter>
+        </EditForm>
+    </ModalContent>
+</Modal>
+
+<Modal @ref="EditingModal">
+    <ModalContent Size="ModalSize.Large" Centered="true">
+        <ModalHeader>
+            <ModalTitle>Edit File Type</ModalTitle>
+        </ModalHeader>
+        <EditForm Model="EditingFileType" OnValidSubmit="async () => { await UpdateFileType(); }">
+
+            <ModalBody>
+
+                <RadzenTabs RenderMode="TabRenderMode.Client">
+                    <Tabs>
+                        <RadzenTabsItem Text="Type Information">
+                            <DataAnnotationsValidator/>
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Name</RadzenText>
+                            <RadzenTextBox Class="w-100" @bind-Value="EditingFileType.Name"/>
+                            <ValidationMessage For="@(() => EditingFileType.Name)"/>
+
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Code</RadzenText>
+                            <RadzenTextBox Class="w-100" @bind-Value="EditingFileType.Code"/>
+                            <ValidationMessage For="@(() => EditingFileType.Code)"/>
+                            <RZBR></RZBR>
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">ODX</RadzenText>
+                            <RadzenNumeric Class="w-100" @bind-Value="EditingFileType.ODX"/>
+                            <ValidationMessage For="@(() => EditingFileType.ODX)"/>
+
+                        </RadzenTabsItem>
+                        <RadzenTabsItem Text="Types">
+                            <RadzenTree Data=@HierarchicalTypes Style="width:100%" Change="OnChangeUpdateFileType">
+                                <RadzenTreeLevel TextProperty="Name" ChildrenProperty="ChildTypes"
+                                                 HasChildren=@(e => (e as FileTypeDto).ChildTypes.Any())
+                                                 Selected="(value) => (value as FileTypeDto).Id == EditingFileTypeId"
+                                                 Expanded="(value) => true">
+                                    <Template Context="data">
+                                        <div style="display: flex;width:100%;justify-content: space-between;align-items: center">
+                                            <div style="display: flex">
+                                                <RadzenIcon Icon="dns" />
+                                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3" Style="margin-bottom: 0">@data.Text</RadzenText>
+                                            </div>
+                                        </div>
+
+                                    </Template>
+                                </RadzenTreeLevel>
+                            </RadzenTree>
+                        </RadzenTabsItem>
+                    </Tabs>
+                </RadzenTabs>
+            </ModalBody>
+            <ModalFooter>
+                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Click="@HideEditModal" Text="Cancel"/>
+                <RadzenButton Text="Save Changes" Icon="save" ButtonType="ButtonType.Submit"/>
+            </ModalFooter>
+        </EditForm>
+    </ModalContent>
+</Modal>

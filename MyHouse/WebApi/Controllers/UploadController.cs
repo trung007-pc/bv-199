@@ -41,5 +41,12 @@ namespace WebApi.Controllers
         {
             return await _uploadService.UploadExcelFileOfUsers(file);
         }
+
+        [HttpPost]
+        [Route("upload-document-file")]
+        public async Task<FileDto> UploadDocumentFile(IFormFile file)
+        {
+            return await _uploadService.UploadDocumentFile(file);
+        }
     }
 }

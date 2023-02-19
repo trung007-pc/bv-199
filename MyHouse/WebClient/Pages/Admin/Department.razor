@@ -24,19 +24,20 @@
 
 
 <RadzenCard>
-    <RadzenTree Data=@Departments Style="width:100%">
+    <RadzenTree Data=@HierarchicalDepartments Style="width:100%">
         <RadzenTreeLevel TextProperty="Name" ChildrenProperty="ChildDepartment"
                          HasChildren=@(e => (e as DepartmentDto).ChildDepartment.Any())
                          Expanded="@(value => true)">
             <Template >
                 <div style="display: flex;width:100%;justify-content: space-between;align-items: center">
                     <div style="display: flex">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/4/44/BMW.svg" style="width: 20px; margin-right: 8px;"/>
+                        <RadzenIcon Icon="home_work" />
+
                         <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3" Style="margin-bottom: 0">@context.Text</RadzenText>
                     </div>
 
                     <div>
-                        <RadzenButton Icon="edit" Click="async () => { await ShowEditModal(context.Value); }" ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat" Size="ButtonSize.Medium">
+                        <RadzenButton Icon="edit" Click="async () => { await ShowEditingModal(context.Value); }" ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat" Size="ButtonSize.Medium">
                         </RadzenButton>
                         <RadzenButton Click="async () => { await ShowConfirmMessage(context.Value); }" ButtonStyle="ButtonStyle.Danger" Icon="delete" Variant="Variant.Flat" Shade="Shade.Lighter" Size="ButtonSize.Medium" Class="my-1 ms-1">
                         </RadzenButton>
@@ -72,19 +73,21 @@
                             <ValidationMessage For="@(() => NewDepartment.Code)"/>
 
                             <RZBR></RZBR>
-
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">ODX</RadzenText>
+                            <RadzenNumeric Class="w-100" @bind-Value="NewDepartment.ODX"/>
+                            <ValidationMessage For="@(() => NewDepartment.ODX)"/>
                         </RadzenTabsItem>
 
                         <RadzenTabsItem Text="Departments">
                             <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Parent Department</RadzenText>
-                            <RadzenTree Data=@Departments Style="width:100%" Change="OnChangeNewDepartment">
+                            <RadzenTree Data=@HierarchicalDepartments Style="width:100%" Change="OnChangeNewDepartment">
                                 <RadzenTreeLevel TextProperty="Name" ChildrenProperty="ChildDepartment"
                                                  Expanded="(value) => true"
                                                  HasChildren=@(e => (e as DepartmentDto).ChildDepartment.Any())>
                                     <Template Context="data">
                                         <div style="display: flex;width:100%;justify-content: space-between;align-items: center">
                                             <div style="display: flex">
-                                                <img src="https://upload.wikimedia.org/wikipedia/commons/4/44/BMW.svg" style="width: 20px; margin-right: 8px;"/>
+                                                <RadzenIcon Icon="home_work" />
                                                 <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3" Style="margin-bottom: 0">@data.Text</RadzenText>
                                             </div>
                                         </div>
@@ -107,12 +110,12 @@
     </ModalContent>
 </Modal>
 
-<Modal @ref="EditModal">
+<Modal @ref="EditingModal">
     <ModalContent Size="ModalSize.Large" Centered="true">
         <ModalHeader>
             <ModalTitle>Edit Department</ModalTitle>
         </ModalHeader>
-        <EditForm Model="EditDepartment" OnValidSubmit="async () => { await UpdateDepartment(); }">
+        <EditForm Model="EditingDepartment" OnValidSubmit="async () => { await UpdateDepartment(); }">
 
             <ModalBody>
 
@@ -121,18 +124,21 @@
                         <RadzenTabsItem Text="Department Information">
                             <DataAnnotationsValidator/>
                             <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Name</RadzenText>
-                            <RadzenTextBox Class="w-100" @bind-Value="EditDepartment.Name"/>
-                            <ValidationMessage For="@(() => EditDepartment.Name)"/>
+                            <RadzenTextBox Class="w-100" @bind-Value="EditingDepartment.Name"/>
+                            <ValidationMessage For="@(() => EditingDepartment.Name)"/>
 
                             <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Department Code</RadzenText>
-                            <RadzenTextBox Class="w-100" @bind-Value="EditDepartment.Code"/>
-                            <ValidationMessage For="@(() => EditDepartment.Code)"/>
+                            <RadzenTextBox Class="w-100" @bind-Value="EditingDepartment.Code"/>
+                            <ValidationMessage For="@(() => EditingDepartment.Code)"/>
                             <RZBR></RZBR>
 
-
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">ODX</RadzenText>
+                            <RadzenNumeric Class="w-100" @bind-Value="EditingDepartment.ODX"/>
+                            <ValidationMessage For="@(() => EditingDepartment.ODX)"/>
+                            <RZBR></RZBR>
                         </RadzenTabsItem>
                         <RadzenTabsItem Text="Departments">
-                            <RadzenTree Data=@Departments Style="width:100%" Change="OnChangeUpdateDepartment">
+                            <RadzenTree Data=@HierarchicalDepartments Style="width:100%" Change="OnChangeUpdateDepartment">
                                 <RadzenTreeLevel TextProperty="Name" ChildrenProperty="ChildDepartment"
                                                  HasChildren=@(e => (e as DepartmentDto).ChildDepartment.Any())
                                                  Selected="(value) => (value as DepartmentDto).Id == EditingDepartmentId"
@@ -140,7 +146,7 @@
                                     <Template Context="data">
                                         <div style="display: flex;width:100%;justify-content: space-between;align-items: center">
                                             <div style="display: flex">
-                                                <img src="https://upload.wikimedia.org/wikipedia/commons/4/44/BMW.svg" style="width: 20px; margin-right: 8px;"/>
+                                                <RadzenIcon Icon="home_work" />
                                                 <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3" Style="margin-bottom: 0">@data.Text</RadzenText>
                                             </div>
                                         </div>
