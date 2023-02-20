@@ -46,7 +46,7 @@ namespace SqlServ4r.Repository.FileDocuments
                     , x => x.File.CreationDate >= filter.StartDay && x.File.CreationDate <= filter.EndDay)
                 .WhereIf(!filter.Text.IsNullOrWhiteSpace(),
                     x=>x.File.Name.Contains(filter.Text)
-                    || x.File.StorageCode.Contains(filter.Text)
+                    || x.File.Code.Contains(filter.Text)
                     )
                 .WhereIf(filter.DocumentFolderId.HasValue, x => folderIds.Contains(x.File.DocumentFolderId))
                 .WhereIf(filter.FileTypeId.HasValue, x => x.File.DocumentTypeId == filter.FileTypeId)

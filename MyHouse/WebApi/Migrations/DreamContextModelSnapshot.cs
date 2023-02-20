@@ -108,12 +108,19 @@ namespace WebApi.Migrations
                     b.Property<string>("Note")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("PrintCount")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("PublicationDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("StorageCode")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("URL")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Views")
                         .HasColumnType("int");

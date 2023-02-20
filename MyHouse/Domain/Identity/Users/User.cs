@@ -5,7 +5,9 @@ using Core.Enum;
 using Domain.Departments;
 using Domain.DocumentFiles;
 using Domain.FileVersions;
+using Domain.Notifications;
 using Domain.Positions;
+using Domain.SendingFiles;
 using Domain.UserDepartments;
 using Microsoft.AspNetCore.Identity;
 
@@ -32,10 +34,14 @@ namespace Domain.Identity.Users
         
         
         //naviagation
+        public List<Notification> Notifications { get; set; }
+        public List<SendingFile> SendingFiles { get; set;}
         public Position Position { get; set; }
         public List<UserDepartment> UserDepartments { get; set;}
         public List<FileVersion> EditedFileVersions { get; set; }
         public List<DocumentFile> CreatedFiles { get; set; }
+        
+        
 
     }
 }

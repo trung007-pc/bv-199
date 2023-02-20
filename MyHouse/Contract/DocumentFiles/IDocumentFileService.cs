@@ -13,5 +13,8 @@ namespace Contract.DocumentFiles
         Task<DocumentFileDto> CreateAsync(CreateUpdateDocumentFileDto input);
         Task<DocumentFileDto> UpdateAsync(CreateUpdateDocumentFileDto input,Guid id);
         Task DeleteAsync(Guid id);
+        Task UpdateDownloadCountAsync(Guid id);
+        Task UpdatePrintCountAsync(Guid id);
+
     }
 }

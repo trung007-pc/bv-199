@@ -5,6 +5,8 @@ using Domain.FileTypes;
 using Domain.FileVersions;
 using Domain.Identity.Users;
 using Domain.IssuingAgencys;
+using Domain.Notifications;
+using Domain.SendingFiles;
 
 namespace Domain.DocumentFiles
 {
@@ -26,12 +28,14 @@ namespace Domain.DocumentFiles
         public bool IsDeleted { get; set; }
         public int Views { get; set; }
         public int DownloadCount { get; set; }
-        
+        public int PrintCount { get; set; }
+
         
         //media 
         public string FileName { get; set; }
         public string Extentions { get; set; }
         public string AbsolutePath { get; set; }
+        public string URL { get; set; }
         //foreign key
         
         public Guid? IssuingAgencyId { get; set; }
@@ -45,7 +49,9 @@ namespace Domain.DocumentFiles
         public User User { get; set;}
         public FileType FileType { get; set;}
         public List<FileVersion> FileVersions { get; set;}
-        
+        public List<SendingFile> SendingFiles { get; set;}
+        public List<Notification> Notifications { get; set; }
+
         public IssuingAgency IssuingAgency { get; set; }
 
 

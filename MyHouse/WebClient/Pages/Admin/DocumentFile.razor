@@ -17,6 +17,7 @@
 @inject FileTypeService _fileTypeService;
 @inject UploadService _uploadService;
 @inject IJSRuntime JS
+@inject NavigationManager _navigationManager;
 
 <div style="display: flex;justify-content: space-between;align-items: center;margin-bottom: 10px">
     <div>
@@ -80,13 +81,13 @@
 
     <Row>
         <Column ColumnSize="ColumnSize.Is2">
-            <RadzenTree Data=@FolderTree Change="OnChangeSelectedFolder" Style="width:100%">
+            <RadzenTree Data=@FolderTree Change="OnChangeSelectedFolder"  Style="width:100%">
                 <RadzenTreeLevel TextProperty="Name" ChildrenProperty="ChildFolders"
                                  HasChildren=@(e => (e as FileFolderDto).ChildFolders.Any())
                                  Expanded="@(value => true)">
                     <Template >
-                        <div style="display: flex;width:100%;justify-content: space-between;align-items: center">
-                            <div style="display: flex">
+                        <div style="display: flex;width:100%;justify-content: space-between;align-items: center" @ondblclick="async () => {await GetDocumentFiles();}">
+                            <div style="display: flex"  >
                                 <RadzenIcon Icon="folder"/>
                                 <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3" Style="margin-bottom: 0">@context.Text</RadzenText>
                             </div>
@@ -128,12 +129,12 @@
 
                             <RadzenButton ButtonStyle="ButtonStyle.Primary" Icon="send" Variant="Variant.Flat" Shade="Shade.Lighter" Size="ButtonSize.Medium" Class="my-1 ms-1">
                             </RadzenButton>
-                            <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="remove_red_eye" Variant="Variant.Flat" Shade="Shade.Default" Size="ButtonSize.Medium" Class="my-1 ms-1">
+                            <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="remove_red_eye" Click="() => {  ShowViewModal(data.File); }" Variant="Variant.Flat" Shade="Shade.Default" Size="ButtonSize.Medium" Class="my-1 ms-1">
                             </RadzenButton>
 
                             <RadzenButton Icon="edit" Click="async () => { await ShowEditingModal(data.File); }" ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat" Size="ButtonSize.Medium">
                             </RadzenButton>
-                            <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="delete" Variant="Variant.Flat" Shade="Shade.Lighter" Size="ButtonSize.Medium" Class="my-1 ms-1">
+                            <RadzenButton ButtonStyle="ButtonStyle.Danger" Click="async () => { await ShowConfirmMessage(data.File.Id);}" Icon="delete" Variant="Variant.Flat" Shade="Shade.Lighter" Size="ButtonSize.Medium" Class="my-1 ms-1">
                             </RadzenButton>
                         </Template>
                     </RadzenDataGridColumn>
@@ -153,98 +154,81 @@
         </ModalHeader>
         <EditForm Model="NewDocumentFile" OnValidSubmit="async () => { await CreateDocumentFile(); }">
             <ModalBody>
+                <Row>
+                    <DataAnnotationsValidator/>
 
-                <RadzenTabs RenderMode="TabRenderMode.Client">
-                    <Tabs>
-                        <RadzenTabsItem Text="File Infomation">
-                            <Row>
-                                <Column ColumnSize="ColumnSize.Is6.OnDesktop">
-                                    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Name</RadzenText>
-                                    <RadzenTextBox Class="w-100" @bind-Value="NewDocumentFile.Name"/>
-                                    <ValidationMessage For="@(() => NewDocumentFile.Name)"/>
+                    <Column ColumnSize="ColumnSize.Is6.OnDesktop">
+                        <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Name</RadzenText>
+                        <RadzenTextBox Class="w-100" @bind-Value="NewDocumentFile.Name"/>
+                        <ValidationMessage For="@(() => NewDocumentFile.Name)"/>
 
-                                    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Code</RadzenText>
-                                    <RadzenTextBox Class="w-100" @bind-Value="NewDocumentFile.Code"/>
-                                    <ValidationMessage For="@(() => NewDocumentFile.Code)"/>
+                        <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Code</RadzenText>
+                        <RadzenTextBox Class="w-100" @bind-Value="NewDocumentFile.Code"/>
+                        <ValidationMessage For="@(() => NewDocumentFile.Code)"/>
 
 
-                                    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Publication Date</RadzenText>
-                                    <RadzenDatePicker @bind-Value=@NewDocumentFile.PublicationDate DateFormat="dd/MM/yyyy" Class="w-100"/>
-                                    <ValidationMessage For="@(() => NewDocumentFile.PublicationDate)"/>
+                        <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Publication Date</RadzenText>
+                        <RadzenDatePicker @bind-Value=@NewDocumentFile.PublicationDate DateFormat="dd/MM/yyyy" Class="w-100"/>
+                        <ValidationMessage For="@(() => NewDocumentFile.PublicationDate)"/>
 
-                                    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">File Types</RadzenText>
-                                    <RadzenDropDown AllowClear="true" AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
-                                                    @bind-Value=@NewDocumentFile.DocumentTypeId Multiple="false"
-                                                    TextProperty="Name"
-                                                    ValueProperty="Id"
-                                                    Placeholder="Select..."
-                                                    Data=@FileTypes
-                                                    Class="w-100"/>
-                                    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Issuing Agencies</RadzenText>
+                        <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">File Types</RadzenText>
+                        <RadzenDropDown AllowClear="true" AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                        @bind-Value=@NewDocumentFile.DocumentTypeId Multiple="false"
+                                        TextProperty="Name"
+                                        ValueProperty="Id"
+                                        Placeholder="Select..."
+                                        Data=@FileTypes
+                                        Class="w-100"/>
+                        <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Issuing Agencies</RadzenText>
 
-                                    <RadzenDropDown AllowClear="true" AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
-                                                    @bind-Value=@NewDocumentFile.IssuingAgencyId Multiple="false"
-                                                    TextProperty="Name"
-                                                    ValueProperty="Id"
-                                                    Placeholder="Select..."
-                                                    Data=@HierarchicalIssuingAgencies
-                                                    Class="w-100"/>
+                        <RadzenDropDown AllowClear="true" AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                        @bind-Value=@NewDocumentFile.IssuingAgencyId Multiple="false"
+                                        TextProperty="Name"
+                                        ValueProperty="Id"
+                                        Placeholder="Select..."
+                                        Data=@HierarchicalIssuingAgencies
+                                        Class="w-100"/>
 
-                                    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Folders</RadzenText>
+                        <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Folders</RadzenText>
 
-                                    <RadzenDropDown AllowClear="true" AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
-                                                    @bind-Value=@NewDocumentFile.DocumentFolderId Multiple="false"
-                                                    TextProperty="Name"
-                                                    ValueProperty="Id"
-                                                    Placeholder="Select..."
-                                                    Data=@HierarchicalFileFolders
-                                                    Class="w-100"/>
-
-
-                                    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Choose File</RadzenText>
-
-                                    <RZInputFile Icon="upload_file"
-                                                 Accept=".pdf, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
-                                                                        , application / msword, application / vnd.openxmlformats - officedocument.wordprocessingml.document"
-                                                 Style="display: flex;align-items: center;min-width:123px;max-width: 205px;margin: 0;cursor: pointer;background-color: #dc3545"
-                                                 Text="Choose An Excel File" Event="async (e) => { await OnChangeFileAtNewModal(e); }">
-                                    </RZInputFile>
+                        <RadzenDropDown AllowClear="true" AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                        @bind-Value=@NewDocumentFile.DocumentFolderId Multiple="false"
+                                        TextProperty="Name"
+                                        ValueProperty="Id"
+                                        Placeholder="Select..."
+                                        Data=@HierarchicalFileFolders
+                                        Class="w-100"/>
 
 
-                                </Column>
+                        <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Choose File</RadzenText>
 
-                                <Column ColumnSize="ColumnSize.Is6.OnDesktop">
-                                    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Received Date</RadzenText>
-                                    <RadzenDatePicker Class="w-100" DateFormat="dd/MM/yyyy" @bind-Value="NewDocumentFile.CreationDate"/>
-                                    <ValidationMessage For="@(() => NewDocumentFile.CreationDate)"/>
-
-                                    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Is Print</RadzenText>
-                                    <RadzenSwitch @bind-Value="NewDocumentFile.IsPrint"/>
-                                    <ValidationMessage For="@(() => NewDocumentFile.IsPrint)"/>
-
-                                    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Note</RadzenText>
-                                    <RadzenTextArea Class="w-100" Placeholder="Nhập vào đây..." @bind-Value="NewDocumentFile.Note" Rows="10" Cols="30"/>
-                                    <ValidationMessage For="@(() => NewDocumentFile.Note)"/>
-
-                                </Column>
+                        <RZInputFile Icon="upload_file"
+                                     Accept=".pdf, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+                                                        , application / msword, application / vnd.openxmlformats - officedocument.wordprocessingml.document"
+                                     Style="display: flex;align-items: center;min-width:123px;max-width: 205px;margin: 0;cursor: pointer;background-color: #dc3545"
+                                     Text="Choose An  File" Event="async (e) => { await OnChangeFileAtNewModal(e); }">
+                        </RZInputFile>
 
 
-                            </Row>
+                    </Column>
 
-                        </RadzenTabsItem>
-                        <RadzenTabsItem Text="View File">
-                           @if (NewFile is not null )
-                        {
-                            <div>
-                                <embed src="@Byte64Data" id="pdf-embed" style="width: 100%;height: 80vh;"  >
-                            </div>
-                        }
-                        </RadzenTabsItem>
-                    </Tabs>
-                </RadzenTabs>
+                    <Column ColumnSize="ColumnSize.Is6.OnDesktop">
+                        <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Received Date</RadzenText>
+                        <RadzenDatePicker Class="w-100" DateFormat="dd/MM/yyyy" @bind-Value="NewDocumentFile.CreationDate"/>
+                        <ValidationMessage For="@(() => NewDocumentFile.CreationDate)"/>
 
+                        <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Is Print</RadzenText>
+                        <RadzenSwitch @bind-Value="NewDocumentFile.IsPrint"/>
+                        <ValidationMessage For="@(() => NewDocumentFile.IsPrint)"/>
 
-                <DataAnnotationsValidator/>
+                        <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Note</RadzenText>
+                        <RadzenTextArea Class="w-100" Placeholder="Nhập vào đây..." @bind-Value="NewDocumentFile.Note" Rows="10" Cols="30"/>
+                        <ValidationMessage For="@(() => NewDocumentFile.Note)"/>
+                    </Column>
+                    <Column ColumnSize="ColumnSize.Is12.OnDesktop">
+
+                    </Column>
+                </Row>
 
 
             </ModalBody>
@@ -259,7 +243,7 @@
 <Modal @ref="EditingModal">
     <ModalContent Size="ModalSize.Large" Centered="true">
         <ModalHeader>
-            <ModalTitle>User</ModalTitle>
+            <ModalTitle>Document File</ModalTitle>
         </ModalHeader>
         <EditForm Model="EditingDocumentFile" OnValidSubmit="async () => { await UpdateDocumentFile(); }">
             <ModalBody>
@@ -310,13 +294,20 @@
 
                         <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Choose File</RadzenText>
 
-                        <RZInputFile Icon="upload_file"
-                                     Accept=".pdf, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
-                                                        , application / msword, application / vnd.openxmlformats - officedocument.wordprocessingml.document"
-                                     Style="display: flex;align-items: center;min-width:123px;max-width: 205px;margin: 0;cursor: pointer;background-color: #dc3545"
-                                     Text="Choose An Excel File" Event="async (e) => { await OnChangeFileAtEditingModal(e); }">
-                        </RZInputFile>
+                        <div style="display: flex;justify-content: space-between">
+                            <RZInputFile Icon="upload_file"
+                                         Accept=".pdf,.xlsx,.doc,.docx"
 
+                                         Style="display: flex;align-items: center;min-width:123px;max-width: 205px;margin: 0;cursor: pointer;background-color: #dc3545"
+                                         Text="Choose An Excel File" Event="async (e) => { await OnChangeFileAtEditingModal(e); }">
+                            </RZInputFile>
+
+                            @if (EditingDocumentFile.Extentions == ".xlsx"
+                                 || EditingDocumentFile.Extentions == ".doc")
+                            {
+                                <RadzenButton Text="Download File" Click="async () => {await DownloadFile(EditingDocumentFile.URL,EditingDocumentFileId);}" Icon="download"/>
+                            }
+                        </div>
 
                     </Column>
 
@@ -333,6 +324,11 @@
                         <RadzenTextArea Class="w-100" Placeholder="Nhập vào đây..." @bind-Value="EditingDocumentFile.Note" Rows="10" Cols="30"/>
                         <ValidationMessage For="@(() => EditingDocumentFile.Note)"/>
                     </Column>
+
+                    <RZBR></RZBR>
+                    <Column ColumnSize="ColumnSize.Is12.OnDesktop">
+
+                    </Column>
                 </Row>
 
 
@@ -342,5 +338,45 @@
                 <RadzenButton Text="Save Changes" Icon="save" ButtonType="ButtonType.Submit"/>
             </ModalFooter>
         </EditForm>
+    </ModalContent>
+</Modal>
+
+<Modal @ref="ViewModal">
+    <ModalContent Size="ModalSize.ExtraLarge" Centered="true">
+        <ModalHeader>
+            <ModalTitle>Document File</ModalTitle>
+        </ModalHeader>
+        <ModalBody>
+            <div style="display: flex;justify-content:left;gap: 10px">
+                <RadzenButton Text="Download File" Click="() => { DownloadFile(ViewDocumentFile.URL,ViewDocumentFile.Id);}" Icon="download" />
+                <RadzenButton Text="Print" Icon="local_printshop" />
+                <RadzenButton Text="Task Assignment" Icon="assignment" />
+            </div>
+            <RZBR></RZBR>
+            <div>
+                @if (ViewDocumentFile.Extentions?.Contains("pdf") == true)
+                {
+                    <iframe src="@ViewDocumentFile.URL#toolbar=0" type="application/pdf" style="width: 100%;height: 80vh;"></iframe>
+
+                }
+                else
+                {
+                    <RadzenCard Style="background-color: #e8e8fa">
+                        <RadzenText TextStyle="TextStyle.H4" Style="color: #6f42c1"><b>File Infomation</b></RadzenText>
+                        <RadzenText TextStyle="TextStyle.Body1" ><span Style="color: #6f42c1">File Name:</span>@ViewDocumentFile.Name</RadzenText>
+                        <RadzenText TextStyle="TextStyle.Body1" ><span Style="color: #6f42c1">File Type:</span>@ViewDocumentFile.Extentions</RadzenText>
+                        <RadzenText TextStyle="TextStyle.Body1" ><span Style="color: #6f42c1">Download Count:</span>@ViewDocumentFile.DownloadCount</RadzenText>
+                        <RadzenText TextStyle="TextStyle.Body1" ><span Style="color: #6f42c1">Print Count:</span>@ViewDocumentFile.PrintCount:</RadzenText>
+
+                    </RadzenCard>
+                }
+            </div>
+
+        </ModalBody>
+
+        <ModalFooter>
+            <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Click="@HideViewModal" Text="Cancel"/>
+            <RadzenButton Text="Save Changes" Icon="save" ButtonType="ButtonType.Submit"/>
+        </ModalFooter>
     </ModalContent>
 </Modal>

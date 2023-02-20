@@ -67,11 +67,6 @@ builder.Services.AddScoped<AuthenticationStateProvider , ApiAuthenticationStateP
 
 
 
-builder.Services.Configure<FormOptions>(options =>
-{
-    options.MultipartBodyLengthLimit = 1048576; // Giới hạn kích thước tệp tin tối đa là 1MB
-});
-
 builder.Services
     .AddBlazorise(options =>
     {
@@ -79,12 +74,6 @@ builder.Services
     })
     .AddBootstrapProviders()
     .AddFontAwesomeIcons();
-
-// builder.Services.AddServerSideBlazor().AddHubOptions(o =>
-// {
-//     o.MaximumReceiveMessageSize = 10 * 1024 * 1024;
-// });
-
 
 
 

@@ -42,6 +42,21 @@ namespace WebApi.Controllers
         }
 
         [HttpPost]
+        [Route("update-download-count/{id}")]
+        public async Task UpdateDownloadCountAsync(Guid id)
+        {
+            await _documentFileService.UpdateDownloadCountAsync(id);
+
+        }
+        
+        [HttpPost]
+        [Route("update-print-count/{id}")]
+        public async Task UpdatePrintCountAsync(Guid id)
+        {
+            await _documentFileService.UpdatePrintCountAsync(id);
+        }
+
+        [HttpPost]
         [Route("get-list-with-nav-properties")]
         public async Task<List<DocumentFileWithNavPropertiesDto>> GetListWithNavPropertiesAsync(DocumentFileFilter filter)
         {

@@ -13,7 +13,9 @@ using Domain.Identity.UserRoles;
 using Domain.Identity.Users;
 using Domain.Identity.UserTokens;
 using Domain.IssuingAgencys;
+using Domain.Notifications;
 using Domain.Positions;
+using Domain.SendingFiles;
 using Domain.Tests;
 using Domain.UnitReviewDetails;
 using Domain.UnitReviews;
@@ -43,7 +45,10 @@ namespace SqlServ4r.EntityFramework
         public DbSet<IssuingAgency> IssuingAgencies { get; set; }
         public DbSet<DocumentFile> Files { get; set; }
         public DbSet<FileVersion>  FileVersions { get; set; }
-            
+        
+        public DbSet<SendingFile> SendingFiles { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
+
 
 
 
@@ -148,6 +153,42 @@ namespace SqlServ4r.EntityFramework
                 .WithMany(x => x.EditedFileVersions)
                 .HasForeignKey(x => x.EditBy)
                 .OnDelete(DeleteBehavior.Restrict);
+            
+            
+            
+            // user - sendingfile - file
+            
+            builder.Entity<SendingFile>().HasKey(sc => new { sc.Id,sc.FileId,sc.ReceiverId });
+            
+            builder.Entity<SendingFile>().HasOne<User>(x => x.User)
+                .WithMany(x => x.SendingFiles)
+                .HasForeignKey(x=>x.ReceiverId);
+            
+            builder.Entity<SendingFile>().HasOne<DocumentFile>(x => x.DocumentFile)
+                .WithMany(x => x.SendingFiles)
+                .HasForeignKey(x=>x.FileId);
+
+
+            builder.Entity<Notification>().HasKey(sc => new { sc.Id
+                ,sc.DestinationCode
+                ,sc.ReceiverId });
+            
+            builder.Entity<Notification>().HasOne<User>(x => x.User)
+                .WithMany(x => x.Notifications)
+                .HasForeignKey(x=>x.ReceiverId);
+            
+            builder.Entity<Notification>().HasOne<DocumentFile>(x => x.DocumentFile)
+                .WithMany(x => x.Notifications)
+                .HasForeignKey(x=>x.DestinationCode);
+            
+            
+            
+            
+            
+            
+            
+            
+            
 
             SetUniqueForProperties(builder);
 

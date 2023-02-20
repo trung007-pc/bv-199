@@ -122,18 +122,34 @@ namespace Application.DocumentFiles
             
             if(item is null)  throw new GlobalException(HttpMessage.NotFound, HttpStatusCode.BadRequest);
             
-            var type = ObjectMapper.Map(input,item);
-            _documentFileRepository.Update(type);
+            var file = ObjectMapper.Map(input,item);
+            await _documentFileRepository.UpdateAsync(file);
             
-            return ObjectMapper.Map<DocumentFile, DocumentFileDto>(type);
+            return ObjectMapper.Map<DocumentFile, DocumentFileDto>(file);
         }
         
         public async Task DeleteAsync(Guid id)
         {
             var item = await _documentFileRepository.FirstOrDefaultAsync(x => x.Id == id);
             if(item is null)  throw new GlobalException(HttpMessage.NotFound, HttpStatusCode.BadRequest);
-            _documentFileRepository.Remove(item);
+            item.IsDeleted = true;
+            await _documentFileRepository.UpdateAsync(item);
         }
-   
+
+        public async Task UpdateDownloadCountAsync(Guid id)
+        {
+            var item = await _documentFileRepository.FirstOrDefaultAsync(x => x.Id == id);
+            if(item is null)  throw new GlobalException(HttpMessage.NotFound, HttpStatusCode.BadRequest);
+            item.DownloadCount += 1;
+            await _documentFileRepository.UpdateAsync(item);
+        }
+
+        public async Task UpdatePrintCountAsync(Guid id)
+        {
+            var item = await _documentFileRepository.FirstOrDefaultAsync(x => x.Id == id);
+            if(item is null)  throw new GlobalException(HttpMessage.NotFound, HttpStatusCode.BadRequest);
+            item.PrintCount += 1;
+            await _documentFileRepository.UpdateAsync(item);
+        }
     }
 }

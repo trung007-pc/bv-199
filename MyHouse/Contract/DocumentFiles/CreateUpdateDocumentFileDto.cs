@@ -18,7 +18,8 @@ namespace Contract.DocumentFiles
         public string FileName { get; set; }
         public string Extentions { get; set; }
         public string AbsolutePath { get; set; }
-        
+        public string URL { get; set; }
+
         //foreign key
         public Guid? IssuingAgencyId { get; set; }
         public Guid? DocumentTypeId { get; set; }

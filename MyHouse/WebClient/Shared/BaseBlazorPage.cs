@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net.Http;
 using System.Text;
 using System.Threading;
@@ -14,7 +15,9 @@ using Core.Extension;
 using FluentDateTimeOffset;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
@@ -22,6 +25,7 @@ using Newtonsoft.Json.Linq;
 using Radzen;
 using Radzen.Blazor;
 using WebClient.Exceptions;
+using WebClient.Setting;
 
 namespace WebClient.Shared
 {
@@ -162,7 +166,7 @@ namespace WebClient.Shared
                 
                 if (exceptionType == typeof(FailedOperation))
                 {
-                    _notificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Warning, Summary = "The Failed Operation", Detail ="The Failed Operation", Duration = 4000});
+                    _notificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Warning, Summary = "The Failed Operation", Detail =e.Message, Duration = 4000});
 
                 }
                 
@@ -269,6 +273,18 @@ namespace WebClient.Shared
             }
 
             return false;
+        }
+
+        public async Task<byte[]> GetByteDataAsync(IBrowserFile file)
+        {
+            using (var ms = new MemoryStream())
+            {
+                await file.OpenReadStream(BlazorSetting.Document_FILE_LENGTH_LIMIT).CopyToAsync(ms);
+                ms.Seek(0, SeekOrigin.Begin);
+              
+
+                return ms.GetAllBytes();
+            }
         }
 
      

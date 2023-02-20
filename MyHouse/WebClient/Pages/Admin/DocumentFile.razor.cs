@@ -16,9 +16,11 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Components.Web;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.JSInterop;
 using Radzen;
 using WebClient.Exceptions;
+using WebClient.Setting;
 
 namespace WebClient.Pages.Admin
 {
@@ -40,6 +42,7 @@ namespace WebClient.Pages.Admin
 
         public CreateUpdateDocumentFileDto NewDocumentFile { get; set; } = new CreateUpdateDocumentFileDto();
         public CreateUpdateDocumentFileDto EditingDocumentFile { get; set; } = new CreateUpdateDocumentFileDto();
+        public DocumentFileDto ViewDocumentFile { get; set; } = new DocumentFileDto();
 
         public FileFolderDto SelectedFolder { get; set; }  = new FileFolderDto();
         public List<FileFolderDto> Folders { get; set; }  = new List<FileFolderDto>();
@@ -52,13 +55,18 @@ namespace WebClient.Pages.Admin
 
         public Modal CreateModal;
         public Modal EditingModal;
+        public Modal ViewModal;
+
         public string HeaderTitle = "Document File";
 
         public IBrowserFile? NewFile { get; set; }
+        
+        public IBrowserFile? PdfFile { get; set; }
+
         public IBrowserFile? EditingFile { get; set; }
-        
-        
-     
+
+        private bool Test1 { get; set; }
+
 
         bool sidebar1Expanded = true;
         bool sidebar2Expanded = true;
@@ -216,42 +224,44 @@ namespace WebClient.Pages.Admin
             return space;
         }
         
-        public string Byte64Data { get; set; }
-        async Task OnChangeFileAtNewModal(InputFileChangeEventArgs e)
+        public byte[] FileBytes { get; set; }
+        async  Task OnChangeFileAtNewModal(InputFileChangeEventArgs e)
         {
-            NewFile = null;
-            NewFile = e.File;
 
-            using (var ms = new MemoryStream())
+            await InvokeAsync(async () =>
             {
-                await NewFile.OpenReadStream().CopyToAsync(ms);
-                ms.Seek(0, SeekOrigin.Begin);
-                Byte64Data = $"data:application/pdf;base64," +
-                             $"{Convert.ToBase64String(ms.GetAllBytes())}";
-                StateHasChanged();
-
-            }
-            
-            
-
+                NewFile = null;
+                NewFile = e.File;
+                 
+                if (e.File.Size > BlazorSetting.Document_FILE_LENGTH_LIMIT)
+                    throw new FailedOperation("File size is too big. please choose file have less 10Mb");
                 
-            
-      
+                if (NewFile.ContentType.Contains("pdf"))
+                {
+                    PdfFile = NewFile;
+                }
+               
 
+              
+            }, ActionType.UploadFile);
 
+       
         }
         
         
-        
-        
-        
-        
-        
-
         async Task OnChangeFileAtEditingModal(InputFileChangeEventArgs e)
         {
-            EditingFile = null;
-            EditingFile = e.GetMultipleFiles().FirstOrDefault();
+            await InvokeAsync(async () =>
+            {
+                EditingFile = null;
+                EditingFile = e.File;
+                if (e.File.Size > BlazorSetting.Document_FILE_LENGTH_LIMIT)
+                    throw new FailedOperation("File size is too big. please choose file have less 10Mb");
+                if (EditingFile.ContentType.Contains("pdf"))
+                {
+                    FileBytes = await GetByteDataAsync(EditingFile);
+                }
+            },ActionType.UploadFile,false);
         }
         
         
@@ -269,6 +279,7 @@ namespace WebClient.Pages.Admin
                 NewDocumentFile.AbsolutePath = fileDto.Path;
                 NewDocumentFile.FileName = fileDto.FileName;
                 NewDocumentFile.Extentions = fileDto.Extension;
+                NewDocumentFile.URL = fileDto.Url;
                 NewDocumentFile.CreatedByUserName = await GetUserNameAsync();
                 
                 await _documentFileService.CreateAsync(input: NewDocumentFile);
@@ -287,6 +298,8 @@ namespace WebClient.Pages.Admin
                     EditingDocumentFile.AbsolutePath = fileDto.Path;
                     EditingDocumentFile.FileName = fileDto.FileName;
                     EditingDocumentFile.Extentions = fileDto.Extension;
+                    EditingDocumentFile.URL = fileDto.Url;
+
                 }
      
                 
@@ -316,8 +329,21 @@ namespace WebClient.Pages.Admin
             }
         }
 
+        public void ShowViewModal(DocumentFileDto dto)
+        {
+            ViewDocumentFile = dto;
+            ViewModal.Show();
+        }
+
+        public void HideViewModal()
+        {
+            ViewModal.Hide();
+        }
+        
+        
         public void ShowNewModal()
         {
+            
             NewDocumentFile = new CreateUpdateDocumentFileDto();
             CreateModal.Show();
         }
@@ -371,5 +397,20 @@ namespace WebClient.Pages.Admin
                 await GetDocumentFiles();
             }
         }
+
+         async Task DownloadFile(string url,Guid documentFileId)
+        {
+            _navigationManager.NavigateTo(url);
+            await _documentFileService.UpdateDownloadCountAsync(documentFileId);
+            await GetDocumentFiles();
+            StateHasChanged();
+        }
+
+         async Task PrintFile(Guid documentFileId)
+         {
+             await _documentFileService.UpdatePrintCountAsync(documentFileId);
+
+         }
+         
     }
 }

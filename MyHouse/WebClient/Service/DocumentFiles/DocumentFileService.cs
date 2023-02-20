@@ -40,5 +40,15 @@ namespace WebClient.Service.DocumentFiles
         { 
             await RequestClient.DeleteAPIAsync<Task>($"document-file/{id}");
         }
+
+        public async Task UpdateDownloadCountAsync(Guid id)
+        {
+            await RequestClient.PostAPIAsync<Task>($"document-file/update-download-count/{id}",null);
+        }
+
+        public async Task UpdatePrintCountAsync(Guid id)
+        {
+            await RequestClient.PostAPIAsync<Task>($"document-file/{id}",null);
+        }
     }
 }
