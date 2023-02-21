@@ -37,7 +37,8 @@ namespace Application
             CreateMap<UpdateUserDto, User>().ReverseMap();
             CreateMap<CreateUpdateUseDto, CreateUserDto>();
             CreateMap<CreateUpdateUseDto, UpdateUserDto>();
-            CreateMap<User,UserDto>().ReverseMap();
+            CreateMap<User,UserDto>().ForMember(dest => dest.FullName,
+                opt => opt.MapFrom(src => $"{src.FirstName} {src.LastName}"));
             CreateMap<CreateUpdateUseDto, User>().ReverseMap();
             CreateMap<Role,RoleDto>().ReverseMap();
             CreateMap<RoleDto,CreateUpdateRoleDto>().ReverseMap();

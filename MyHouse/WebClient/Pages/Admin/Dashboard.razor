@@ -19,13 +19,15 @@
 <RZBR></RZBR>
 
 <RadzenCard>
-    <Row Style="display:flex;align-items: center">
-        <Column ColumnSize="ColumnSize.Is2" Style="display:flex;align-items: center">
+    
+
+    <Blazorise.Row Style="display:flex;align-items: center">
+        <Blazorise.Column ColumnSize="ColumnSize.Is2" Style="display:flex;align-items: center">
             <RadzenIcon Icon="calendar_today" Style="margin-right: 7px;font-size: 28px;color: deeppink"/>
-            <DateRangePicker @bind-StartDate="Timeline.StartDay"  @bind-EndDate="Timeline.EndDay" Ranges="DateRanges" DateFormat="@DateFormatType.DateFormat" OnClosed="OnChangedDate" class="form-control form-control-md" placeholder="Select Date...">
+            <DateRangePicker @bind-StartDate="Timeline.StartDay" @bind-EndDate="Timeline.EndDay" Ranges="DateRanges" DateFormat="@DateFormatType.DateFormat" OnClosed="OnChangedDate" class="form-control form-control-md" placeholder="Select Date...">
             </DateRangePicker>
-        </Column>
-        <Column ColumnSize="ColumnSize.Is2" Style="display:flex;align-items: center;padding-left: 0px"> 
+        </Blazorise.Column>
+        <Blazorise.Column ColumnSize="ColumnSize.Is2" Style="display:flex;align-items: center;padding-left: 0px">
             <RadzenIcon Icon="dns" Style="margin-right: 7px;font-size: 28px;color: deeppink"/>
 
             <RadzenDropDown AllowClear="true" AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
@@ -34,10 +36,10 @@
                             ValueProperty="Id"
                             @bind-Value="Filter.UnitTypeId"
                             Change="OnChangeSelectedTypes" Class="w-100"/>
-        </Column>
-   
+        </Blazorise.Column>
 
-    </Row>
+
+    </Blazorise.Row>
 </RadzenCard>
 
 

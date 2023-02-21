@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Threading.Tasks;
 using Domain.Departments;
 using Domain.DocumentFiles;
 using Domain.FileFolders;
@@ -56,7 +57,7 @@ namespace SqlServ4r.EntityFramework
         public DreamContext(DbContextOptions<DreamContext> options):base(options)
         {
             
-            
+
         }
         
         protected override void OnModelCreating (ModelBuilder builder) {

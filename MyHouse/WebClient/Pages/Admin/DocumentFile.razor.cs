@@ -6,10 +6,13 @@ using System.Threading.Tasks;
 using AutoMapper.Internal.Mappers;
 using BlazorDateRangePicker;
 using Blazorise;
+using Contract.Departments;
 using Contract.DocumentFiles;
 using Contract.FileFolders;
 using Contract.FileTypes;
+using Contract.Identity.UserManager;
 using Contract.IssuingAgencys;
+using Contract.SendingFiles;
 using Core.Enum;
 using Core.Extension;
 using Microsoft.AspNetCore.Components;
@@ -38,7 +41,13 @@ namespace WebClient.Pages.Admin
 
         public List<FileFolderDto> FolderTree { get; set; }  = new List<FileFolderDto>();
         public List<FileFolderDto> HierarchicalFileFolders { get; set; } = new List<FileFolderDto>();
+        
+        public IEnumerable<DepartmentDto> HierarchicalDepartments { get; set; } = new List<DepartmentDto>();
+        public List<DepartmentDto> Departments { get; set; } = new List<DepartmentDto>();
+        public IEnumerable<object> SelectedDepartments = new List<DepartmentDto>();
 
+        public IEnumerable<UserDto> Users = new List<UserDto>();
+        public IEnumerable<Guid> SelectedUsers = new List<Guid>();
 
         public CreateUpdateDocumentFileDto NewDocumentFile { get; set; } = new CreateUpdateDocumentFileDto();
         public CreateUpdateDocumentFileDto EditingDocumentFile { get; set; } = new CreateUpdateDocumentFileDto();
@@ -65,7 +74,6 @@ namespace WebClient.Pages.Admin
 
         public IBrowserFile? EditingFile { get; set; }
 
-        private bool Test1 { get; set; }
 
 
         bool sidebar1Expanded = true;
@@ -92,6 +100,8 @@ namespace WebClient.Pages.Admin
                     await GetFileTypes();
                     await GetIssuingAgencies();
                     await GetFileFolders();
+                    await GetDepartments();
+                    await GetUsers();
                     StateHasChanged();
                 }, ActionType.GetList, false);
             }
@@ -100,6 +110,11 @@ namespace WebClient.Pages.Admin
         public async Task GetDocumentFiles()
         {
             DocumentFileWithNavProperties = await _documentFileService.GetListWithNavPropertiesAsync(Filter);
+        }
+
+        public async Task GetUsers()
+        {
+           Users = await _userManagerService.GetListAsync();
         }
         
         public async Task GetFileTypes()
@@ -128,7 +143,19 @@ namespace WebClient.Pages.Admin
             }
             
         }
-        
+        public async Task GetDepartments()
+        {
+            Departments = await _departmentService.GetListAsync();
+            HierarchicalDepartments = Departments;
+            foreach (var item in HierarchicalDepartments)
+            {
+                var childDepartments = 
+                    HierarchicalDepartments.Where(x => x.ParentCode == item.Id).ToList();
+                item.ChildDepartment = childDepartments;
+            }
+            HierarchicalDepartments = HierarchicalDepartments.Where(x => x.ParentCode == null);
+            
+        }
         
         public async Task GetFileFolders()
         {
@@ -405,6 +432,26 @@ namespace WebClient.Pages.Admin
             await GetDocumentFiles();
             StateHasChanged();
         }
+
+         public async Task CreateSendingFiles(Guid fileId)
+         {
+             var userIds = new List<Guid>();
+             userIds.AddRange((SelectedDepartments.OfType<DepartmentDto>())
+                 .Where(x => x.ChildDepartment.Count == 0)
+                 .Select(x => x.Id).ToList());
+             userIds.AddRange(SelectedUsers);
+             userIds = userIds.Distinct().ToList();
+
+             var sendingFiles = new List<CreateUpdateSendingFileDto>();
+             foreach (var item in userIds)
+             {
+                sendingFiles.Add(new CreateUpdateSendingFileDto()
+                {
+                    
+                });
+             }
+             await _sendingFileService.CreateListAsync(sendingFiles);
+         }
 
          async Task PrintFile(Guid documentFileId)
          {

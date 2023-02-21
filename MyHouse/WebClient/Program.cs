@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using MudBlazor.Services;
 using Radzen;
 
 
@@ -23,6 +24,7 @@ using WebClient.Service.IssuingAgencys;
 using WebClient.Service.JS;
 using WebClient.Service.Positions;
 using WebClient.Service.Roles;
+using WebClient.Service.SendingFiles;
 using WebClient.Service.UnitReviewDetails;
 using WebClient.Service.UnitReviews;
 using WebClient.Service.Units;
@@ -36,6 +38,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
+builder.Services.AddMudServices();
+
 RequestClient.Initialize(builder.Configuration);
 
 //service
@@ -53,7 +57,7 @@ builder.Services.AddTransient<FileFolderService,FileFolderService>();
 builder.Services.AddTransient<IssuingAgencyService,IssuingAgencyService>();
 builder.Services.AddTransient<FileTypeService,FileTypeService>();
 builder.Services.AddTransient<DocumentFileService,DocumentFileService>();
-
+builder.Services.AddTransient<SendingFileService>();
 builder.Services.AddTransient<DashboardService,DashboardService>();
 
 builder.Services.AddScoped<DownloadFileService>();

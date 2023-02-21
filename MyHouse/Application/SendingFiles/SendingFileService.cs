@@ -58,8 +58,9 @@ namespace Application.SendingFiles
             await _sendingFileRepository.AddRangeAsync(sendingFiles);
 
             var fileIds = sendingFiles.Select(x => x.FileId);
-            
-            
+
+            var files = await _documentFileRepository
+                .GetListAsync(x => fileIds.Contains(x.Id));
             
             
             var notifications = new List<Notification>();
@@ -71,7 +72,8 @@ namespace Application.SendingFiles
                 {
                   ReceiverId = item.ReceiverId,
                   DestinationCode = item.FileId,
-                  Title = "You've just received documentary number:"
+                  Title = $"You've just received documentary number" +
+                          $":{files.FirstOrDefault(x=>x.Id == item.Id)?.Code}"
                 });
             }
 

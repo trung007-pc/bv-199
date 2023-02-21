@@ -146,6 +146,7 @@ namespace Application.Identity.UserManager
         public async Task<List<UserDto>> GetListAsync()
         {
             var users = await _userManager.Users.ToListAsync();
+            
             return ObjectMapper.Map<List<User>, List<UserDto>>(users);
         }
 

@@ -1,34 +1,39 @@
 ﻿@using System.Security.Claims
+@using Color = MudBlazor.Color
 @inherits LayoutComponentBase
 @inject NavigationManager _navManager
     
 <RadzenLayout class="rz-shadow-3">
     <RadzenHeader>
         <div class="box">
-            <RadzenSidebarToggle Click="@(() => sidebar1Expanded = !sidebar1Expanded)"/>
+            <RadzenSidebarToggle      Click="@(() => sidebar1Expanded = !sidebar1Expanded)"/>
             <div>
-                   @if (!_navManager.Uri.Contains("bv-199"))
-                   {
-                       <AuthorizeView>
-                           <Authorized>
-                               <RadzenProfileMenu>
-                                   <Template>
-                                       <div class="box">
-                                           <h3 >
-                                               @context.User.Claims.FirstOrDefault(x=>x.Type == ClaimTypes.Surname)?.Value
-                                           </h3>
-                                           <RadzenGravatar Email="user@example.com">
-                                           </RadzenGravatar>
-                                       </div>
-                                   </Template>
-                                   <ChildContent>
-                                       <RadzenProfileMenuItem Text="Logout" Path="logout" Icon="announcement"></RadzenProfileMenuItem>
-                                   </ChildContent>
-                               </RadzenProfileMenu>
-                           </Authorized>
-                       </AuthorizeView>
-                   }
+                @if (!_navManager.Uri.Contains("bv-199"))
+                {
+                    <AuthorizeView>
+                        <Authorized>
+                            <RadzenProfileMenu>
+                                <Template>
+                                    <div class="box">
+                                        <h3 >
+                                            @context.User.Claims.FirstOrDefault(x=>x.Type == ClaimTypes.Surname)?.Value
+                                        </h3>
+                                        <RadzenGravatar Email="user@example.com">
+                                        </RadzenGravatar>
+                                    </div>
+                                </Template>
+                                <ChildContent>
+                                    <RadzenProfileMenuItem Text="Logout" Path="logout" Icon="announcement"></RadzenProfileMenuItem>
+                                </ChildContent>
+                            </RadzenProfileMenu>
+                               
+                               
+                               
+                        </Authorized>
+                    </AuthorizeView>
+                }
             </div>
+
         </div>
 
     </RadzenHeader>
@@ -70,6 +75,13 @@
 <RadzenNotification Style="z-index: 9999"/>
 <RadzenDialog/>
 <RadzenTooltip/>
+<MudThemeProvider/>
+<MudDialogProvider/>
+<MudSnackbarProvider/>
+
+
+<MudSwitch @bind-Checked="@_isDarkMode" Color="Color.Primary" Class="ma-4" T="bool" Label="Toggle Light/Dark Mode"/>
+
 
 
 @code {
@@ -80,7 +92,14 @@
     bool sidebar5Expanded = true;
     bool sidebar6Expanded = true;
 
+    
+    private MudTheme _theme = new();
+    private bool _isDarkMode;
 
+    
+    
+    
+    
     // ErrorBoundary? boundary;
     //
     // protected override void OnParametersSet()
