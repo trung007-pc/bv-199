@@ -26,7 +26,12 @@ namespace WebClient.Service.SendingFiles
 
         public async Task<List<SendingFileDto>> CreateListAsync(List<CreateUpdateSendingFileDto> inputs)
         {
-            return await RequestClient.PostAPIAsync<List<SendingFileDto>>("sending-file",inputs);
+            return await RequestClient.PostAPIAsync<List<SendingFileDto>>("sending-file/create-list",inputs);
+        }
+
+        public async Task<List<SendingFileDto>> SendNotificationForDepartmentUsersAndDefineUsers(SendingFileRequest request)
+        {
+            return await RequestClient.PostAPIAsync<List<SendingFileDto>>("sending-file/send-notifications-user",request);
         }
     }
 }

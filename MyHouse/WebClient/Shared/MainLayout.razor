@@ -1,73 +1,117 @@
 ﻿@using System.Security.Claims
+@using Contract.Notifications
+@using WebClient.Service.Notications
 @using Color = MudBlazor.Color
+@using NotificationType = Core.Enum.NotificationType
+@using Variant = MudBlazor.Variant
 @inherits LayoutComponentBase
 @inject NavigationManager _navManager
-    
+@inject NotificationnService _notificationService
+@inject NavigationManager _navigationManager;
+
 <RadzenLayout class="rz-shadow-3">
     <RadzenHeader>
-        <div class="box">
-            <RadzenSidebarToggle      Click="@(() => sidebar1Expanded = !sidebar1Expanded)"/>
-            <div>
+        <RadzenRow Gap="0">
+            <RadzenColumn Size="1">
+                <RadzenSidebarToggle Click="@(() => sidebar1Expanded = !sidebar1Expanded)"/>
+            </RadzenColumn>
+
+            <RadzenColumn Size="8">
+            </RadzenColumn>
+
+            <RadzenColumn Size="1">
+
+            </RadzenColumn>
+
+            <RadzenColumn Size="2">
                 @if (!_navManager.Uri.Contains("bv-199"))
                 {
                     <AuthorizeView>
                         <Authorized>
-                            <RadzenProfileMenu>
-                                <Template>
-                                    <div class="box">
-                                        <h3 >
-                                            @context.User.Claims.FirstOrDefault(x=>x.Type == ClaimTypes.Surname)?.Value
-                                        </h3>
-                                        <RadzenGravatar Email="user@example.com">
-                                        </RadzenGravatar>
-                                    </div>
-                                </Template>
-                                <ChildContent>
-                                    <RadzenProfileMenuItem Text="Logout" Path="logout" Icon="announcement"></RadzenProfileMenuItem>
-                                </ChildContent>
-                            </RadzenProfileMenu>
-                               
-                               
-                               
+                            <div style="display: flex;justify-content: space-between;align-items: center">
+                            <div @onclick="ToggleNotification" style="cursor: pointer">
+                              <MudBadge Content="NotificationCount" Color="Color.Primary" Overlap="true" Class="d-flex ml-auto">
+                                  <MudIcon Icon="@Icons.Material.Filled.Email" Color="Color.Default"/>
+                                        
+                                  <MudOverlay @bind-Visible="isVisible" OnClick="ToggleNotification" DarkBackground="false" ZIndex="99" AutoClose="true"/>
+
+                                     
+
+                                  <MudPopover  Open="ShowNotification"
+                                  
+                                              OverflowBehavior="OverflowBehavior.FlipAlways"
+                                              AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopRight"
+                                              Paper="false">
+                                      <MudPaper Outlined="true" Style="width: 20vw;min-height: 30vh;position:relative;">
+                                  
+                                          <div class="content--2">
+                                              <MudList Clickable="true" Dense="true" DisableGutters="true">
+                                                  @foreach (var item in Notifications)
+                                                  {
+                                                      <MudListItem Text="@item.Title" OnClick=" async () => {await ViewNotification(item);}" Icon="@Icons.Material.Filled.Bookmark"  IconColor="Color.Secondary" />
+                                                  }
+                                              </MudList>
+                                          </div>
+                                  
+                                          <RadzenButton Text="See All" Click="GoToNotificationPage" Style=" position: absolute; bottom: 0; left: 0; right: 0;">
+                                          </RadzenButton>
+                                  
+                                  
+                                  
+                                  
+                                  
+                                      </MudPaper>
+                                  </MudPopover>
+
+
+                              </MudBadge>
+                                </div>
+                                <RadzenProfileMenu Style="float: right">
+                                    <Template>
+                                        <div style="display: flex;justify-content: center;align-items: center;gap: 5px">
+                                            <span >
+                                                @context.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Surname)?.Value
+                                            </span>
+                                            <RadzenGravatar Email="user@example.com">
+                                            </RadzenGravatar>
+                                        </div>
+                                    </Template>
+                                    <ChildContent>
+                                        <RadzenProfileMenuItem Text="Logout" Path="logout" Icon="announcement"></RadzenProfileMenuItem>
+                                    </ChildContent>
+                                </RadzenProfileMenu>
+                            </div>
                         </Authorized>
                     </AuthorizeView>
                 }
-            </div>
 
-        </div>
+            </RadzenColumn>
+        </RadzenRow>
+
 
     </RadzenHeader>
-   @if (!_navManager.Uri.Contains("bv-199"))
-   {
-       <RadzenSidebar @bind-Expanded="@sidebar1Expanded">
+    @if (!_navManager.Uri.Contains("bv-199"))
+    {
+        <RadzenSidebar @bind-Expanded="@sidebar1Expanded">
 
-           <AuthorizeView>
-               <Authorized>
-                   <RadzenPanelMenu>
-                       <Menu></Menu>
-                   </RadzenPanelMenu>
-               </Authorized>
-               <NotAuthorized>
-               </NotAuthorized>
-           </AuthorizeView>
+            <AuthorizeView>
+                <Authorized>
+                    <RadzenPanelMenu>
+                        <Menu></Menu>
+                    </RadzenPanelMenu>
+                </Authorized>
+                <NotAuthorized>
+                </NotAuthorized>
+            </AuthorizeView>
 
-       </RadzenSidebar>
-   }
+        </RadzenSidebar>
+    }
 
-   <RadzenBody Style="transform: none !important;">
+    <RadzenBody Style="transform: none !important;">
         @Body
-       @* <ErrorBoundary> *@
-       @*     <ChildContent> *@
-       @*           @Body *@
-       @*     </ChildContent> *@
-       @*     <ErrorContent> *@
-       @*           @Body *@
-       @*     </ErrorContent> *@
-       @* </ErrorBoundary> *@
-    
-   </RadzenBody>
-   
-    <RadzenFooter Style="display: none" >
+    </RadzenBody>
+
+    <RadzenFooter Style="display: none">
         Footer
     </RadzenFooter>
 </RadzenLayout>
@@ -80,10 +124,6 @@
 <MudSnackbarProvider/>
 
 
-<MudSwitch @bind-Checked="@_isDarkMode" Color="Color.Primary" Class="ma-4" T="bool" Label="Toggle Light/Dark Mode"/>
-
-
-
 @code {
     bool sidebar1Expanded = true;
     bool sidebar2Expanded = true;
@@ -91,21 +131,81 @@
     bool sidebar4Expanded = true;
     bool sidebar5Expanded = true;
     bool sidebar6Expanded = true;
+    bool ShowNotification = false;
+    bool isVisible = false;
+    public NotificationFilter Filter { get; set; } = new NotificationFilter();
+    public List<NotificationDto> Notifications { get; set; } = new List<NotificationDto>();
+    public int NotificationCount { get; set; }
 
-    
-    private MudTheme _theme = new();
-    private bool _isDarkMode;
 
-    
-    
-    
-    
-    // ErrorBoundary? boundary;
-    //
-    // protected override void OnParametersSet()
-    // {
-    //     boundary?.Recover();
-    //     
-    // }
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthState { get; set; }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            Filter.UserName = await GetUserNameAsync();
+            Filter.Status = NotificationStatus.Unread;
+            NotificationCount = await _notificationService.CountUnreadNotificationOfUser(Filter);
+            StateHasChanged();
+        }
+    }
+
+
+    public async Task ToggleNotification()
+    {
+        ShowNotification = !ShowNotification;
+        isVisible = false;
+        if (ShowNotification)
+        {
+            await GetNotifications();
+            isVisible = true;
+        }
+    }
+
+    public async Task GetNotifications()
+    {
+        Notifications = await _notificationService.GetListByFilter(Filter);
+    }
+
+    public void GoToNotificationPage()
+    {
+        _navigationManager.NavigateTo($"notifications");
+    }
+
+
+    public async Task<string> GetUserNameAsync()
+    {
+        var authState = await AuthState;
+        var user = authState.User;
+
+        return user.Identity.Name;
+    }
+
+    public async Task ViewNotification(NotificationDto dto)
+    {
+
+        if (dto.Type == NotificationType.Document)
+        {
+            var updateNotification = new UpdateNotification()
+            {
+                Id = dto.Id,
+                Status = true,
+                Title = dto.Title,
+                Type = dto.Type,
+                DestinationCode = dto.DestinationCode,
+                ReceiverId = dto.ReceiverId,
+                SentDate = dto.SentDate
+            };
+            await _notificationService.UpdateAsync(updateNotification);
+            NotificationCount = await _notificationService.CountUnreadNotificationOfUser(Filter);
+            _navigationManager.NavigateTo($"view-document-file?fileId={dto.DestinationCode}");
+        }
+        if (dto.Type == NotificationType.Task)
+        {
+            
+        }
+    }
 
 }

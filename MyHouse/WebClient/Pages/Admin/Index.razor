@@ -8,10 +8,17 @@
 @using System.Web
 @using WebClient.Service.Users
 @using Color = MudBlazor.Color
+@using Variant = MudBlazor.Variant
 
 
 
 
+@code {
+	private bool _isOpen = false;
+
+	public void ToggleOpen() => _isOpen = !_isOpen;
+
+}
 
 
 <h1 style="color: red">Hello Index</h1>

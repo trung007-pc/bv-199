@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
+using System.Security.Claims;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -262,6 +264,14 @@ namespace WebClient.Shared
 
             return user.Identity.Name;
         }
+        
+        public async Task<Guid> GetUserIdAsync()
+        {
+            var authState = await AuthState;
+            var user = authState.User;
+            return Guid.Parse(user.Claims.FirstOrDefault(x=>x.Type == ClaimTypes.PrimarySid)?.Value);
+        }
+        
 
         public async Task<bool> IsAuthenticatedAsync()
         {

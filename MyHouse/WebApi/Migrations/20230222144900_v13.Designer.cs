@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SqlServ4r.EntityFramework;
 
@@ -11,9 +12,10 @@ using SqlServ4r.EntityFramework;
 namespace WebApi.Migrations
 {
     [DbContext(typeof(DreamContext))]
-    partial class DreamContextModelSnapshot : ModelSnapshot
+    [Migration("20230222144900_v13")]
+    partial class v13
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -67,7 +69,6 @@ namespace WebApi.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Code")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<Guid>("CreatedBy")
@@ -129,7 +130,8 @@ namespace WebApi.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("Code")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[Code] IS NOT NULL");
 
                     b.HasIndex("CreatedBy");
 
@@ -145,7 +147,7 @@ namespace WebApi.Migrations
                     b.HasIndex("StorageCode")
                         .IsUnique();
 
-                    b.ToTable("DocumentFiles");
+                    b.ToTable("Files");
                 });
 
             modelBuilder.Entity("Domain.FileFolders.FileFolder", b =>

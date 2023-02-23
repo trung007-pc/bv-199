@@ -10,6 +10,7 @@ namespace Contract.Departments
         Task<DepartmentDto> UpdateAsync(CreateUpdateDepartmentDto input,Guid id);
         Task DeleteAsync(Guid id);
         Task<List<DepartmentDto>> GetListAsync();
+        
 
     }
 }

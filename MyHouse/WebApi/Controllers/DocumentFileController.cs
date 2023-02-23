@@ -19,8 +19,21 @@ namespace WebApi.Controllers
         {
             _documentFileService = fileFolderService;
         }
-
         
+        [HttpGet]
+        [Route("get-shared-list-with-me/{userId}")]
+        public async Task<List<DocumentFileWithNavPropertiesDto>> GetSharedListWithMeAsync(Guid userId)
+        {
+           return  await _documentFileService.GetSharedListWithMeAsync(userId);
+        }
+
+        [HttpGet]
+        [Route("{id}")]
+        public async Task<DocumentFileDto> GetAsync(Guid id)
+        {
+            return await _documentFileService.GetAsync(id);
+        }
+
         [HttpPost]
         public async Task<DocumentFileDto> CreateAsync(CreateUpdateDocumentFileDto input)
         {

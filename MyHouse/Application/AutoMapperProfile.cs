@@ -7,7 +7,9 @@ using Contract.FileTypes;
 using Contract.Identity.RoleManager;
 using Contract.Identity.UserManager;
 using Contract.IssuingAgencys;
+using Contract.Notifications;
 using Contract.Positions;
+using Contract.SendingFiles;
 using Contract.UnitReviewDetails;
 using Contract.UnitReviews;
 using Contract.Units;
@@ -19,7 +21,9 @@ using Domain.FileTypes;
 using Domain.Identity.Roles;
 using Domain.Identity.Users;
 using Domain.IssuingAgencys;
+using Domain.Notifications;
 using Domain.Positions;
+using Domain.SendingFiles;
 using Domain.UnitReviewDetails;
 using Domain.UnitReviews;
 using Domain.Units;
@@ -86,6 +90,13 @@ namespace Application
 
 
             CreateMap<DocumentFileWithNavProperties, DocumentFileWithNavPropertiesDto>().ReverseMap();
+            CreateMap<CreateUpdateSendingFileDto, SendingFile>().ReverseMap();
+            CreateMap<SendingFile, SendingFileDto>();
+
+            CreateMap<CreateNotificationDto, Notification>().ReverseMap();
+            CreateMap<UpdateNotification, Notification>().ReverseMap();
+            CreateMap<Notification, NotificationDto>().ReverseMap();
+
         }            
 
     }

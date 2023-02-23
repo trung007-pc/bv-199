@@ -22,6 +22,7 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.JSInterop;
 using Radzen;
+using WebClient.Components;
 using WebClient.Exceptions;
 using WebClient.Setting;
 
@@ -47,11 +48,13 @@ namespace WebClient.Pages.Admin
         public IEnumerable<object> SelectedDepartments = new List<DepartmentDto>();
 
         public IEnumerable<UserDto> Users = new List<UserDto>();
-        public IEnumerable<Guid> SelectedUsers = new List<Guid>();
+        public IEnumerable<Guid> SelectedUserIds = new List<Guid>();
 
         public CreateUpdateDocumentFileDto NewDocumentFile { get; set; } = new CreateUpdateDocumentFileDto();
         public CreateUpdateDocumentFileDto EditingDocumentFile { get; set; } = new CreateUpdateDocumentFileDto();
         public DocumentFileDto ViewDocumentFile { get; set; } = new DocumentFileDto();
+        
+        public DocumentFileDto DocumentFileDto { get; set; } = new DocumentFileDto();
 
         public FileFolderDto SelectedFolder { get; set; }  = new FileFolderDto();
         public List<FileFolderDto> Folders { get; set; }  = new List<FileFolderDto>();
@@ -65,6 +68,7 @@ namespace WebClient.Pages.Admin
         public Modal CreateModal;
         public Modal EditingModal;
         public Modal ViewModal;
+        public RZModel SendingFileModel;
 
         public string HeaderTitle = "Document File";
 
@@ -366,6 +370,20 @@ namespace WebClient.Pages.Admin
         {
             ViewModal.Hide();
         }
+
+
+        public async Task ShowSendingFile(DocumentFileDto dto)
+        {
+            SelectedDepartments = new List<DepartmentDto>();
+            SelectedUserIds = new List<Guid>();
+            DocumentFileDto = dto;
+            await SendingFileModel.ShowModel();
+        }
+
+        public void HideSendingFile()
+        {
+             SendingFileModel.HideModel();
+        }
         
         
         public void ShowNewModal()
@@ -435,22 +453,22 @@ namespace WebClient.Pages.Admin
 
          public async Task CreateSendingFiles(Guid fileId)
          {
-             var userIds = new List<Guid>();
-             userIds.AddRange((SelectedDepartments.OfType<DepartmentDto>())
-                 .Where(x => x.ChildDepartment.Count == 0)
-                 .Select(x => x.Id).ToList());
-             userIds.AddRange(SelectedUsers);
-             userIds = userIds.Distinct().ToList();
-
-             var sendingFiles = new List<CreateUpdateSendingFileDto>();
-             foreach (var item in userIds)
-             {
-                sendingFiles.Add(new CreateUpdateSendingFileDto()
+            await  InvokeAsync(async () =>
+            {
+                var request = new SendingFileRequest()
                 {
-                    
-                });
-             }
-             await _sendingFileService.CreateListAsync(sendingFiles);
+                    Sender = await GetUserIdAsync(),
+                    DepartmentIds =  (SelectedDepartments.OfType<DepartmentDto>())
+                        .Where(x => x.ChildDepartment.Count == 0)
+                        .Select(x => x.Id).ToList(),
+                    DefineUsers = SelectedUserIds.ToList(),
+                    FileId = fileId,
+                };
+
+                await _sendingFileService.SendNotificationForDepartmentUsersAndDefineUsers(request);
+                
+                 SendingFileModel.HideModel();
+             }, ActionType.Create, true);
          }
 
          async Task PrintFile(Guid documentFileId)

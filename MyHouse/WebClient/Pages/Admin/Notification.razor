@@ -1,0 +1,44 @@
+﻿@page "/notifications"
+@using WebClient.Service.Notications
+@using Color = MudBlazor.Color
+@inherits BaseBlazorPage
+
+@inject NotificationnService _notificationService;
+
+
+<div style="display: flex;justify-content: space-between;align-items: center">
+    <div>
+        <RadzenBreadCrumb >
+            <RadzenBreadCrumbItem Path="/" Icon="home" Style="font-size: 20px"/>
+            <RadzenBreadCrumbItem Text="@HeaderTitle" Style="font-weight: 300"/>
+        </RadzenBreadCrumb>
+    </div>
+</div>
+
+<RadzenCard>
+
+    
+@*      *@
+@*         <RadzenCheckBoxListItem @bind-Value=@values AllowSelectAll="true" SelectAllText="Select all items" TValue="int" Orientation="Orientation.Vertical"> *@
+@*             <Items> *@
+@*                 <RadzenCheckBoxListItem   Text="Orders" Value="1"> *@
+@*                 </RadzenCheckBoxListItem> *@
+@*                 <RadzenCheckBoxListItem Text="Employees" Value="2" /> *@
+@*                 <RadzenCheckBoxListItem Text="Customers" Value="3" /> *@
+@*             </Items> *@
+@*         </RadzenCheckBoxList> *@
+@*      *@
+@*      *@
+@* *@
+@*     <MudList Clickable="true" Dense="true" DisableGutters="@true"> *@
+@*         @foreach (var item in Notifications) *@
+@* { *@
+@*     <MudListItem Text="@item.Title"  Icon="@Icons.Material.Filled.Bookmark" IconColor="(item.Status ? Color.Secondary:Color.Inherit )" > *@
+@*         <MudTemplateColumn> *@
+@*              *@
+@*         </MudTemplateColumn> *@
+@*     </MudList> *@
+@*        } *@
+@*     </MudList> *@
+
+</RadzenCard>

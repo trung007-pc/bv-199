@@ -26,7 +26,7 @@ namespace SqlServ4r.Repository.FileDocuments
         public async Task<List<DocumentFileWithNavProperties>> GetFilesWithNavProperties(DocumentFileFilter filter)
         {
 
-            var query = from file in _context.Files.Where(x => !x.IsDeleted)
+            var query = from file in _context.DocumentFiles.Where(x => !x.IsDeleted)
                 select new DocumentFileWithNavProperties
                 {
                     File = file,
@@ -55,6 +55,21 @@ namespace SqlServ4r.Repository.FileDocuments
             return await query.ToListAsync();
         }
 
+        public async Task<List<DocumentFileWithNavProperties>> GetFilesWithNavProperties(Guid userId)
+        {
+            var query = from file in _context.DocumentFiles.Where(x => 
+                    !x.IsDeleted)
+                join sendingFile in _context.SendingFiles.Where(x=>x.ReceiverId == userId) 
+                    on file.Id equals sendingFile.FileId 
+                select new DocumentFileWithNavProperties
+                {
+                    File = file,
+                    FileType = file.FileType ,
+                    IssuingAgency = file.IssuingAgency
+                };
+            
+            return await query.ToListAsync();
+        }
 
 
         private async Task<List<Guid>> GetChildFolderIdAsync(Guid parentID)

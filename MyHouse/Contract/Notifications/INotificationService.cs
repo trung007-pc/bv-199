@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Domain.Notifications;
 
 namespace Contract.Notifications
 {
@@ -13,6 +14,11 @@ namespace Contract.Notifications
         
         Task<List<NotificationDto>> CreateListAsync(List<CreateNotificationDto> inputs);
         Task<List<NotificationDto>> UpdateListAsync(List<UpdateNotification> inputs);
+        Task<List<NotificationDto>> GetListByFilter(NotificationFilter filter);
+        
+        Task<int> CountUnreadNotificationOfUser(NotificationFilter filter);
+
+        
 
     }
 }

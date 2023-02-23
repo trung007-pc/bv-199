@@ -48,5 +48,20 @@ namespace WebApi.Controllers
         {
             return await _notificationService.UpdateListAsync(inputs);
         }
+
+        
+        [HttpPost]
+        [Route("get-list-by-filter")]
+        public async Task<List<NotificationDto>> GetListByFilter(NotificationFilter filter)
+        {
+            return await _notificationService.GetListByFilter(filter);
+        }
+
+        [HttpPost]
+        [Route("count-unread-notification-of-user")]
+        public async Task<int> CountUnreadNotificationOfUser(NotificationFilter filter)
+        {
+            return await _notificationService.CountUnreadNotificationOfUser(filter);
+        }
     }
 }

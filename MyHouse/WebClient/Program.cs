@@ -22,6 +22,7 @@ using WebClient.Service.FileFolders;
 using WebClient.Service.FileTypes;
 using WebClient.Service.IssuingAgencys;
 using WebClient.Service.JS;
+using WebClient.Service.Notications;
 using WebClient.Service.Positions;
 using WebClient.Service.Roles;
 using WebClient.Service.SendingFiles;
@@ -59,6 +60,8 @@ builder.Services.AddTransient<FileTypeService,FileTypeService>();
 builder.Services.AddTransient<DocumentFileService,DocumentFileService>();
 builder.Services.AddTransient<SendingFileService>();
 builder.Services.AddTransient<DashboardService,DashboardService>();
+builder.Services.AddTransient<NotificationnService>();
+
 
 builder.Services.AddScoped<DownloadFileService>();
 builder.Services.AddScoped<TooltipService>();

@@ -9,9 +9,11 @@ using Core.Const;
 using Core.Exceptions;
 using Domain.Notifications;
 using Domain.SendingFiles;
+using Domain.UserDepartments;
 using SqlServ4r.Repository.FileDocuments;
 using SqlServ4r.Repository.Notifications;
 using SqlServ4r.Repository.SendingFiles;
+using SqlServ4r.Repository.UserDepartments;
 using Volo.Abp.DependencyInjection;
 
 namespace Application.SendingFiles
@@ -21,13 +23,16 @@ namespace Application.SendingFiles
         private readonly SendingFileRepository _sendingFileRepository;
         private readonly NotificationRepository _notificationRepository;
         private readonly DocumentFileRepository _documentFileRepository;
+        private readonly UserDepartmentRepository _userDepartmentRepository;
         public SendingFileService(SendingFileRepository SendingFileRepository,
             NotificationRepository notificationRepository
-            , DocumentFileRepository documentFileRepository)
+            , DocumentFileRepository documentFileRepository,
+            UserDepartmentRepository userDepartmentRepository)
         {
             _sendingFileRepository = SendingFileRepository;
             _notificationRepository = notificationRepository;
             _documentFileRepository = documentFileRepository;
+            _userDepartmentRepository = userDepartmentRepository;
         }
         public Task<SendingFileDto> CreateAsync(CreateUpdateSendingFileDto input)
         {
@@ -52,36 +57,54 @@ namespace Application.SendingFiles
 
         public async Task<List<SendingFileDto>> CreateListAsync(List<CreateUpdateSendingFileDto> inputs)
         {
-            var sendingFiles = ObjectMapper.
-                Map<List<CreateUpdateSendingFileDto>, List<SendingFile>>(inputs);
+            
+            return null;
+        }
 
+        public async Task<List<SendingFileDto>> SendNotificationForDepartmentUsersAndDefineUsers(SendingFileRequest request)
+        {
+
+            var userDepartments = await _userDepartmentRepository.GetListAsync(x => request
+                .DepartmentIds.Contains(x.DepartmentId));
+            var userIds = userDepartments.Select(x => x.UserId).Distinct().ToList();
+            userIds.AddRange(request.DefineUsers);
+            userIds = userIds.Where(x => x != request.Sender).ToList();
+            
+            
+            var sendingFiles = new List<SendingFile>();
+            
+            foreach (var item in userIds)
+            {
+                sendingFiles.Add(new SendingFile()
+                {
+                    Status = false,
+                    FileId = request.FileId,
+                    IsRevoked = false,
+                    SentDate = DateTime.Now,
+                    ReceiverId = item,
+                    SenderId = request.Sender
+                });
+            }
+            
             await _sendingFileRepository.AddRangeAsync(sendingFiles);
-
-            var fileIds = sendingFiles.Select(x => x.FileId);
-
-            var files = await _documentFileRepository
-                .GetListAsync(x => fileIds.Contains(x.Id));
-            
-            
             var notifications = new List<Notification>();
-
+            var file = await _documentFileRepository
+                .FirstOrDefaultAsync(x => x.Id == request.FileId);
             foreach (var item in sendingFiles)
             {
                 
                 notifications.Add(new Notification()
                 {
-                  ReceiverId = item.ReceiverId,
-                  DestinationCode = item.FileId,
-                  Title = $"You've just received documentary number" +
-                          $":{files.FirstOrDefault(x=>x.Id == item.Id)?.Code}"
+                    ReceiverId = item.ReceiverId,
+                    DestinationCode = item.FileId,
+                    Title = $"You've just received documentary number" +
+                            $":{file?.Code}"
                 });
             }
 
             await _notificationRepository.AddRangeAsync(notifications);
-            
-            
-            
-            return ObjectMapper.Map<List<SendingFile>,List<SendingFileDto>>(sendingFiles);
+
+            return ObjectMapper.Map<List<SendingFile>, List<SendingFileDto>>(sendingFiles);
         }
     }
 }

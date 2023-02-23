@@ -38,5 +38,15 @@ namespace WebClient.Service.Notications
         {
             return await RequestClient.PutAPIAsync<List<NotificationDto>>("notification/update-list",inputs);
         }
+        
+        public async Task<List<NotificationDto>> GetListByFilter(NotificationFilter filter)
+        {   
+            return await RequestClient.PostAPIAsync<List<NotificationDto>>("notification/get-list-by-filter",filter);
+        }
+
+        public async Task<int> CountUnreadNotificationOfUser(NotificationFilter filter)
+        {
+            return await RequestClient.PostAPIAsync<int>("notification/count-unread-notification-of-user",filter);
+        }
     }
 }

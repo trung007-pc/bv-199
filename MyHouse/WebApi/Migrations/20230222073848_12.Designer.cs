@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SqlServ4r.EntityFramework;
 
@@ -11,9 +12,10 @@ using SqlServ4r.EntityFramework;
 namespace WebApi.Migrations
 {
     [DbContext(typeof(DreamContext))]
-    partial class DreamContextModelSnapshot : ModelSnapshot
+    [Migration("20230222073848_12")]
+    partial class _12
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -67,7 +69,6 @@ namespace WebApi.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Code")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<Guid>("CreatedBy")
@@ -129,7 +130,8 @@ namespace WebApi.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("Code")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[Code] IS NOT NULL");
 
                     b.HasIndex("CreatedBy");
 
@@ -145,7 +147,7 @@ namespace WebApi.Migrations
                     b.HasIndex("StorageCode")
                         .IsUnique();
 
-                    b.ToTable("DocumentFiles");
+                    b.ToTable("Files");
                 });
 
             modelBuilder.Entity("Domain.FileFolders.FileFolder", b =>
@@ -591,17 +593,16 @@ namespace WebApi.Migrations
             modelBuilder.Entity("Domain.SendingFiles.SendingFile", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("FileId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("IsRevoked")
-                        .HasColumnType("bit");
-
                     b.Property<Guid>("ReceiverId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsRevoked")
+                        .HasColumnType("bit");
 
                     b.Property<Guid>("SenderId")
                         .HasColumnType("uniqueidentifier");
@@ -615,7 +616,7 @@ namespace WebApi.Migrations
                     b.Property<DateTime>("ViewDate")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id", "FileId", "ReceiverId");
 
                     b.HasIndex("FileId");
 

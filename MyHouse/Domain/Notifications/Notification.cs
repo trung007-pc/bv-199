@@ -8,7 +8,7 @@ namespace Domain.Notifications
 {
     public class Notification
     {
-        public Guid Id { get; set; } 
+        public Guid Id { get; set; } = Guid.NewGuid();
         public Guid ReceiverId { get; set; }
         public bool Status { get; set; }
         public Guid DestinationCode { get; set; }

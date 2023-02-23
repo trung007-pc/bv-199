@@ -39,9 +39,16 @@ namespace WebApi.Controllers
 
         [HttpPost]
         [Route("create-list")]
-        public Task<List<SendingFileDto>> CreateListAsync(List<CreateUpdateSendingFileDto> inputs)
+        public async Task<List<SendingFileDto>> CreateListAsync(List<CreateUpdateSendingFileDto> inputs)
         {
-            throw new NotImplementedException();
+            return await _sendingFileService.CreateListAsync(inputs);
+        }
+
+        [HttpPost]
+        [Route("send-notifications-user")]
+        public async Task<List<SendingFileDto>> SendNotificationForDepartmentUsersAndDefineUsers(SendingFileRequest request)
+        {
+            return await _sendingFileService.SendNotificationForDepartmentUsersAndDefineUsers(request);
         }
     }
 }

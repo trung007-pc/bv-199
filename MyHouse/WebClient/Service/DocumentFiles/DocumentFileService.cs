@@ -24,6 +24,16 @@ namespace WebClient.Service.DocumentFiles
             return await RequestClient.GetAPIAsync<List<DocumentFileDto>>("document-file");
         }
 
+        public async Task<List<DocumentFileWithNavPropertiesDto>> GetSharedListWithMeAsync(Guid userId)
+        {
+            return await RequestClient.GetAPIAsync<List<DocumentFileWithNavPropertiesDto>>($"document-file/get-shared-list-with-me/{userId.ToString()}");
+        }
+
+        public async Task<DocumentFileDto> GetAsync(Guid id)
+        {
+            return await RequestClient.GetAPIAsync<DocumentFileDto>($"document-file/{id}");
+        }
+
         public async Task<DocumentFileDto> CreateAsync(CreateUpdateDocumentFileDto input)
         {
             return await RequestClient.PostAPIAsync<DocumentFileDto>("document-file",input);

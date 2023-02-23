@@ -35,7 +35,10 @@ namespace Domain.Identity.Users
         
         //naviagation
         public List<Notification> Notifications { get; set; }
-        public List<SendingFile> SendingFiles { get; set;}
+        public List<SendingFile> SenderSendingFiles { get; set;}
+        
+        public List<SendingFile> ReceiverSendingFiles { get; set;}
+
         public Position Position { get; set; }
         public List<UserDepartment> UserDepartments { get; set;}
         public List<FileVersion> EditedFileVersions { get; set; }

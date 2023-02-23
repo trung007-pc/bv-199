@@ -10,6 +10,8 @@ namespace Contract.DocumentFiles
         Task<List<DocumentFileWithNavPropertiesDto>> GetListWithNavPropertiesAsync(DocumentFileFilter filter);
 
         Task<List<DocumentFileDto>> GetListAsync();
+        Task<List<DocumentFileWithNavPropertiesDto>> GetSharedListWithMeAsync(Guid userId);
+        Task<DocumentFileDto> GetAsync(Guid id);
         Task<DocumentFileDto> CreateAsync(CreateUpdateDocumentFileDto input);
         Task<DocumentFileDto> UpdateAsync(CreateUpdateDocumentFileDto input,Guid id);
         Task DeleteAsync(Guid id);

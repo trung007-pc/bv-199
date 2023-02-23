@@ -44,7 +44,7 @@ namespace SqlServ4r.EntityFramework
         public DbSet<FileFolder> FileFolders { get; set; }
         public DbSet<FileType> FileTypes { get; set; }
         public DbSet<IssuingAgency> IssuingAgencies { get; set; }
-        public DbSet<DocumentFile> Files { get; set; }
+        public DbSet<DocumentFile> DocumentFiles { get; set; }
         public DbSet<FileVersion>  FileVersions { get; set; }
         
         public DbSet<SendingFile> SendingFiles { get; set; }
@@ -159,11 +159,16 @@ namespace SqlServ4r.EntityFramework
             
             // user - sendingfile - file
             
-            builder.Entity<SendingFile>().HasKey(sc => new { sc.Id,sc.FileId,sc.ReceiverId });
+            builder.Entity<SendingFile>().HasKey(sc => new { sc.Id });
+
+            builder.Entity<SendingFile>().HasOne<User>(x => x.ReceiverUser)
+                .WithMany(x => x.ReceiverSendingFiles)
+                .HasForeignKey(x => x.ReceiverId)
+                .OnDelete(DeleteBehavior.Restrict);
             
-            builder.Entity<SendingFile>().HasOne<User>(x => x.User)
-                .WithMany(x => x.SendingFiles)
-                .HasForeignKey(x=>x.ReceiverId);
+            builder.Entity<SendingFile>().HasOne<User>(x => x.SenderUser)
+                .WithMany(x => x.SenderSendingFiles)
+                .HasForeignKey(x=>x.SenderId);
             
             builder.Entity<SendingFile>().HasOne<DocumentFile>(x => x.DocumentFile)
                 .WithMany(x => x.SendingFiles)

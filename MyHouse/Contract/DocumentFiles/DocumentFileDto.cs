@@ -13,7 +13,7 @@ namespace Contract.DocumentFiles
 
 
         public string Name { get; set;}
-        public string? Code { get; set; }
+        public string Code { get; set; }
         
         public DateTime PublicationDate { get; set; }
         public DateTime CreationDate { get; set; }

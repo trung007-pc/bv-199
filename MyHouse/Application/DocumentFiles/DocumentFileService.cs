@@ -12,23 +12,27 @@ using Domain.Identity.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using SqlServ4r.Repository.FileDocuments;
+using SqlServ4r.Repository.SendingFiles;
 using Volo.Abp.DependencyInjection;
 
 namespace Application.DocumentFiles
 {
     public class DocumentFileService :ServiceBase,IDocumentFileService,ITransientDependency
     {
-        readonly DocumentFileRepository _documentFileRepository;
+        private readonly DocumentFileRepository _documentFileRepository;
+        private readonly SendingFileRepository _sendingFileRepository;
         private readonly IConfiguration _configuration;
         private readonly UserManager<User> _userManager;
 
         public DocumentFileService(DocumentFileRepository documentFileRepository,
             UserManager<User> userManager,
+            SendingFileRepository sendingFileRepository,
             IConfiguration configuration
         )
         {
             _documentFileRepository = documentFileRepository;
             _userManager = userManager;
+            _sendingFileRepository = sendingFileRepository;
             _configuration = configuration;
         }
 
@@ -50,7 +54,23 @@ namespace Application.DocumentFiles
             return ObjectMapper.Map<List<DocumentFile>,
                 List<DocumentFileDto>>(files);;
         }
-        
+
+        public async Task<List<DocumentFileWithNavPropertiesDto>> GetSharedListWithMeAsync(Guid userId)
+        {
+
+            var files = await _documentFileRepository.GetFilesWithNavProperties(userId);
+
+            return ObjectMapper.Map<List<DocumentFileWithNavProperties>,
+                List<DocumentFileWithNavPropertiesDto>>(files);
+        }
+
+        public async Task<DocumentFileDto> GetAsync(Guid id)
+        {
+            var item = await  _documentFileRepository.GetAsync(x => x.Id == id);
+            if (item is null) throw new GlobalException(HttpMessage.NotFound, HttpStatusCode.BadRequest);
+            return ObjectMapper.Map<DocumentFile,DocumentFileDto>(item);
+        }
+
         public async Task<DocumentFileDto> CreateAsync(CreateUpdateDocumentFileDto input)
         {
             var storageCode = _configuration["DocumentFile:StorageCode"];

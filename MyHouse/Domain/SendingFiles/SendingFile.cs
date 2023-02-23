@@ -6,9 +6,11 @@ namespace Domain.SendingFiles
 {
     public class SendingFile
     {
-        public Guid Id { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
         
         //id-user
+        public Guid SenderId { get; set; }
+
         public Guid ReceiverId { get; set; }
         
         public Guid FileId { get; set; }
@@ -21,7 +23,10 @@ namespace Domain.SendingFiles
         
         //navaigation
         
-        public User User { get; set; }
+        public User ReceiverUser { get; set; }
+        
+        public User SenderUser { get; set; }
+
         public DocumentFile DocumentFile { get; set; }
     }
 }

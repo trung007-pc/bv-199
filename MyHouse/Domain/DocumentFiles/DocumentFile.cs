@@ -16,7 +16,7 @@ namespace Domain.DocumentFiles
 
 
         public string Name { get; set;}
-        public string? Code { get; set; }
+        public string Code { get; set; }
         
         public DateTime PublicationDate { get; set; } = DateTime.Now;
         public DateTime CreationDate { get; set; } = DateTime.Now;

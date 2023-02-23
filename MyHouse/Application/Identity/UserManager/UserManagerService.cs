@@ -342,6 +342,7 @@ namespace Application.Identity.UserManager
                 claims.Add(new Claim(ClaimTypes.Role, item));
             }
             
+            claims.Add(new Claim(ClaimTypes.PrimarySid, user.Id.ToString()));
             claims.Add(new Claim(ClaimTypes.Name, user.UserName));
             claims.Add(new Claim(ClaimTypes.Surname,user.FirstName +" "+ user.LastName));
 

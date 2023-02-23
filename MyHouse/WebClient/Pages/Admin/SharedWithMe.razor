@@ -1,0 +1,51 @@
+﻿@page "/share-with-me"
+@inherits BaseBlazorPage
+@using WebClient.Service.DocumentFiles
+@using Variant = Radzen.Variant
+@using Contract.DocumentFiles;
+@inject DocumentFileService _documentFileService;
+
+
+<div style="display: flex;justify-content: space-between;align-items: center">
+    <div>
+        <RadzenBreadCrumb >
+            <RadzenBreadCrumbItem Path="/" Icon="home" Style="font-size: 20px"/>
+            <RadzenBreadCrumbItem Text="@HeaderTitle" Style="font-weight: 300"/>
+        </RadzenBreadCrumb>
+    </div>
+</div>
+
+<RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" AllowAlternatingBlazorise.Rows="false" AllowSorting="true" PageSize="20" AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true"
+                            Data="@DocumentFileWithNavProperties" TItem="DocumentFileWithNavPropertiesDto" ColumnWidth="300px"
+                            AllowColumnPicking="true"
+                            PageSizeOptions="PageSizeOptions"
+                            Style="width: 100%">
+                <Columns>
+                    <RadzenDataGridColumn TItem="DocumentFileWithNavPropertiesDto" Property="File.Name" TextAlign="TextAlign.Center" Title="Name" Width="160px"/>
+                    <RadzenDataGridColumn TItem="DocumentFileWithNavPropertiesDto" Property="File.Code" TextAlign="TextAlign.Center" Title="Code" Width="160px"/>
+                    <RadzenDataGridColumn TItem="DocumentFileWithNavPropertiesDto" Property="File.StorageCode" TextAlign="TextAlign.Center" Title="Storage Code" Width="160px"/>
+                    <RadzenDataGridColumn TItem="DocumentFileWithNavPropertiesDto" Property="IssuingAgency.Name" TextAlign="TextAlign.Center" Title="Agency" Width="160px"/>
+                    <RadzenDataGridColumn TItem="DocumentFileWithNavPropertiesDto" Property="FileType.Name" TextAlign="TextAlign.Center" Title="Type" Width="160px"/>
+
+                    <RadzenDataGridColumn TItem="DocumentFileWithNavPropertiesDto" Property="File.PublicationDate" TextAlign="TextAlign.Center" Title="Publication Date" Width="160px">
+                        <Template Context="data">
+                            @($"{data.File.PublicationDate:dd/MM/yyyy}")
+                        </Template>
+                    </RadzenDataGridColumn>
+
+                    <RadzenDataGridColumn TItem="DocumentFileWithNavPropertiesDto" Property="File.CreationDate" TextAlign="TextAlign.Center" Title="Received Date" Width="160px">
+                        <Template Context="data">
+                            @($"{data.File.CreationDate:dd/MM/yyyy}")
+                        </Template>
+                    </RadzenDataGridColumn>
+                    <RadzenDataGridColumn TItem="DocumentFileWithNavPropertiesDto" Property="File.Name" Title="Action" TextAlign="TextAlign.Center" Filterable="false">
+                        <Template Context="data">
+
+                            <RadzenButton ButtonStyle="ButtonStyle.Primary" Icon="send"  Variant="Variant.Flat" Shade="Shade.Lighter" Size="ButtonSize.Medium" Class="my-1 ms-1">
+                            </RadzenButton>
+                            <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="remove_red_eye"  Variant="Variant.Flat" Shade="Shade.Default" Size="ButtonSize.Medium" Class="my-1 ms-1">
+                            </RadzenButton>
+                        </Template>
+                    </RadzenDataGridColumn>
+                </Columns>
+            </RadzenDataGrid>
