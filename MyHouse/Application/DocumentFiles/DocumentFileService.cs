@@ -55,11 +55,10 @@ namespace Application.DocumentFiles
                 List<DocumentFileDto>>(files);;
         }
 
-        public async Task<List<DocumentFileWithNavPropertiesDto>> GetSharedListWithMeAsync(Guid userId)
+        public async Task<List<DocumentFileWithNavPropertiesDto>> GetSharedListWithMeAsync(DocumentFileFilter filter)
         {
 
-            var files = await _documentFileRepository.GetFilesWithNavProperties(userId);
-
+            var files = await _documentFileRepository.GetSharedFilesWithNavProperties(filter);
             return ObjectMapper.Map<List<DocumentFileWithNavProperties>,
                 List<DocumentFileWithNavPropertiesDto>>(files);
         }

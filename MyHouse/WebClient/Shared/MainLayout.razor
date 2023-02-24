@@ -55,11 +55,6 @@
                                   
                                           <RadzenButton Text="See All" Click="GoToNotificationPage" Style=" position: absolute; bottom: 0; left: 0; right: 0;">
                                           </RadzenButton>
-                                  
-                                  
-                                  
-                                  
-                                  
                                       </MudPaper>
                                   </MudPopover>
 
@@ -169,8 +164,10 @@
         Notifications = await _notificationService.GetListByFilter(Filter);
     }
 
-    public void GoToNotificationPage()
+    public async  Task GoToNotificationPage()
     {
+        await ToggleNotification();
+
         _navigationManager.NavigateTo($"notifications");
     }
 

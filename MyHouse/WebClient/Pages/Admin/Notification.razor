@@ -1,6 +1,8 @@
 ﻿@page "/notifications"
 @using WebClient.Service.Notications
 @using Color = MudBlazor.Color
+@using Orientation = Radzen.Orientation
+@inject NavigationManager _navigationManager;
 @inherits BaseBlazorPage
 
 @inject NotificationnService _notificationService;
@@ -15,30 +17,43 @@
     </div>
 </div>
 
-<RadzenCard>
 
-    
-@*      *@
-@*         <RadzenCheckBoxListItem @bind-Value=@values AllowSelectAll="true" SelectAllText="Select all items" TValue="int" Orientation="Orientation.Vertical"> *@
-@*             <Items> *@
-@*                 <RadzenCheckBoxListItem   Text="Orders" Value="1"> *@
-@*                 </RadzenCheckBoxListItem> *@
-@*                 <RadzenCheckBoxListItem Text="Employees" Value="2" /> *@
-@*                 <RadzenCheckBoxListItem Text="Customers" Value="3" /> *@
-@*             </Items> *@
-@*         </RadzenCheckBoxList> *@
-@*      *@
-@*      *@
-@* *@
-@*     <MudList Clickable="true" Dense="true" DisableGutters="@true"> *@
-@*         @foreach (var item in Notifications) *@
-@* { *@
-@*     <MudListItem Text="@item.Title"  Icon="@Icons.Material.Filled.Bookmark" IconColor="(item.Status ? Color.Secondary:Color.Inherit )" > *@
-@*         <MudTemplateColumn> *@
-@*              *@
-@*         </MudTemplateColumn> *@
-@*     </MudList> *@
-@*        } *@
-@*     </MudList> *@
+<RZBR></RZBR>
+<RadzenCard>
+    <div style="display: flex;justify-content: space-between;align-items:center">
+        <div>
+            <RadzenCheckBox TValue="bool" Change="OnSelectAll" Name="CheckBox2"/>
+            <RadzenLabel Text="Select All" Component="CheckBox2" Style="margin-left: 8px; vertical-align: middle;"/>
+        </div>
+        <div>
+            <RadzenButton Text="Confirm Read" Click="async () => { await ConfirmRead(); }" Style="float: right" Icon="check"/>
+        </div>
+    </div>
+
+    <MudList Clickable="true" Dense="true" DisableGutters="@true">
+
+        @foreach (var item in Notifications)
+        {
+            <div style="display: flex;justify-content: left;align-items: center;gap:5px">
+                <div style="min-width: 25px">
+                    @if (item.Visible)
+                    {
+                        <RadzenCheckBox TValue="bool" @bind-Value="@item.Status" Name="CheckBox1"/>
+                    }
+                </div>
+                <div>
+                    <MudListItem Text="@item.Title" Icon="@Icons.Material.Filled.Bookmark" OnClick="async () => { await ViewNotification(item); }" IconColor="(item.Status ? Color.Inherit : Color.Secondary)"/>
+                    <div>
+                        <span style="font-size: 11px;color: grey;margin-left: 15%">@item.SentDate</span>
+                    </div>
+                </div>
+            </div>
+        }
+
+        <div>
+
+        </div>
+
+    </MudList>
 
 </RadzenCard>

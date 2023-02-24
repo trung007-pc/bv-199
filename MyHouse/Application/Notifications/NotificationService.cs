@@ -75,7 +75,7 @@ namespace Application.Notifications
             if (filter.Status == NotificationStatus.All)
             {
                 notifications = await _notificationRepository.GetQueryable()
-                    .Where(x => x.ReceiverId == user.Id).OrderBy(x => x.Status == false)
+                    .Where(x => x.ReceiverId == user.Id).OrderBy(x => x.Status)
                     .ThenByDescending(x => x.SentDate).ToListAsync();
             }
             else

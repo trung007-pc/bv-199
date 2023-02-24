@@ -362,7 +362,7 @@
         </ModalHeader>
         <ModalBody>
             <div style="display: flex;justify-content:left;gap: 10px">
-                <RadzenButton Text="Download File" Click="() => { DownloadFile(ViewDocumentFile.URL, ViewDocumentFile.Id); }" Icon="download"/>
+                <RadzenButton Text="Download File" Click="async () => {await DownloadFile(ViewDocumentFile.URL, ViewDocumentFile.Id); }" Icon="download"/>
                 <RadzenButton Text="Print" Icon="local_printshop"/>
                 <RadzenButton Text="Task Assignment" Icon="assignment"/>
             </div>

@@ -18,7 +18,8 @@
     {
         if (!DocumentFile.URL.IsNullOrWhiteSpace())
         {
-            <iframe src="@DocumentFile.URL#toolbar=0" type="application/pdf" style="width: 100%;height: 80vh;"></iframe>
+            <iframe id="bv" src="@DocumentFile.URL" type="application/pdf" allowfullscreen webkitallowfullscreen style="width: 100%;height: 80vh;"></iframe>
+                                                                                                                                                  
         }
     }
     else

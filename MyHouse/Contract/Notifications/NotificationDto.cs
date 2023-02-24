@@ -12,5 +12,11 @@ namespace Contract.Notifications
         public DateTime SentDate { get; set; } = DateTime.Now;
         public string? Title { get; set; }
         public NotificationType Type { get; set; } = NotificationType.Document;
+        
+        
+        
+        //UI - Tier
+
+        public bool Visible { get; set; } = false;
     }
 }

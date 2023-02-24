@@ -1,5 +1,6 @@
 ﻿using Domain.FileTypes;
 using Domain.IssuingAgencys;
+using Domain.SendingFiles;
 
 namespace Domain.DocumentFiles
 {
@@ -10,5 +11,7 @@ namespace Domain.DocumentFiles
         public IssuingAgency IssuingAgency { get; set; }
         
         public FileType FileType { get; set; }
+        
+        public SendingFile SendingFile { get; set; }
     }
 }

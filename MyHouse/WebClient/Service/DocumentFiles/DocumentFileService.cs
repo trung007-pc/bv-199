@@ -24,11 +24,12 @@ namespace WebClient.Service.DocumentFiles
             return await RequestClient.GetAPIAsync<List<DocumentFileDto>>("document-file");
         }
 
-        public async Task<List<DocumentFileWithNavPropertiesDto>> GetSharedListWithMeAsync(Guid userId)
+        public async Task<List<DocumentFileWithNavPropertiesDto>> GetSharedListWithMeAsync(DocumentFileFilter filter)
         {
-            return await RequestClient.GetAPIAsync<List<DocumentFileWithNavPropertiesDto>>($"document-file/get-shared-list-with-me/{userId.ToString()}");
-        }
+            return await RequestClient.PostAPIAsync<List<DocumentFileWithNavPropertiesDto>>($"document-file/get-shared-list-with-me",filter);
 
+        }
+        
         public async Task<DocumentFileDto> GetAsync(Guid id)
         {
             return await RequestClient.GetAPIAsync<DocumentFileDto>($"document-file/{id}");

@@ -10,7 +10,7 @@ namespace SqlServ4r.Repository.FileDocuments
     {
         Task<List<DocumentFileWithNavProperties>> GetFilesWithNavProperties(DocumentFileFilter filter);
         
-        Task<List<DocumentFileWithNavProperties>> GetFilesWithNavProperties(Guid userId);
+        Task<List<DocumentFileWithNavProperties>> GetSharedFilesWithNavProperties(DocumentFileFilter filter);
 
     }
 }
