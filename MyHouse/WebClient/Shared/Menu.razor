@@ -55,6 +55,13 @@
             </RadzenPanelMenuItem>
         }
 
+        @if (context.User.IsInRole("ADMIN"))
+        {
+            <RadzenPanelMenuItem Text="Document Manager" Icon="account_box">
+                <RadzenPanelMenuItem Text="Documents" Path="usersxxxx" Icon="table_view"></RadzenPanelMenuItem>
+                <RadzenPanelMenuItem Text="Report" Path="rolesxxxx" Icon="table_view"></RadzenPanelMenuItem>
+            </RadzenPanelMenuItem>
+        }
 
 
 

@@ -31,7 +31,7 @@
                             <div style="display: flex;justify-content: space-between;align-items: center">
                             <div @onclick="ToggleNotification" style="cursor: pointer">
                               <MudBadge Content="NotificationCount" Color="Color.Primary" Overlap="true" Class="d-flex ml-auto">
-                                  <MudIcon Icon="@Icons.Material.Filled.Email" Color="Color.Default"/>
+                                  <MudIcon Icon="@Icons.Material.Filled.Notifications" Color="Color.Default"/>
                                         
                                   <MudOverlay @bind-Visible="isVisible" OnClick="ToggleNotification" DarkBackground="false" ZIndex="99" AutoClose="true"/>
 
@@ -40,11 +40,17 @@
                                   <MudPopover  Open="ShowNotification"
                                   
                                               OverflowBehavior="OverflowBehavior.FlipAlways"
-                                              AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopRight"
+                                              AnchorOrigin="Origin.BottomRight" TransformOrigin="Origin.TopRight"
                                               Paper="false">
-                                      <MudPaper Outlined="true" Style="width: 20vw;min-height: 30vh;position:relative;">
+                                      <MudPaper Outlined="true" Style="width: 30vw;padding:10px">
                                   
-                                          <div class="content--2">
+                                          <div style="display: flex;justify-content: space-between;">
+                                              <div><strong>Unread</strong></div>
+                                              <div>
+                                                  <RadzenLink  @onclick="GoToNotificationPage" Text="See All"/>
+                                              </div>
+                                          </div>
+                                          <div class="content--2" style="height: 30vh;margin-bottom: 5px;overflow: auto">
                                               <MudList Clickable="true" Dense="true" DisableGutters="true">
                                                   @foreach (var item in Notifications)
                                                   {
@@ -52,9 +58,6 @@
                                                   }
                                               </MudList>
                                           </div>
-                                  
-                                          <RadzenButton Text="See All" Click="GoToNotificationPage" Style=" position: absolute; bottom: 0; left: 0; right: 0;">
-                                          </RadzenButton>
                                       </MudPaper>
                                   </MudPopover>
 
@@ -197,6 +200,7 @@
             };
             await _notificationService.UpdateAsync(updateNotification);
             NotificationCount = await _notificationService.CountUnreadNotificationOfUser(Filter);
+            await ToggleNotification();
             _navigationManager.NavigateTo($"view-document-file?fileId={dto.DestinationCode}");
         }
         if (dto.Type == NotificationType.Task)
