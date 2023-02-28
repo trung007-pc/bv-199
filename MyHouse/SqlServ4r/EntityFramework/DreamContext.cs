@@ -14,6 +14,7 @@ using Domain.Identity.UserRoles;
 using Domain.Identity.Users;
 using Domain.Identity.UserTokens;
 using Domain.IssuingAgencys;
+using Domain.MeetingContents;
 using Domain.Notifications;
 using Domain.Positions;
 using Domain.SendingFiles;
@@ -23,6 +24,7 @@ using Domain.UnitReviews;
 using Domain.Units;
 using Domain.UnitTypes;
 using Domain.UserDepartments;
+using Domain.WorkSchedules;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -49,6 +51,9 @@ namespace SqlServ4r.EntityFramework
         
         public DbSet<SendingFile> SendingFiles { get; set; }
         public DbSet<Notification> Notifications { get; set; }
+        
+        public DbSet<WorkSchedule> WorkSchedules { get; set; }
+        public DbSet<MeetingContent> MeetingContents { get; set; }
 
 
 
@@ -188,10 +193,17 @@ namespace SqlServ4r.EntityFramework
                 .HasForeignKey(x=>x.DestinationCode);
             
             
+            builder.Entity<WorkSchedule>().HasOne<User>(x => x.User)
+                .WithMany(x => x.WorkSchedules)
+                .HasForeignKey(x => x.CreatedBy)
+                .IsRequired(true)
+                .OnDelete(DeleteBehavior.Restrict);
             
-            
-            
-            
+            builder.Entity<MeetingContent>().HasOne<User>(x => x.User)
+                .WithMany(x => x.MeetingContents)
+                .HasForeignKey(x => x.CreatedBy)
+                .IsRequired(true)
+                .OnDelete(DeleteBehavior.Restrict);
             
             
             
@@ -279,10 +291,15 @@ namespace SqlServ4r.EntityFramework
                     .IsUnique(true);
             });
             
+            builder.Entity<WorkSchedule>(entity => {
+                entity.HasIndex(p => p.Name)     
+                    .IsUnique(true);
+            });
             
-            
-            
-            
+            builder.Entity<MeetingContent>(entity => {
+                entity.HasIndex(p => p.Name)     
+                    .IsUnique(true);
+            });
             
         }
         

@@ -17,6 +17,5 @@ namespace Contract.DocumentFiles
         Task DeleteAsync(Guid id);
         Task UpdateDownloadCountAsync(Guid id);
         Task UpdatePrintCountAsync(Guid id);
-
     }
 }

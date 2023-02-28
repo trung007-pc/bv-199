@@ -143,7 +143,7 @@
 
                             <RadzenButton ButtonStyle="ButtonStyle.Primary" Icon="send" Click="async () => { await ShowSendingFile(data.File);}" Variant="Variant.Flat" Shade="Shade.Lighter" Size="ButtonSize.Medium" Class="my-1 ms-1">
                             </RadzenButton>
-                            <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="remove_red_eye" Click="() => { ShowViewModal(data.File); }" Variant="Variant.Flat" Shade="Shade.Default" Size="ButtonSize.Medium" Class="my-1 ms-1">
+                            <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="remove_red_eye" Click="() => { GotoViewDocumentFile(data.File.Id); }" Variant="Variant.Flat" Shade="Shade.Default" Size="ButtonSize.Medium" Class="my-1 ms-1">
                             </RadzenButton>
 
                             <RadzenButton Icon="edit" Click="async () => { await ShowEditingModal(data.File); }" ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat" Size="ButtonSize.Medium">
@@ -352,59 +352,6 @@
                 <RadzenButton Text="Save Changes" Icon="save" ButtonType="ButtonType.Submit"/>
             </ModalFooter>
         </EditForm>
-    </ModalContent>
-</Modal>
-
-<Modal @ref="ViewModal">
-    <ModalContent Size="ModalSize.ExtraLarge" Centered="true">
-        <ModalHeader>
-            <ModalTitle>Document File</ModalTitle>
-        </ModalHeader>
-        <ModalBody>
-            <div style="display: flex;justify-content:left;gap: 10px">
-                <RadzenButton Text="Download File" Click="async () => {await DownloadFile(ViewDocumentFile.URL, ViewDocumentFile.Id); }" Icon="download"/>
-                <RadzenButton Text="Print" Icon="local_printshop"/>
-                <RadzenButton Text="Task Assignment" Icon="assignment"/>
-            </div>
-            <RZBR></RZBR>
-            <div>
-                
-                @if (ViewDocumentFile.Extentions?.Contains("pdf") == true)
-                {
-                    if (!ViewDocumentFile.URL.IsNullOrWhiteSpace())
-                    {
-                        
-                        <iframe src="@ViewDocumentFile.URL#toolbar=0" type="application/pdf"  style="width: 100%;height: 80vh;"></iframe>
-                                                                                                                               
-                    }
-                }
-                else
-                {
-                    <RadzenCard Style="background-color: #e8e8fa">
-                        <RadzenText TextStyle="TextStyle.H4" Style="color: #6f42c1">
-                            <b>File Infomation</b>
-                        </RadzenText>
-                        <RadzenText TextStyle="TextStyle.Body1">
-                            <span Style="color: #6f42c1">File Name:</span>@ViewDocumentFile.Name
-                        </RadzenText>
-                        <RadzenText TextStyle="TextStyle.Body1">
-                            <span Style="color: #6f42c1">File Type:</span>@ViewDocumentFile.Extentions
-                        </RadzenText>
-                        <RadzenText TextStyle="TextStyle.Body1">
-                            <span Style="color: #6f42c1">Download Count:</span>@ViewDocumentFile.DownloadCount
-                        </RadzenText>
-                        <RadzenText TextStyle="TextStyle.Body1"><span Style="color: #6f42c1">Print Count:</span>@ViewDocumentFile.PrintCount:</RadzenText>
-
-                    </RadzenCard>
-                }
-            </div>
-
-        </ModalBody>
-
-        <ModalFooter>
-            <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Click="@HideViewModal" Text="Cancel"/>
-            <RadzenButton Text="Save Changes" Icon="save" ButtonType="ButtonType.Submit"/>
-        </ModalFooter>
     </ModalContent>
 </Modal>
 

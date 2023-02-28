@@ -5,10 +5,12 @@ using Core.Enum;
 using Domain.Departments;
 using Domain.DocumentFiles;
 using Domain.FileVersions;
+using Domain.MeetingContents;
 using Domain.Notifications;
 using Domain.Positions;
 using Domain.SendingFiles;
 using Domain.UserDepartments;
+using Domain.WorkSchedules;
 using Microsoft.AspNetCore.Identity;
 
 namespace Domain.Identity.Users
@@ -44,7 +46,10 @@ namespace Domain.Identity.Users
         public List<FileVersion> EditedFileVersions { get; set; }
         public List<DocumentFile> CreatedFiles { get; set; }
         
+        public List<WorkSchedule> WorkSchedules { get; set; }
         
+        public List<MeetingContent> MeetingContents { get; set;}
+
 
     }
 }

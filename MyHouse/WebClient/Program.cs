@@ -22,6 +22,8 @@ using WebClient.Service.FileFolders;
 using WebClient.Service.FileTypes;
 using WebClient.Service.IssuingAgencys;
 using WebClient.Service.JS;
+using WebClient.Service.MeetingContents;
+using WebClient.Service.MyDashboards;
 using WebClient.Service.Notications;
 using WebClient.Service.Positions;
 using WebClient.Service.Roles;
@@ -32,6 +34,7 @@ using WebClient.Service.Units;
 using WebClient.Service.UnitTypes;
 using WebClient.Service.Upload;
 using WebClient.Service.Users;
+using WebClient.Service.WorkSchedules;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -61,6 +64,9 @@ builder.Services.AddTransient<DocumentFileService,DocumentFileService>();
 builder.Services.AddTransient<SendingFileService>();
 builder.Services.AddTransient<DashboardService,DashboardService>();
 builder.Services.AddTransient<NotificationnService>();
+builder.Services.AddTransient<MeetingContentService>();
+builder.Services.AddTransient<WorkScheduleService>();
+builder.Services.AddTransient<MyDashboardService>();
 
 
 builder.Services.AddScoped<DownloadFileService>();

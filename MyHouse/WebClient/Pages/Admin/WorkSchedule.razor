@@ -1,0 +1,187 @@
+﻿@page "/work-schedule"
+@attribute [Authorize(Roles = "ADMIN,QUALITY MANAGER")]
+@using WebClient.Service.WorkSchedules
+@using ButtonType = Radzen.ButtonType
+@inject WorkScheduleService _unitTypeService;
+@inject ClipboardService _clipboardService
+@inject TooltipService _tooltipService
+@inherits BaseBlazorPage
+@using Contract.WorkSchedules;
+@using Core.Enum
+@using WebClient.Service.JS
+@using WebClient.Service.Upload
+@using Variant = Radzen.Variant
+@using Color = MudBlazor.Color
+@inject NavigationManager _navigationManager;
+@inject UploadService _uploadService;
+
+<h3>WorkSchedule</h3>
+
+<div style="display: flex;justify-content: space-between;align-items: center">
+    <div>
+        <RadzenBreadCrumb >
+            <RadzenBreadCrumbItem Path="/" Icon="home" Style="font-size: 20px"/>
+            <RadzenBreadCrumbItem Text="@HeaderTitle" Style="font-weight: 300"/>
+        </RadzenBreadCrumb>
+    </div>
+    <div>
+        <RadzenButton Text="Create" Icon="post_add" Click="@ShowNewModal" Style="margin-bottom: 20px;"/>
+    </div>
+</div>
+
+
+<RadzenCard>
+    <RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" AllowAlternatingRows="false" AllowSorting="true" PageSize="20" AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true"
+                    Data="@WorkSchedules" TItem="WorkScheduleDto" ColumnWidth="300px"
+                    FilterMode="FilterMode.Simple"
+                    LogicalFilterOperator="LogicalFilterOperator.Or"
+                    FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                    AllowColumnPicking="true"
+                    Style="width: 100%">
+        <Columns>
+            <RadzenDataGridColumn TItem="WorkScheduleDto" TextAlign="TextAlign.Center" Property="Name" Title="Name" Width="160px"/>
+            <RadzenDataGridColumn TItem="WorkScheduleDto" TextAlign="TextAlign.Center" Property="Node" Title="Node" Width="160px"/>
+            <RadzenDataGridColumn TItem="WorkScheduleDto" TextAlign="TextAlign.Center" Property="CreationTime" Title="Creation Time" Width="160px">
+                <Template Context="data">
+                    @($"{data.CreationTime:dd/MM/yyyy}")
+                </Template>
+
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="WorkScheduleDto" TextAlign="TextAlign.Center" Property="StartDay" Title="StartDay" Width="160px">
+                <Template Context="data">
+                    @($"{data.StartDay:dd/MM/yyyy}")
+                </Template>
+
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="WorkScheduleDto" TextAlign="TextAlign.Center" Property="EndDay" Title="EndDay" Width="160px">
+                <Template Context="data">
+                    @($"{data.EndDay:dd/MM/yyyy}")
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="WorkScheduleDto" TextAlign="TextAlign.Center" Property="ScheduleStatus" Title="Schedule Status" Width="160px">
+                   <Template Context="data">
+                       <MudIcon Icon="@Icons.Material.Filled.Stop" Title="Favorite" Color="SetColorByStatus(data.ScheduleStatus)"/> @data.ScheduleStatus
+                   </Template>
+                        </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="WorkScheduleDto" Property="Name" TextAlign="TextAlign.Center" Title="Action" Width="160px" Filterable="false">
+                <Template Context="data">
+                    <RadzenButton Click="async () => { await ShowEditingModal(data); }" Icon="edit" ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat" Size="ButtonSize.Medium">
+                    </RadzenButton>
+                    <RadzenButton Click="async () => { await ShowConfirmMessage(data.Id); }" ButtonStyle="ButtonStyle.Danger" Icon="delete" Variant="Variant.Flat" Shade="Shade.Lighter" Size="ButtonSize.Medium" Class="my-1 ms-1">
+                    </RadzenButton>
+                </Template>
+            </RadzenDataGridColumn>
+        </Columns>
+    </RadzenDataGrid>
+</RadzenCard>
+
+
+<Modal @ref="CreateModal">
+    <ModalContent Size="ModalSize.Large" Centered="true">
+        <ModalHeader>
+            <ModalTitle>Work Schedule</ModalTitle>
+        </ModalHeader>
+        <EditForm Model="NewWorkSchedule" OnValidSubmit="async () => { await CreateWorkSchedule(); }">
+            <ModalBody>
+
+                <DataAnnotationsValidator/>
+                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Name</RadzenText>
+                <RadzenTextBox Class="w-100" @bind-Value="NewWorkSchedule.Name"/>
+                <ValidationMessage For="@(() => NewWorkSchedule.Name)"/>
+
+                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Node</RadzenText>
+                <RadzenTextArea Placeholder="Nhập vào đây..." @bind-Value="NewWorkSchedule.Node" Rows="10" Cols="30" Class="w-100"/>
+                <ValidationMessage For="@(() => NewWorkSchedule.Node)"/>
+                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Start Day</RadzenText>
+                <RadzenDatePicker Class="w-100" @bind-Value="NewWorkSchedule.StartDay" DateFormat="dd/MM/yyyy"/>
+                <ValidationMessage For="@(() => NewWorkSchedule.StartDay)"/>
+
+                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">End Day</RadzenText>
+                <RadzenDatePicker Class="w-100" @bind-Value="NewWorkSchedule.EndDay" DateFormat="dd/MM/yyyy"/>
+                <ValidationMessage For="@(() => NewWorkSchedule.EndDay)"/>
+
+                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Creation Time</RadzenText>
+                <RadzenDatePicker Class="w-100" @bind-Value="NewWorkSchedule.CreationTime" DateFormat="dd/MM/yyyy"/>
+                <ValidationMessage For="@(() => NewWorkSchedule.CreationTime)"/>
+
+
+                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Status</RadzenText>
+
+                <RadzenDropDown @bind-Value=@NewWorkSchedule.ScheduleStatus Data=@(Enum.GetValues(typeof(ScheduleStatus)))>
+                    <Template Context="data">
+                        <MudIcon Icon="@Icons.Material.Filled.Stop" Title="Favorite" Color="SetColorByStatus(data)"/> @((data))
+                    </Template>
+                    <ValueTemplate Context="data">
+                        @data
+                    </ValueTemplate>
+                </RadzenDropDown>
+                <RZBR></RZBR>
+                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Upload File</RadzenText>
+                <RZInputFile Icon="upload_file"
+                             Accept=".pdf, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+                                        , application / msword, application / vnd.openxmlformats - officedocument.wordprocessingml.document"
+                             Style="display: flex;align-items: center;min-width:123px;max-width: 205px;margin: 0;cursor: pointer;background-color: #3e2cdd"
+                             Text="Upload File" Event="async (e) => { await OnChangeFileAtNewModal(e); }">
+                </RZInputFile>
+
+            </ModalBody>
+            <ModalFooter>
+                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Click="@HideNewModal" Text="Cancel"/>
+                <RadzenButton Text="Save Changes" Icon="save" ButtonType="ButtonType.Submit"/>
+            </ModalFooter>
+        </EditForm>
+    </ModalContent>
+</Modal>
+
+<Modal @ref="EditingModal">
+    <ModalContent Size="ModalSize.Large" Centered="true">
+        <ModalHeader>
+            <ModalTitle>Work Schedule</ModalTitle>
+        </ModalHeader>
+        <EditForm Model="EditingWorkSchedule" OnValidSubmit="async () => { await UpdateWorkSchedule(); }">
+            <ModalBody>
+                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Name</RadzenText>
+                <RadzenTextBox Class="w-100" @bind-Value="EditingWorkSchedule.Name"/>
+                <ValidationMessage For="@(() => EditingWorkSchedule.Name)"/>
+
+                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Node</RadzenText>
+                <RadzenTextArea Placeholder="Nhập vào đây..." @bind-Value="NewWorkSchedule.Node" Rows="10" Cols="30" Class="w-100"/>
+                <ValidationMessage For="@(() => EditingWorkSchedule.Node)"/>
+                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Start Day</RadzenText>
+                <RadzenDatePicker Class="w-100" @bind-Value="EditingWorkSchedule.StartDay" DateFormat="dd/MM/yyyy"/>
+                <ValidationMessage For="@(() => EditingWorkSchedule.StartDay)"/>
+
+                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">End Day</RadzenText>
+                <RadzenDatePicker Class="w-100" @bind-Value="EditingWorkSchedule.EndDay" DateFormat="dd/MM/yyyy"/>
+                <ValidationMessage For="@(() => EditingWorkSchedule.EndDay)"/>
+
+                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Creation Time</RadzenText>
+                <RadzenDatePicker Class="w-100" @bind-Value="EditingWorkSchedule.CreationTime" DateFormat="dd/MM/yyyy"/>
+                <ValidationMessage For="@(() => EditingWorkSchedule.CreationTime)"/>
+
+                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Status</RadzenText>
+                <RadzenDropDown @bind-Value=@EditingWorkSchedule.ScheduleStatus Data=@(Enum.GetValues(typeof(ScheduleStatus)))>
+                    <Template Context="data">
+                        <MudIcon Icon="@Icons.Material.Filled.Stop" Title="Favorite" Color="SetColorByStatus(data)"/> @((data))
+                    </Template>
+                    <ValueTemplate Context="data">
+                        @data
+                    </ValueTemplate>
+                </RadzenDropDown>
+                <RZBR></RZBR>
+                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Upload File</RadzenText>
+
+                <RZInputFile Icon="upload_file"
+                             Accept=".pdf, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+                                        , application / msword, application / vnd.openxmlformats - officedocument.wordprocessingml.document"
+                             Style="display: flex;align-items: center;min-width:123px;max-width: 205px;margin: 0;cursor: pointer;background-color: #3e2cdd"
+                             Text="Upload File" Event="async (e) => { await OnChangeFileAtEditModal(e); }">
+                </RZInputFile>
+            </ModalBody>
+            <ModalFooter>
+                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Click="@HideEditModal" Text="Cancel"/>
+                <RadzenButton Text="Save Changes" Icon="save" ButtonType="ButtonType.Submit"/>
+            </ModalFooter>
+        </EditForm>
+    </ModalContent>
+</Modal>

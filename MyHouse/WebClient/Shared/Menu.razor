@@ -23,7 +23,6 @@
                 <RadzenPanelMenuItem Text="File Folders" Path="file-folders" Icon="table_view"></RadzenPanelMenuItem>
                 <RadzenPanelMenuItem Text="File Types" Path="file-types" Icon="table_view"></RadzenPanelMenuItem>
                 <RadzenPanelMenuItem Text="Issuing Agency" Path="issuing-agency" Icon="table_view"></RadzenPanelMenuItem>
-                <RadzenPanelMenuItem Text="Document Files" Path="document-file" Icon="table_view"></RadzenPanelMenuItem>
             </RadzenPanelMenuItem>
         }
         @if (context.User.IsInRole("ADMIN") || context.User.IsInRole("REPORTS"))
@@ -58,15 +57,19 @@
         @if (context.User.IsInRole("ADMIN"))
         {
             <RadzenPanelMenuItem Text="Document Manager" Icon="account_box">
-                <RadzenPanelMenuItem Text="Documents" Path="usersxxxx" Icon="table_view"></RadzenPanelMenuItem>
+                <RadzenPanelMenuItem Text="Document Files" Path="document-file" Icon="table_view"></RadzenPanelMenuItem>
                 <RadzenPanelMenuItem Text="Report" Path="rolesxxxx" Icon="table_view"></RadzenPanelMenuItem>
             </RadzenPanelMenuItem>
         }
-
-
-
-
-
+        
+        @if (context.User.IsInRole("ADMIN"))
+        {
+            <RadzenPanelMenuItem Text="Work Schedule - Meeting" Icon="account_box">
+                <RadzenPanelMenuItem Text="Meeting Content" Path="meeting-content" Icon="table_view"></RadzenPanelMenuItem>
+                <RadzenPanelMenuItem Text="Work Schedule" Path="work-schedule" Icon="table_view"></RadzenPanelMenuItem>
+            </RadzenPanelMenuItem>
+        }
+        
     </AuthorizeView>
 
 

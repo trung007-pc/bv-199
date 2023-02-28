@@ -7,6 +7,7 @@ using Contract.FileTypes;
 using Contract.Identity.RoleManager;
 using Contract.Identity.UserManager;
 using Contract.IssuingAgencys;
+using Contract.MeetingContents;
 using Contract.Notifications;
 using Contract.Positions;
 using Contract.SendingFiles;
@@ -14,6 +15,7 @@ using Contract.UnitReviewDetails;
 using Contract.UnitReviews;
 using Contract.Units;
 using Contract.UnitTypes;
+using Contract.WorkSchedules;
 using Domain.Departments;
 using Domain.DocumentFiles;
 using Domain.FileFolders;
@@ -21,6 +23,7 @@ using Domain.FileTypes;
 using Domain.Identity.Roles;
 using Domain.Identity.Users;
 using Domain.IssuingAgencys;
+using Domain.MeetingContents;
 using Domain.Notifications;
 using Domain.Positions;
 using Domain.SendingFiles;
@@ -28,6 +31,7 @@ using Domain.UnitReviewDetails;
 using Domain.UnitReviews;
 using Domain.Units;
 using Domain.UnitTypes;
+using Domain.WorkSchedules;
 using Microsoft.Build.Tasks.Deployment.Bootstrapper;
 
 namespace Application
@@ -97,6 +101,10 @@ namespace Application
             CreateMap<UpdateNotification, Notification>().ReverseMap();
             CreateMap<Notification, NotificationDto>().ReverseMap();
 
+            CreateMap<CreateUpdateWorkScheduleDto, WorkSchedule>().ReverseMap();
+            CreateMap<WorkSchedule, WorkScheduleDto>().ReverseMap();
+            CreateMap<CreateUpdateMeetingContentDto, MeetingContent>().ReverseMap();
+            CreateMap<MeetingContent, MeetingContentDto>().ReverseMap();
         }            
 
     }

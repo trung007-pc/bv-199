@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Contract.DocumentFiles;
+using Contract.MyDashboards;
 using Domain.DocumentFiles;
 
 namespace SqlServ4r.Repository.FileDocuments
@@ -12,5 +13,6 @@ namespace SqlServ4r.Repository.FileDocuments
         
         Task<List<DocumentFileWithNavProperties>> GetSharedFilesWithNavProperties(DocumentFileFilter filter);
 
+        Task<List<DocumentFileWithNavProperties>> GetUnreadDocumentFileOfUser(MyWorkFilter filter);
     }
 }

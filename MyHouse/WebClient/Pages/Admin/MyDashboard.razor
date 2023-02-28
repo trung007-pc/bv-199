@@ -1,0 +1,132 @@
+﻿@page "/"
+@page "/my-dashboard"
+@inherits BaseBlazorPage
+@using WebClient.Service.MyDashboards
+@inject MyDashboardService _myDashboardService;
+@using Contract.DocumentFiles;
+@using Contract.WorkSchedules;
+@using Contract.MeetingContents;
+
+
+
+<div style="display: flex;justify-content: space-between;align-items: center;margin-bottom: 10px">
+    <div>
+        <RadzenBreadCrumb >
+            <RadzenBreadCrumbItem Path="/" Icon="home" Style="font-size: 20px"/>
+            <RadzenBreadCrumbItem Text="@HeaderTitle" Style="font-weight: 300"/>
+        </RadzenBreadCrumb>
+    </div>
+</div>
+
+
+<RadzenRow Gap="20px">
+
+    <RadzenColumn Size="4">
+        <RadzenCard>
+            <h2>Popular Folders</h2>
+            <RadzenChart SeriesClick=@OnSeriesClick Style="width: 500px;margin: 0 auto">
+
+                <RadzenPieSeries Data="@ChartStatistics.FolderItems" Title="Total" CategoryProperty="LabelWithValue" ValueProperty="Value">
+                    <TooltipTemplate Context="data">
+                        <div>
+                            <span>
+                                @data.Label <RadzenIcon Icon="star" Style="color:gold"/>
+                            </span>:
+                            <strong>
+                                @data.Value
+                            </strong>
+                        </div>
+                    </TooltipTemplate>
+                </RadzenPieSeries>
+            </RadzenChart>
+        </RadzenCard>
+    </RadzenColumn>
+    <RadzenColumn Size="4">
+        <RadzenCard>
+            <h2>Reading Rate</h2>
+            <h3>@ChartStatistics?.ReadingRate</h3>
+        </RadzenCard>
+    </RadzenColumn>
+
+    <RadzenColumn Size="4">
+        <RadzenCard>
+            <h2>Task</h2>
+        </RadzenCard>
+    </RadzenColumn>
+</RadzenRow>
+
+<div style="height: 10vh">
+
+</div>
+
+<RadzenRow Gap="20px">
+
+    <RadzenColumn Size="8">
+        <RadzenCard>
+            <h2>Unread Document</h2>
+            <RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" AllowAlternatingBlazorise.Rows="false" AllowSorting="true" PageSize="20" AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true"
+                            Data="@MyWorkStatistics.DocumentFiles" TItem="DocumentFileWithNavPropertiesDto" ColumnWidth="300px"
+                            AllowColumnPicking="true"
+                            PageSizeOptions="PageSizeOptions"
+                            Style="width: 100%">
+                <Columns>
+                    <RadzenDataGridColumn TItem="DocumentFileWithNavPropertiesDto" Property="File.Name" TextAlign="TextAlign.Center" Title="Name" Width="160px"/>
+                    <RadzenDataGridColumn TItem="DocumentFileWithNavPropertiesDto" Property="File.Code" TextAlign="TextAlign.Center" Title="Code" Width="160px"/>
+                    <RadzenDataGridColumn TItem="DocumentFileWithNavPropertiesDto" Property="File.StorageCode" TextAlign="TextAlign.Center" Title="Storage Code" Width="160px"/>
+                    <RadzenDataGridColumn TItem="DocumentFileWithNavPropertiesDto" Property="IssuingAgency.Name" TextAlign="TextAlign.Center" Title="Agency" Width="160px"/>
+                    <RadzenDataGridColumn TItem="DocumentFileWithNavPropertiesDto" Property="FileType.Name" TextAlign="TextAlign.Center" Title="Type" Width="160px"/>
+
+                    <RadzenDataGridColumn TItem="DocumentFileWithNavPropertiesDto" Property="File.PublicationDate" TextAlign="TextAlign.Center" Title="Publication Date" Width="160px">
+                        <Template Context="data">
+                            @($"{data.File.PublicationDate:dd/MM/yyyy}")
+                        </Template>
+                    </RadzenDataGridColumn>
+
+                    <RadzenDataGridColumn TItem="DocumentFileWithNavPropertiesDto" Property="File.CreationDate" TextAlign="TextAlign.Center" Title="Received Date" Width="160px">
+                        <Template Context="data">
+                            @($"{data.File.CreationDate:dd/MM/yyyy}")
+                        </Template>
+                    </RadzenDataGridColumn>
+                </Columns>
+            </RadzenDataGrid>
+
+        </RadzenCard>
+    </RadzenColumn>
+    <RadzenColumn Size="4">
+        <RadzenCard>
+            <RadzenRow Gap="10px">
+                <RadzenColumn Size="12">
+                    <h1>Work Schedule</h1>
+                    <RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" AllowAlternatingRows="false" AllowSorting="true" PageSize="20" AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true"
+                                    Data="@MyWorkStatistics.WorkSchedules" TItem="WorkScheduleDto" ColumnWidth="300px"
+                                    FilterMode="FilterMode.Simple"
+                                    LogicalFilterOperator="LogicalFilterOperator.Or"
+                                    FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                    AllowColumnPicking="true"
+                                    Style="width: 100%">
+                        <Columns>
+                            <RadzenDataGridColumn TItem="WorkScheduleDto" TextAlign="TextAlign.Center" Property="Name" Title="Name" Frozen="true" Width="160px"/>
+                        </Columns>
+                    </RadzenDataGrid>
+
+                </RadzenColumn>
+
+
+                <RadzenColumn Size="12">
+                    <h1>Meeting Content</h1>
+                    <RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" AllowAlternatingRows="false" AllowSorting="true" PageSize="20" AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true"
+                                    Data="@MyWorkStatistics.MeetingContents" TItem="MeetingContentDto" ColumnWidth="300px"
+                                    FilterMode="FilterMode.Simple"
+                                    LogicalFilterOperator="LogicalFilterOperator.Or"
+                                    FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                    AllowColumnPicking="true"
+                                    Style="width: 100%">
+                        <Columns>
+                            <RadzenDataGridColumn TItem="MeetingContentDto" TextAlign="TextAlign.Center" Property="Name" Title="Name" Frozen="true" Width="160px"/>
+                        </Columns>
+                    </RadzenDataGrid>
+                </RadzenColumn>
+            </RadzenRow>
+        </RadzenCard>
+    </RadzenColumn>
+</RadzenRow>

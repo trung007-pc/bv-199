@@ -6,3 +6,11 @@ function saveAsFile(filename, bytesBase64) {
     link.click();
     document.body.removeChild(link);
 }
+
+
+function  printAsFile(elementId){
+    
+    var iframe = document.getElementById(elementId);
+    var iframeWindow = iframe.contentWindow;
+    iframeWindow.print();
+}

@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Contract.DocumentFiles;
 using Core.Enum;
 using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 
 namespace WebClient.Pages.Admin
 {
@@ -44,6 +45,11 @@ namespace WebClient.Pages.Admin
             _navigationManager.NavigateTo(url);
             await _documentFileService.UpdateDownloadCountAsync(documentFileId);
             StateHasChanged();
+        }
+        
+        async  Task PrintFile()
+        {
+            await JS.InvokeVoidAsync("printAsFile", "bv-199");
         }
     }
 }

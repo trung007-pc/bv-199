@@ -474,7 +474,11 @@ namespace WebClient.Pages.Admin
          async Task PrintFile(Guid documentFileId)
          {
              await _documentFileService.UpdatePrintCountAsync(documentFileId);
+         }
 
+          void GotoViewDocumentFile(Guid fileId)
+         {
+              _navigationManager.NavigateTo($"view-document-file?fileId={fileId}");
          }
          
     }

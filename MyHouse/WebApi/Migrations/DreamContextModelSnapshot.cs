@@ -525,6 +525,48 @@ namespace WebApi.Migrations
                     b.ToTable("IssuingAgencies");
                 });
 
+            modelBuilder.Entity("Domain.MeetingContents.MeetingContent", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("FileName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsPublic")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Node")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Path")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Url")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedBy");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("MeetingContents");
+                });
+
             modelBuilder.Entity("Domain.Notifications.Notification", b =>
                 {
                     b.Property<Guid>("Id")
@@ -766,6 +808,53 @@ namespace WebApi.Migrations
                     b.ToTable("UserDepartments");
                 });
 
+            modelBuilder.Entity("Domain.WorkSchedules.WorkSchedule", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("EndDay")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("FileName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Node")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Path")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ScheduleStatus")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("StartDay")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Url")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedBy");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("WorkSchedules");
+                });
+
             modelBuilder.Entity("Domain.DocumentFiles.DocumentFile", b =>
                 {
                     b.HasOne("Domain.Identity.Users.User", "User")
@@ -879,6 +968,17 @@ namespace WebApi.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Domain.MeetingContents.MeetingContent", b =>
+                {
+                    b.HasOne("Domain.Identity.Users.User", "User")
+                        .WithMany("MeetingContents")
+                        .HasForeignKey("CreatedBy")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Domain.Notifications.Notification", b =>
                 {
                     b.HasOne("Domain.DocumentFiles.DocumentFile", "DocumentFile")
@@ -973,6 +1073,17 @@ namespace WebApi.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Domain.WorkSchedules.WorkSchedule", b =>
+                {
+                    b.HasOne("Domain.Identity.Users.User", "User")
+                        .WithMany("WorkSchedules")
+                        .HasForeignKey("CreatedBy")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Domain.Departments.Department", b =>
                 {
                     b.Navigation("UserDepartments");
@@ -1003,6 +1114,8 @@ namespace WebApi.Migrations
 
                     b.Navigation("EditedFileVersions");
 
+                    b.Navigation("MeetingContents");
+
                     b.Navigation("Notifications");
 
                     b.Navigation("ReceiverSendingFiles");
@@ -1010,6 +1123,8 @@ namespace WebApi.Migrations
                     b.Navigation("SenderSendingFiles");
 
                     b.Navigation("UserDepartments");
+
+                    b.Navigation("WorkSchedules");
                 });
 
             modelBuilder.Entity("Domain.IssuingAgencys.IssuingAgency", b =>

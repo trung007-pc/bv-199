@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Contract.DocumentFiles;
+using Contract.MyDashboards;
 using Domain.DocumentFiles;
 using Domain.FileFolders;
 using Domain.FileTypes;
@@ -56,6 +57,21 @@ namespace SqlServ4r.Repository.FileDocuments
             return await query.ToListAsync();
         }
 
+        public async Task<List<DocumentFileWithNavProperties>> GetUnreadDocumentFileOfUser(MyWorkFilter filter)
+        {
+            var documentFiles =  await _context.SendingFiles
+                .Where(x => x.ReceiverId == filter.UserId && !x.Status)
+                .Include(x => x.DocumentFile)
+                .Select(x => new DocumentFileWithNavProperties()
+                {
+                    File = x.DocumentFile,
+                    SendingFile = x
+                }).ToListAsync();
+           
+            return documentFiles;
+        }
+        
+        
         public async Task<List<DocumentFileWithNavProperties>> GetSharedFilesWithNavProperties(
             DocumentFileFilter filter
            )
@@ -87,7 +103,7 @@ namespace SqlServ4r.Repository.FileDocuments
             return await query.ToListAsync();
         }
 
-
+        
         private async Task<List<Guid>> GetChildFolderIdAsync(Guid parentID)
         {
             var folders = await _context.FileFolders.AsNoTracking().ToListAsync();

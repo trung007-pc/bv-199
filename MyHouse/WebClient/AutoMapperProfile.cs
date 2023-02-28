@@ -13,6 +13,7 @@ using Contract.UnitReviewDetails;
 using Contract.UnitReviews;
 using Contract.Units;
 using Contract.UnitTypes;
+using Contract.WorkSchedules;
 using WebClient.Pages.Admin;
 using WebClient.Pages.Client;
 
@@ -52,7 +53,7 @@ namespace WebClient
 
             CreateMap<NotificationDto, UpdateNotification>().ReverseMap();
             CreateMap<SendingFileDto, CreateUpdateSendingFileDto>().ReverseMap();
-
+            CreateMap<WorkScheduleDto, CreateUpdateWorkScheduleDto>().ReverseMap();
         }
     }
 }
