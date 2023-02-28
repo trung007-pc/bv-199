@@ -2,7 +2,7 @@
 
 namespace Contract.MyDashboards
 {
-    public class MyWorkFilter
+    public class MyStatisticFilter
     {
         public DateTime? StartDay { get; set; }
         public DateTime? EndDay { get; set; }

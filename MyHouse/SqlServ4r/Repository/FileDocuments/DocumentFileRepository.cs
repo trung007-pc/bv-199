@@ -57,9 +57,11 @@ namespace SqlServ4r.Repository.FileDocuments
             return await query.ToListAsync();
         }
 
-        public async Task<List<DocumentFileWithNavProperties>> GetUnreadDocumentFileOfUser(MyWorkFilter filter)
+        public async Task<List<DocumentFileWithNavProperties>> GetUnreadDocumentFileOfUser(MyStatisticFilter filter)
         {
             var documentFiles =  await _context.SendingFiles
+                .WhereIf(filter.EndDay is not null && filter.StartDay is not null ,
+                    x=>x.SentDate >= filter.StartDay && x.SentDate <= filter.EndDay)    
                 .Where(x => x.ReceiverId == filter.UserId && !x.Status)
                 .Include(x => x.DocumentFile)
                 .Select(x => new DocumentFileWithNavProperties()

@@ -240,8 +240,17 @@ namespace WebClient.Shared
                       Start = now.AddMonths(-1).FirstDayOfMonth(),
                       End = now.AddMonths(-1).LastDayOfMonth()
                   }
+              },
+              {
+                  DateRangeType._3MonthsAgo.GetDescriptionOrName(),
+                  new DateRange()
+                  {
+                      Start = now.AddMonths(-3).FirstDayOfMonth(),
+                      End = now
+                  }
               }
               
+          
           };
 
           

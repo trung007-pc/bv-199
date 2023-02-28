@@ -16,6 +16,8 @@ namespace Core.Enum
         LastMonth,
         [Description("This Month")]
         ThisMonth,
+        [Description("3 Month Ago")]
+        _3MonthsAgo,
         [Description("Last Year")]
         LastYear
     }

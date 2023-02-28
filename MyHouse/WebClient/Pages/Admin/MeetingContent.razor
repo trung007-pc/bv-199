@@ -41,6 +41,8 @@
         <Columns>
             <RadzenDataGridColumn TItem="MeetingContentDto" TextAlign="TextAlign.Center" Property="Name" Title="Name" Width="160px"/>
             <RadzenDataGridColumn TItem="MeetingContentDto" TextAlign="TextAlign.Center" Property="Node" Title="Node" Width="160px"/>
+            <RadzenDataGridColumn TItem="MeetingContentDto" TextAlign="TextAlign.Center" Property="IsPublic" Title="Is Publish" Width="160px"/>
+
             <RadzenDataGridColumn TItem="MeetingContentDto" TextAlign="TextAlign.Center" Property="CreationTime" Title="Creation Time" Width="160px">
                 <Template Context="data">
                     @($"{data.CreationTime:dd/MM/yyyy}")
@@ -82,6 +84,12 @@
                 <ValidationMessage For="@(() => NewMeetingContent.CreationTime)"/>
                 
                 <RZBR></RZBR>
+                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3" Style="display: inline">Is Public</RadzenText>
+                <RadzenSwitch @bind-Value=@NewMeetingContent.IsPublic />
+                <ValidationMessage For="@(() => NewMeetingContent.IsPublic)"/>
+
+
+                <RZBR></RZBR>
                 <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Upload File</RadzenText>
                 <RZInputFile Icon="upload_file"
                              Accept=".pdf, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
@@ -116,6 +124,12 @@
                 <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Start Day</RadzenText>
                 <RadzenDatePicker Class="w-100" @bind-Value="EditingMeetingContent.CreationTime" DateFormat="dd/MM/yyyy"/>
                 <ValidationMessage For="@(() => EditingMeetingContent.CreationTime)"/>
+
+                  <RZBR></RZBR>
+                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3" Style="display: inline">Is Public</RadzenText>
+                <RadzenSwitch @bind-Value=@EditingMeetingContent.IsPublic />
+                <ValidationMessage For="@(() => EditingMeetingContent.IsPublic)"/>
+
                 <RZBR></RZBR>
                 <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Upload File</RadzenText>
 

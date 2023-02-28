@@ -20,17 +20,17 @@ namespace WebApi.Controllers
         
         [HttpPost]
         [Route("get-chart-statistics")]
-        public async Task<ChartStatistics> GetChartStatistics(ChartStatisticFilter filter)
+        public async Task<GlobalStatistics> GetGlobalStatistics(GlobalStatisticFilter filter)
         {
-            return await _myDashboardService.GetChartStatistics(filter);
+            return await _myDashboardService.GetGlobalStatistics(filter);
         }
 
            
         [HttpPost]
-        [Route("get-my-work-statistics")]
-        public async Task<MyWorkStatistics> GetMyWorkStatistics(MyWorkFilter filter)
+        [Route("get-my-statistics")]
+        public async Task<MyStatistics> GetMyStatistics(MyStatisticFilter filter)
         {
-            return await _myDashboardService.GetMyWorkStatistics(filter);
+            return await _myDashboardService.GetMyStatistics(filter);
         }
     }
 }

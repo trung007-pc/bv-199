@@ -30,51 +30,53 @@ namespace Application.MyDashboards
             FileFolderRepository fileFolderRepository,
             SendingFileRepository sendingFileRepository,
             WorkScheduleRepository workScheduleRepository,
-            MeetingContentRepository meetingContentRepository
+            MeetingContentRepository meetingContentRepository,
+            DocumentFileRepository documentFileRepository
         )
         {
             _fileFolderRepository = fileFolderRepository;
             _sendingFileRepository = sendingFileRepository;
             _workScheduleRepository = workScheduleRepository;
             _meetingContentRepository = meetingContentRepository;
+            _documentFileRepository = documentFileRepository;
         }
 
 
-        public async Task<ChartStatistics> GetChartStatistics(ChartStatisticFilter filter)
+        public async Task<GlobalStatistics> GetGlobalStatistics(GlobalStatisticFilter filter)
         {
 
-            var chart = new ChartStatistics(); 
-            //
-            // var folders = await _fileFolderRepository.GetMostPopularFolder(filter.FolderTop);
-            //
-            // foreach (var item in folders)
-            // {
-            //     chart.FolderItems.Add(new DataItem()
-            //     {
-            //         Label = item.FileFolder.Name,
-            //         Value = item.FileCount
-            //     });
-            // }
-            chart.ReadingRate =await _sendingFileRepository.GetReadingRateOfUser(filter.UserId);
-
-          return chart;
-        }
-
-        public async Task<MyWorkStatistics> GetMyWorkStatistics(MyWorkFilter filter)
-        {
-            var myWorkStatistics = new MyWorkStatistics();
+            var chart = new GlobalStatistics();
             var meetingContents = await _meetingContentRepository.
                 GetListAsync(x => x.IsPublic
                                   && x.CreationTime >= filter.StartDay && x.CreationTime <= filter.EndDay);
             var workSchedules = await _workScheduleRepository
                 .GetListAsync(x =>x.CreationTime >= filter.StartDay && x.CreationTime <= filter.EndDay);
-            var documentFiles = await _documentFileRepository.GetUnreadDocumentFileOfUser(filter);
-            myWorkStatistics.MeetingContents = 
-                ObjectMapper.Map<List<MeetingContent>, List<MeetingContentDto>>(meetingContents);
-            myWorkStatistics.WorkSchedules = ObjectMapper.Map<List<WorkSchedule>, List<WorkScheduleDto>>(workSchedules);
-            myWorkStatistics.DocumentFiles = ObjectMapper.Map<List<DocumentFileWithNavProperties>, List<DocumentFileWithNavPropertiesDto>>(documentFiles);;
             
-            return myWorkStatistics;
+             var folders = await _fileFolderRepository.GetMostPopularFolder(filter.FolderTop);
+          
+            foreach (var item in folders)
+            {
+                chart.FolderItems.Add(new DataItem()
+                {
+                    Label = item.FileFolder.Name,
+                    Value = item.FileCount,
+                    LabelWithValue = $"{item.FileFolder.Name} :{item.FileCount}"
+                });
+            }
+            chart.MeetingContents = ObjectMapper.Map<List<MeetingContent>, List<MeetingContentDto>>(meetingContents);
+            chart.WorkSchedules =ObjectMapper.Map<List<WorkSchedule>, List<WorkScheduleDto>>(workSchedules);
+          return chart;
+        }
+
+        public async Task<MyStatistics> GetMyStatistics(MyStatisticFilter filter)
+        {
+            var myStatistics = new MyStatistics();
+
+            myStatistics.UnreadDocumentFiles =
+                ObjectMapper.Map<List<DocumentFileWithNavProperties>, List<DocumentFileWithNavPropertiesDto>>(await _documentFileRepository.GetUnreadDocumentFileOfUser(filter));
+
+            myStatistics.ReadingRate = await _sendingFileRepository.GetReadingRateOfUser(filter.UserId);
+            return myStatistics;
         }
         
         

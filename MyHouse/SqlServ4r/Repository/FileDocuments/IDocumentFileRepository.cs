@@ -13,6 +13,6 @@ namespace SqlServ4r.Repository.FileDocuments
         
         Task<List<DocumentFileWithNavProperties>> GetSharedFilesWithNavProperties(DocumentFileFilter filter);
 
-        Task<List<DocumentFileWithNavProperties>> GetUnreadDocumentFileOfUser(MyWorkFilter filter);
+        Task<List<DocumentFileWithNavProperties>> GetUnreadDocumentFileOfUser(MyStatisticFilter filter);
     }
 }
