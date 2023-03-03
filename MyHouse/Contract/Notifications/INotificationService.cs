@@ -10,6 +10,10 @@ namespace Contract.Notifications
         Task<NotificationDto> CreateAsync(CreateNotificationDto input);
 
         Task<NotificationDto> UpdateAsync(UpdateNotification input);
+        
+        Task<NotificationDto> UpdateWithReadingStatusAsync(UpdateNotification input);
+        Task<bool> UpdateListReadingStatusAsync(List<UpdateNotification> inputs);
+
         Task DeleteAsync(Guid id);
         
         Task<List<NotificationDto>> CreateListAsync(List<CreateNotificationDto> inputs);

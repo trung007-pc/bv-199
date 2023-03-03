@@ -32,6 +32,20 @@ namespace WebApi.Controllers
              return await _notificationService.UpdateAsync(input);
         }
 
+        [HttpPut]
+        [Route("update-with-reading-status")]
+        public async Task<NotificationDto> UpdateWithReadingStatusAsync(UpdateNotification input)
+        {
+            return await _notificationService.UpdateWithReadingStatusAsync(input);
+        }
+
+        [HttpPut]
+        [Route("update-list-reading-status")]
+        public async Task<bool> UpdateListReadingStatusAsync(List<UpdateNotification> inputs)
+        {
+            return await _notificationService.UpdateListReadingStatusAsync(inputs);
+        }
+
         public Task DeleteAsync(Guid id)
         {
             throw new NotImplementedException();

@@ -42,7 +42,9 @@ namespace WebClient.Pages.Admin
 
         async Task DownloadFile(string url,Guid documentFileId)
         {
-            _navigationManager.NavigateTo(url);
+            
+         
+            await JS.InvokeVoidAsync("downloadURI", url,DateTime.Now.Date.ToString());
             await _documentFileService.UpdateDownloadCountAsync(documentFileId);
             StateHasChanged();
         }

@@ -44,7 +44,17 @@ builder.Services.AddIdentity<User, Role>()
     .AddEntityFrameworkStores<DreamContext>()
     .AddDefaultTokenProviders();
 
+builder.Services.AddCors(options => options.AddPolicy("ApiCorsPolicy", builder =>
+{
+    builder.AllowAnyOrigin();
+    // builder.WithOrigins("https://localhost:7083","http://localhost:7083")
+    //     .AllowAnyMethod().AllowAnyHeader()
+    //     .AllowCredentials()
+    //     .SetIsOriginAllowedToAllowWildcardSubdomains();
 
+    // builder.WithOrigins("https://localhost:7116", "http://localhost:7116").AllowAnyHeader().AllowAnyMethod();
+
+}));
 
 builder.Services.AddAuthentication(options =>
 {
@@ -94,16 +104,6 @@ builder.Services.Configure<IdentityOptions> (options => {
 
 });
 
-// builder.Services.AddAuthorization(options =>
-// {
-//     options.AddPolicy("EmployeeOnly", policy =>
-//         {
-//             policy.RequireRole("manager");
-//             policy.RequireClaim("manager-level-1");
-//         }
-//     );
-// });
-
 
 
 
@@ -118,6 +118,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseCors("ApiCorsPolicy");
 
 app.UseStaticFiles(new StaticFileOptions
 {
@@ -125,6 +126,9 @@ app.UseStaticFiles(new StaticFileOptions
         Path.Combine(builder.Environment.ContentRootPath, "wwwroot")),
     RequestPath = "/StaticFiles"
 });
+
+
+
 
 
 

@@ -24,6 +24,16 @@ namespace WebClient.Service.Notications
             return await RequestClient.PutAPIAsync<NotificationDto>("notification",input);
         }
 
+        public async Task<NotificationDto> UpdateWithReadingStatusAsync(UpdateNotification input)
+        {
+            return await RequestClient.PutAPIAsync<NotificationDto>("notification/update-with-reading-status",input);
+        }
+
+        public async Task<bool> UpdateListReadingStatusAsync(List<UpdateNotification> inputs)
+        {
+            return await RequestClient.PutAPIAsync<bool>("notification/update-list-reading-status",inputs);
+        }
+
         public Task DeleteAsync(Guid id)
         {
             throw new NotImplementedException();

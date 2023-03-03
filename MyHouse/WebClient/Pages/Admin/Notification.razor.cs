@@ -81,7 +81,7 @@ namespace WebClient.Pages.Admin
                         var updateNotifications =
                             ObjectMapper.Map<NotificationDto, UpdateNotification>(dto);
                         updateNotifications.Status = true;
-                        await _notificationService.UpdateAsync(updateNotifications);
+                        await _notificationService.UpdateWithReadingStatusAsync(updateNotifications);
                     },ActionType.Update,false);
                 }
                 _navigationManager.NavigateTo($"view-document-file?fileId={dto.DestinationCode}");
