@@ -50,6 +50,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="MyAttributes" />
       <Folder Include="wwwroot\excels\userExcelSample" />
       <Folder Include="wwwroot\Images_" />
     </ItemGroup>

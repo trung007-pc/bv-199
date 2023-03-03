@@ -9,9 +9,12 @@
 
 
 <div style="display: flex;justify-content:left;gap: 10px">
-    <RadzenButton Text="Download File" Click="async () => { await DownloadFile(DocumentFile.URL, DocumentFile.Id); }" Icon="download"/>
-    <RadzenButton Text="Print" Icon="local_printshop" Click="async () => { await PrintFile();}"/>
-    <RadzenButton Text="Task Assignment" Icon="assignment"/>
+    @if (DocumentFile.AllowDownloadAndPrint)
+    {
+        <RadzenButton Text="Download File" Click="async () => { await DownloadFile(DocumentFile.URL, DocumentFile.Id); }" Icon="download"/>
+        <RadzenButton Text="Print" Icon="local_printshop" Click="async () => { await PrintFile();}"/>
+    }
+    @* <RadzenButton Text="Task Assignment" Icon="assignment"/> *@
 </div>
 <RZBR></RZBR>
 <div>

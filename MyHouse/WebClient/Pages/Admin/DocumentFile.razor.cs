@@ -99,7 +99,8 @@ namespace WebClient.Pages.Admin
             {
                 await InvokeAsync(async () =>
                 {
-                    DateRanges = await GetDateRangePickers();
+
+                    await InitTime();
                     await GetDocumentFiles();
                     await GetFileTypes();
                     await GetIssuingAgencies();
@@ -109,6 +110,12 @@ namespace WebClient.Pages.Admin
                     StateHasChanged();
                 }, ActionType.GetList, false);
             }
+        }
+
+        public async Task InitTime()
+        {
+            (DateRanges,Timeline.StartDay,Timeline.EndDay) = await GetDateRangePickersWithDefault();
+            (Filter.StartDay, Filter.EndDay) = GetDateTimeFromOffSet(Timeline.StartDay,Timeline.EndDay);
         }
 
         public async Task GetDocumentFiles()
@@ -390,6 +397,7 @@ namespace WebClient.Pages.Admin
         {
             
             NewDocumentFile = new CreateUpdateDocumentFileDto();
+            NewFile = null;
             CreateModal.Show();
         }
 

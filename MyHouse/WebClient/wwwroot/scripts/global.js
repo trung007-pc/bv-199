@@ -32,7 +32,7 @@ function downloadURI(uri, name)
 // fetch("https://localhost:7093/StaticFiles/Document-Files/26-02-2023/20230226155548_20230222145519_Hieu-Minh-Le-Java-Full-stack-Engineer.pdf", {
 //     method: 'GET',
 //     headers: { accept: 'application/json' }
-//    
+//
 // }).then(resp => resp.blob())
 //     .then(blob => {
 //         const url = window.URL.createObjectURL(blob);
@@ -45,5 +45,5 @@ function downloadURI(uri, name)
 //         window.URL.revokeObjectURL(url);
 //     })
 //
-// fetch("https://localhost:7083/temp.pdf")
+// fetch("https://localhost:7093/StaticFiles/Document-Files/26-02-2023/20230226155548_20230222145519_Hieu-Minh-Le-Java-Full-stack-Engineer.pdf")
 //     .then((response) => {console.log(response)})

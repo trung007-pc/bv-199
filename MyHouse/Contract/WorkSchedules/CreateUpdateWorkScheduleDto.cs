@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using Core.Enum;
 
 namespace Contract.WorkSchedules
@@ -6,7 +7,10 @@ namespace Contract.WorkSchedules
     public class CreateUpdateWorkScheduleDto
     {
       
+        [Required(ErrorMessage = "Name is required")]
         public string Name { get; set; }
+        
+        [Required(ErrorMessage = "Node is required")]
         public string? Node { get; set; }
         public DateTime CreationTime { get; set; } =DateTime.Now;
         public DateTime StartDay { get; set; } =DateTime.Now;

@@ -21,7 +21,7 @@ namespace Contract.DocumentFiles
         
         
         public string StorageCode { get; set; }
-        public bool IsPrint { get; set; }
+        public bool AllowDownloadAndPrint { get; set; }
         public bool IsDeleted { get; set; }
         public int Views { get; set; }
         public int DownloadCount { get; set; }

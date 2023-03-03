@@ -246,7 +246,7 @@ namespace WebClient.Shared
                   new DateRange()
                   {
                       Start = now.AddMonths(-3).FirstDayOfMonth(),
-                      End = now
+                      End = now.Add(new TimeSpan(23,59,59))
                   }
               }
               
@@ -260,11 +260,24 @@ namespace WebClient.Shared
 
         }
 
+        protected async Task<(Dictionary<string, DateRange>DateRanges,DateTimeOffset StartDay,DateTimeOffset EndDay)>
+            GetDateRangePickersWithDefault()
+        {
+           var dateRanges = await GetDateRangePickers();
+            
+            var dateRange = dateRanges.
+                FirstOrDefault(x => x.Key ==  DateRangeType._3MonthsAgo.GetDescriptionOrName()).Value;
+
+            return (dateRanges, dateRange.Start, dateRange.End);
+        }
+
         protected (DateTime?,DateTime?) GetDateTimeFromOffSet(DateTimeOffset? fromDateOffset, DateTimeOffset? toDateTimeOffset)
         {
             if (!fromDateOffset.HasValue || !toDateTimeOffset.HasValue) return (null, null);
             return (fromDateOffset.Value.DateTime, toDateTimeOffset.Value.DateTime);
         }
+        
+        
 
         public async Task<string> GetUserNameAsync()
         {

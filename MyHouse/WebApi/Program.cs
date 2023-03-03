@@ -44,17 +44,15 @@ builder.Services.AddIdentity<User, Role>()
     .AddEntityFrameworkStores<DreamContext>()
     .AddDefaultTokenProviders();
 
-builder.Services.AddCors(options => options.AddPolicy("ApiCorsPolicy", builder =>
-{
-    builder.AllowAnyOrigin();
-    // builder.WithOrigins("https://localhost:7083","http://localhost:7083")
-    //     .AllowAnyMethod().AllowAnyHeader()
-    //     .AllowCredentials()
-    //     .SetIsOriginAllowedToAllowWildcardSubdomains();
-
-    // builder.WithOrigins("https://localhost:7116", "http://localhost:7116").AllowAnyHeader().AllowAnyMethod();
-
-}));
+// builder.Services.AddCors(options => options.AddPolicy("ApiCorsPolicy", builder =>
+// {
+//     builder.AllowAnyOrigin();
+//     builder.WithOrigins("https://localhos22t:70823", "http://loca22lhost:722083")
+//         .AllowAnyMethod().AllowAnyHeader();
+//
+//     // builder.WithOrigins("https://localhost:7116", "http://localhost:7116").AllowAnyHeader().AllowAnyMethod();
+//
+// }));
 
 builder.Services.AddAuthentication(options =>
 {
@@ -118,7 +116,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseCors("ApiCorsPolicy");
+// app.UseCors("ApiCorsPolicy");
 
 app.UseStaticFiles(new StaticFileOptions
 {

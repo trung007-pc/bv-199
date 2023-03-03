@@ -32,7 +32,6 @@
 @inject SendingFileService _sendingFileService;
 
 
-
 <div style="display: flex;justify-content: space-between;align-items: center;margin-bottom: 10px">
     <div>
         <RadzenBreadCrumb >
@@ -95,12 +94,12 @@
 
     <Blazorise.Row>
         <Blazorise.Column ColumnSize="ColumnSize.Is2">
-            <RadzenTree Data=@FolderTree Change=" async (e) => { await OnChangeSelectedFolder(e);}" Style="width:100%">
+            <RadzenTree Data=@FolderTree Change="async (e) => { await OnChangeSelectedFolder(e); }" Style="width:100%">
                 <RadzenTreeLevel TextProperty="Name" ChildrenProperty="ChildFolders"
                                  HasChildren=@(e => (e as FileFolderDto).ChildFolders.Any())
                                  Expanded="@(value => true)">
                     <Template >
-                        <div style="display: flex;width:100%;justify-content: space-between;align-items: center" >
+                        <div style="display: flex;width:100%;justify-content: space-between;align-items: center">
                             <div style="display: flex">
                                 <RadzenIcon Icon="folder"/>
                                 <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3" Style="margin-bottom: 0">@context.Text</RadzenText>
@@ -141,7 +140,7 @@
                     <RadzenDataGridColumn TItem="DocumentFileWithNavPropertiesDto" Property="File.Name" Title="Action" TextAlign="TextAlign.Center" Filterable="false">
                         <Template Context="data">
 
-                            <RadzenButton ButtonStyle="ButtonStyle.Primary" Icon="send" Click="async () => { await ShowSendingFile(data.File);}" Variant="Variant.Flat" Shade="Shade.Lighter" Size="ButtonSize.Medium" Class="my-1 ms-1">
+                            <RadzenButton ButtonStyle="ButtonStyle.Primary" Icon="send" Click="async () => { await ShowSendingFile(data.File); }" Variant="Variant.Flat" Shade="Shade.Lighter" Size="ButtonSize.Medium" Class="my-1 ms-1">
                             </RadzenButton>
                             <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="remove_red_eye" Click="() => { GotoViewDocumentFile(data.File.Id); }" Variant="Variant.Flat" Shade="Shade.Default" Size="ButtonSize.Medium" Class="my-1 ms-1">
                             </RadzenButton>
@@ -162,7 +161,7 @@
 
 
 <Modal @ref="CreateModal">
-    <ModalContent Size="ModalSize.ExtraLarge" Centered="true">
+    <ModalContent Size="ModalSize.Large" Centered="true">
         <ModalHeader>
             <ModalTitle>DocumentFile</ModalTitle>
         </ModalHeader>
@@ -179,11 +178,6 @@
                         <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Code</RadzenText>
                         <RadzenTextBox Class="w-100" @bind-Value="NewDocumentFile.Code"/>
                         <ValidationMessage For="@(() => NewDocumentFile.Code)"/>
-
-
-                        <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Publication Date</RadzenText>
-                        <RadzenDatePicker @bind-Value=@NewDocumentFile.PublicationDate DateFormat="dd/MM/yyyy" Class="w-100"/>
-                        <ValidationMessage For="@(() => NewDocumentFile.PublicationDate)"/>
 
                         <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">File Types</RadzenText>
                         <RadzenDropDown AllowClear="true" AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
@@ -211,7 +205,18 @@
                                         ValueProperty="Id"
                                         Placeholder="Select..."
                                         Data=@HierarchicalFileFolders
+                                        Name="@nameof(NewDocumentFile.DocumentFolderId)"
                                         Class="w-100"/>
+                              <RadzenRequiredValidator Component="@nameof(NewDocumentFile.DocumentFolderId)" Text="Enter email" />
+
+                        @* @if (NewDocumentFile.DocumentFolderId == Guid.Empty) *@
+                        @* { *@
+                        @*     <div class="validation-message">FolderId is required</div> *@
+                        @* } *@
+                        
+
+          
+         
 
 
                         <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Choose File</RadzenText>
@@ -227,16 +232,28 @@
                     </Blazorise.Column>
 
                     <Blazorise.Column ColumnSize="ColumnSize.Is6.OnDesktop">
-                        <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Received Date</RadzenText>
-                        <RadzenDatePicker Class="w-100" DateFormat="dd/MM/yyyy" @bind-Value="NewDocumentFile.CreationDate"/>
-                        <ValidationMessage For="@(() => NewDocumentFile.CreationDate)"/>
 
-                        <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Is Print</RadzenText>
-                        <RadzenSwitch @bind-Value="NewDocumentFile.IsPrint"/>
-                        <ValidationMessage For="@(() => NewDocumentFile.IsPrint)"/>
+                        <RadzenRow Gap="5px">
+                            <RadzenColumn Size="6">
+                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Publication Date</RadzenText>
+                                <RadzenDatePicker @bind-Value=@NewDocumentFile.PublicationDate DateFormat="dd/MM/yyyy" Class="w-100"/>
+                                <ValidationMessage For="@(() => NewDocumentFile.PublicationDate)"/>
+                            </RadzenColumn>
+                            <RadzenColumn Size="6">
+
+                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Received Date</RadzenText>
+                                <RadzenDatePicker Class="w-100" DateFormat="dd/MM/yyyy" @bind-Value="NewDocumentFile.CreationDate"/>
+                                <ValidationMessage For="@(() => NewDocumentFile.CreationDate)"/>
+                            </RadzenColumn>
+                        </RadzenRow>
+
+
+                        <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Allow Download And Print</RadzenText>
+                        <RadzenSwitch @bind-Value="NewDocumentFile.AllowDownloadAndPrint"/>
+                        <ValidationMessage For="@(() => NewDocumentFile.AllowDownloadAndPrint)"/>
 
                         <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Note</RadzenText>
-                        <RadzenTextArea Class="w-100" Placeholder="Nhập vào đây..." @bind-Value="NewDocumentFile.Note" Blazorise.Rows="10" Cols="30"/>
+                        <RadzenTextArea Class="w-100" Placeholder="Nhập vào đây..." @bind-Value="NewDocumentFile.Note" Rows="8" Cols="30"/>
                         <ValidationMessage For="@(() => NewDocumentFile.Note)"/>
                     </Blazorise.Column>
                     <Blazorise.Column ColumnSize="ColumnSize.Is12.OnDesktop">
@@ -272,10 +289,6 @@
                         <RadzenTextBox Class="w-100" @bind-Value="EditingDocumentFile.Code"/>
                         <ValidationMessage For="@(() => EditingDocumentFile.Code)"/>
 
-
-                        <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Publication Date</RadzenText>
-                        <RadzenDatePicker @bind-Value=@EditingDocumentFile.PublicationDate DateFormat="dd/MM/yyyy" Class="w-100"/>
-                        <ValidationMessage For="@(() => EditingDocumentFile.PublicationDate)"/>
 
                         <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">File Types</RadzenText>
                         <RadzenDropDown AllowClear="true" AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
@@ -326,16 +339,27 @@
                     </Blazorise.Column>
 
                     <Blazorise.Column ColumnSize="ColumnSize.Is6.OnDesktop">
-                        <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Received Date</RadzenText>
-                        <RadzenDatePicker Class="w-100" DateFormat="dd/MM/yyyy" @bind-Value="NewDocumentFile.CreationDate"/>
-                        <ValidationMessage For="@(() => EditingDocumentFile.CreationDate)"/>
 
-                        <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Is Print</RadzenText>
-                        <RadzenSwitch @bind-Value="NewDocumentFile.IsPrint"/>
-                        <ValidationMessage For="@(() => EditingDocumentFile.IsPrint)"/>
+                        <RadzenRow Gap="5px">
+                            <RadzenColumn Size="6">
+                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Publication Date</RadzenText>
+                                <RadzenDatePicker @bind-Value=@EditingDocumentFile.PublicationDate DateFormat="dd/MM/yyyy" Class="w-100"/>
+                                <ValidationMessage For="@(() => EditingDocumentFile.PublicationDate)"/>
+                            </RadzenColumn>
+                            <RadzenColumn Size="6">
+                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Received Date</RadzenText>
+                                <RadzenDatePicker Class="w-100" DateFormat="dd/MM/yyyy" @bind-Value="EditingDocumentFile.CreationDate"/>
+                                <ValidationMessage For="@(() => EditingDocumentFile.CreationDate)"/>
+                            </RadzenColumn>
+                        </RadzenRow>
+
+
+                        <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Allow Download And Print</RadzenText>
+                        <RadzenSwitch @bind-Value="EditingDocumentFile.AllowDownloadAndPrint"/>
+                        <ValidationMessage For="@(() => EditingDocumentFile.AllowDownloadAndPrint)"/>
 
                         <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Note</RadzenText>
-                        <RadzenTextArea Class="w-100" Placeholder="Nhập vào đây..." @bind-Value="EditingDocumentFile.Note" Blazorise.Rows="10" Cols="30"/>
+                        <RadzenTextArea Class="w-100" Placeholder="Nhập vào đây..." @bind-Value="EditingDocumentFile.Note" Rows="8" Cols="30"/>
                         <ValidationMessage For="@(() => EditingDocumentFile.Note)"/>
                     </Blazorise.Column>
 
@@ -357,82 +381,66 @@
 
 
 @* Sending - FIle *@
-<RZModel  @ref="@SendingFileModel" Width="70vw" Title="Send File" ShowTitle="true">
-      <RadzenAlert AlertStyle="AlertStyle.Success" ShowIcon="true" Variant="Variant.Flat" Shade="Shade.Lighter">
-                                           Number:@DocumentFileDto.Code|Name:@DocumentFileDto.Name|Storage Number :@DocumentFileDto.StorageCode</RadzenAlert>
-                     <RadzenRow  Gap="10" >
-                        <RadzenColumn Size="5">
-                            <RadzenText>Send By Department</RadzenText>
-                            <RadzenTree Data=@HierarchicalDepartments Style="width:100%"
-                                        AllowCheckBoxes="true"
-                                        @bind-CheckedValues="SelectedDepartments">
-                                <RadzenTreeLevel TextProperty="Name" ChildrenProperty="ChildDepartment"
-                                                 Expanded="@(value => true)"
-                                                 HasChildren=@(e => (e as DepartmentDto).ChildDepartment.Any())>
-                                    <Template Context="data">
-                                        <div style="display: flex;width:100%;justify-content: space-between;align-items: center">
-                                            <div style="display: flex">
-                                                <RadzenIcon Icon="home_work"/>
-                                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3" Style="margin-bottom: 0">@data.Text</RadzenText>
-                                            </div>
-                                        </div>
-    
-                                    </Template>
-                                </RadzenTreeLevel>
-                            </RadzenTree>
-                        </RadzenColumn>
-                        <RadzenColumn Size="5" >
-                            <RadzenText>Send By Identity</RadzenText>
-                            <RadzenDropDownDataGrid Multiple="true"
-                                                    Style="width: 70%"
-                                                    AllowClear="true" AllowFiltering="true"
-                                                    Chips="true"
-                                                    FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
-                                                    TextProperty="FullName"
-                                                    ValueProperty="Id"
-                                                    @bind-Value="SelectedUserIds"
-                                                    Data=@Users>
-    
-                                <Columns>
-                                    <RadzenDropDownDataGridColumn Width="60px" Sortable="false">
-                                        <Template Context="data">
-                                            <RadzenCheckBox TriState="false" Value="@(SelectedUserIds!=null && SelectedUserIds.Any(x => x == ((UserDto) data).Id))"
-                                                            TValue="bool"/>
-                                        </Template>
-                                    </RadzenDropDownDataGridColumn>
-                                    <RadzenDropDownDataGridColumn Property="FullName" Title="Full Name" Width="200px"/>
-                                    <RadzenDropDownDataGridColumn Property="PhoneNumber" Title="Phone Number" Width="200px"/>
-                                    <RadzenDropDownDataGridColumn Property="EmployeeCode" Title="Employee Code" Width="200px"/>
-                                </Columns>
-    
-    
-                            </RadzenDropDownDataGrid>
-    
-                        </RadzenColumn>
-                    </RadzenRow>
-    
-    
-                    <div class="Row" style="float: right">
-                        <div class="col">
-                            <RadzenButton Text="Ok" Click="async () => {await CreateSendingFiles(DocumentFileDto.Id); }" Class="me-1" Style="width: 80px;"/>
-                            <RadzenButton Text="Cancel" Click="() => SendingFileModel.HideModel()" ButtonStyle="ButtonStyle.Light" Class="me-1"/>
+<RZModel @ref="@SendingFileModel" Width="70vw" Title="Send File" ShowTitle="true">
+    <RadzenAlert AlertStyle="AlertStyle.Success" ShowIcon="true" Variant="Variant.Flat" Shade="Shade.Lighter">
+        Number:@DocumentFileDto.Code|Name:@DocumentFileDto.Name|Storage Number :@DocumentFileDto.StorageCode
+    </RadzenAlert>
+    <RadzenRow Gap="10">
+        <RadzenColumn Size="5">
+            <RadzenText>Send By Department</RadzenText>
+            <RadzenTree Data=@HierarchicalDepartments Style="width:100%"
+                        AllowCheckBoxes="true"
+                        @bind-CheckedValues="SelectedDepartments">
+                <RadzenTreeLevel TextProperty="Name" ChildrenProperty="ChildDepartment"
+                                 Expanded="@(value => true)"
+                                 HasChildren=@(e => (e as DepartmentDto).ChildDepartment.Any())>
+                    <Template Context="data">
+                        <div style="display: flex;width:100%;justify-content: space-between;align-items: center">
+                            <div style="display: flex">
+                                <RadzenIcon Icon="home_work"/>
+                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3" Style="margin-bottom: 0">@data.Text</RadzenText>
+                            </div>
                         </div>
-                    </div>
+
+                    </Template>
+                </RadzenTreeLevel>
+            </RadzenTree>
+        </RadzenColumn>
+        <RadzenColumn Size="5">
+            <RadzenText>Send By Identity</RadzenText>
+            <RadzenDropDownDataGrid Multiple="true"
+                                    Style="width: 70%"
+                                    AllowClear="true" AllowFiltering="true"
+                                    Chips="true"
+                                    FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                    TextProperty="FullName"
+                                    ValueProperty="Id"
+                                    @bind-Value="SelectedUserIds"
+                                    Data=@Users>
+
+                <Columns>
+                    <RadzenDropDownDataGridColumn Width="60px" Sortable="false">
+                        <Template Context="data">
+                            <RadzenCheckBox TriState="false" Value="@(SelectedUserIds != null && SelectedUserIds.Any(x => x == ((UserDto) data).Id))"
+                                            TValue="bool"/>
+                        </Template>
+                    </RadzenDropDownDataGridColumn>
+                    <RadzenDropDownDataGridColumn Property="FullName" Title="Full Name" Width="200px"/>
+                    <RadzenDropDownDataGridColumn Property="PhoneNumber" Title="Phone Number" Width="200px"/>
+                    <RadzenDropDownDataGridColumn Property="EmployeeCode" Title="Employee Code" Width="200px"/>
+                </Columns>
+
+
+            </RadzenDropDownDataGrid>
+
+        </RadzenColumn>
+    </RadzenRow>
+
+
+    <div class="Row" style="float: right">
+        <div class="col">
+            <RadzenButton Text="Ok" Click="async () => { await CreateSendingFiles(DocumentFileDto.Id); }" Class="me-1" Style="width: 80px;"/>
+            <RadzenButton Text="Cancel" Click="() => SendingFileModel.HideModel()" ButtonStyle="ButtonStyle.Light" Class="me-1"/>
+        </div>
+    </div>
 </RZModel>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

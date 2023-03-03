@@ -60,15 +60,12 @@ namespace WebClient.Pages.Admin
         }
         public async Task Init()
         {
-            DateRanges = await GetDateRangePickers();
-
+         
+            (DateRanges,Timeline.StartDay,Timeline.EndDay) = await GetDateRangePickersWithDefault();
+            
             var userId = await GetUserIdAsync();
             StatisticFilter.FolderTop = 5;
             StatisticFilter.UserId = userId;
-            var dateRange = DateRanges.
-                FirstOrDefault(x => x.Key ==  DateRangeType._3MonthsAgo.GetDescriptionOrName()).Value;
-            Timeline.StartDay = dateRange.Start;
-            Timeline.EndDay = dateRange.End;
             
             (StatisticFilter.StartDay, StatisticFilter.EndDay) = GetDateTimeFromOffSet(Timeline.StartDay, Timeline.EndDay);
             (MyStatisticFilter.StartDay, MyStatisticFilter.EndDay) = GetDateTimeFromOffSet(Timeline.StartDay, Timeline.EndDay);

@@ -265,10 +265,10 @@ namespace SqlServ4r.EntityFramework
 
                 entity.HasIndex(p => p.StorageCode)
                     .IsUnique(true);
-                entity.HasIndex(p => p.Name)
-                    .IsUnique(true);
-                entity.HasIndex(p => p.Code)     
-                    .IsUnique(true);
+                entity.HasIndex(p => p.Name);
+
+                entity.HasIndex(p => p.Code);
+
             });
 
             builder.Entity<FileType>(entity => {
@@ -291,14 +291,14 @@ namespace SqlServ4r.EntityFramework
                     .IsUnique(true);
             });
             
-            builder.Entity<WorkSchedule>(entity => {
-                entity.HasIndex(p => p.Name)     
-                    .IsUnique(true);
+            builder.Entity<WorkSchedule>(entity =>
+            {
+                entity.HasIndex(p => p.Name);
             });
             
-            builder.Entity<MeetingContent>(entity => {
-                entity.HasIndex(p => p.Name)     
-                    .IsUnique(true);
+            builder.Entity<MeetingContent>(entity =>
+            {
+                entity.HasIndex(p => p.Name);
             });
             
         }
