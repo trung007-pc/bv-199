@@ -278,7 +278,7 @@ namespace WebClient.Shared
         {
             var authState = await AuthState;
             var user = authState.User;
-            return Guid.Parse(user.Claims.FirstOrDefault(x=>x.Type == ClaimTypes.PrimarySid)?.Value);
+            return Guid.Parse(user.Claims?.FirstOrDefault(x=>x.Type == ClaimTypes.PrimarySid)?.Value);
         }
         
 

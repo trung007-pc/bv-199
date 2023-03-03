@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BlazorDateRangePicker;
+using Contract.MeetingContents;
 using Contract.MyDashboards;
 using Contract.SendingFiles;
+using Contract.WorkSchedules;
 using Core.Enum;
 using Core.Extension;
 using Radzen;
+using WebClient.Components;
 
 namespace WebClient.Pages.Admin
 {
@@ -24,6 +27,13 @@ namespace WebClient.Pages.Admin
         public bool IsLoading { get; set; } = true;
         public Dictionary<string, DateRange> DateRanges { get; set; } = new Dictionary<string, DateRange>();
         public (DateTimeOffset? StartDay, DateTimeOffset? EndDay) Timeline = (null, null);
+        
+        public RZModel ScheduleFileView { get; set;}
+        public RZModel ContentFileView { get; set;}
+        
+        public MeetingContentDto SelectedContent { get; set; }
+        public WorkScheduleDto  SelectedSchedule { get; set; }
+
         protected override async Task OnInitializedAsync()
         {
            
@@ -117,5 +127,33 @@ namespace WebClient.Pages.Admin
 
             return MudBlazor.Color.Tertiary;
         }
+        
+        
+        public async Task ShowScheduleFileView(WorkScheduleDto item)
+        {
+            SelectedSchedule = item;
+            await ScheduleFileView.ShowModel();
+        }
+
+        public void HideScheduleFileView()
+        {
+             ScheduleFileView.HideModel();
+        }
+        
+        public async Task ShowMeetingContentFileView(MeetingContentDto item)
+        {
+            SelectedContent = item;
+            await ContentFileView.ShowModel();
+        }
+
+        public void HideMeetingContentFileView()
+        {
+            ContentFileView.HideModel();
+        }
+        
+        
+        
+        
+        
     }
 }

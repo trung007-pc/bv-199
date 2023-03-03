@@ -19,7 +19,7 @@ namespace Domain.Notifications
         
         
         public User User { get; set; }
-        public DocumentFile DocumentFile { get; set;} 
+        // public DocumentFile DocumentFile { get; set;} 
 
     }
 }

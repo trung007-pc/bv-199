@@ -67,6 +67,7 @@ namespace WebClient.Pages.Admin
                     NewWorkSchedule.Path = fileDto.Path;
                     NewWorkSchedule.FileName = fileDto.FileName;
                     NewWorkSchedule.Url = fileDto.Url;
+                    NewWorkSchedule.Extentions = fileDto.Extension;
                 }
 
                 NewWorkSchedule.CreatedBy = await GetUserIdAsync();
@@ -89,6 +90,8 @@ namespace WebClient.Pages.Admin
                     EditingWorkSchedule.Path = fileDto.Path;
                     EditingWorkSchedule.FileName = fileDto.FileName;
                     EditingWorkSchedule.Url = fileDto.Url;
+                    EditingWorkSchedule.Extentions = fileDto.Extension;
+
                 }
                
                 EditingWorkSchedule.CreatedBy = await GetUserIdAsync();

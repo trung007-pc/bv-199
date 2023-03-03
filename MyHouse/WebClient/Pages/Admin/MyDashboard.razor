@@ -1,5 +1,7 @@
 ﻿@page "/"
 @page "/my-dashboard"
+@attribute [Authorize(Roles = "ADMIN")]
+
 @inherits BaseBlazorPage
 @using WebClient.Service.MyDashboards
 @inject MyDashboardService _myDashboardService;
@@ -78,7 +80,7 @@
                     <RadzenArcGaugeScaleValue Value=@MyStatistics.ReadingRate ShowValue="true">
                         <Template Context="pointer">
                             <h4>
-                                @pointer.Value <sup>%</sup>
+                                @pointer.Value.ToString("0,0") <sup>%</sup>
                             </h4>
                         </Template>
                     </RadzenArcGaugeScaleValue>
@@ -98,9 +100,6 @@
     </RadzenColumn>
 </RadzenRow>
 
-@* <div style="height: 10vh"> *@
-@* *@
-@* </div> *@
 
 <RZBR></RZBR>
 
@@ -110,7 +109,7 @@
         <RadzenCard>
 
             <div style="display: flex;align-items: center;gap: 3px">
-                <RadzenIcon Icon="remove_red_eye" Style="font-size: 40px;color: #b02a37"></RadzenIcon>
+                <RadzenIcon Icon="remove_red_eye" Style="font-size: 30px;color: #b02a37"></RadzenIcon>
                 <span style="font-size: 12px;color: grey;">Unread Documents</span>
             </div>
 
@@ -162,6 +161,12 @@
                                 </Template>
                             </RadzenDataGridColumn>
 
+                            <RadzenDataGridColumn TItem="WorkScheduleDto" Property="Name" TextAlign="TextAlign.Center" Title="Status" Width="160px">
+                                <Template Context="data">
+                                    <RadzenButton Icon="remove_red_eye" Click="async () => { await ShowScheduleFileView(data); }" Variant="Variant.Flat" Shade="Shade.Default" Size="ButtonSize.Medium" Class="my-1 ms-1"></RadzenButton>
+                                </Template>
+                            </RadzenDataGridColumn>
+
                         </Columns>
                     </RadzenDataGrid>
 
@@ -186,6 +191,12 @@
                                 </Template>
                             </RadzenDataGridColumn>
 
+                            <RadzenDataGridColumn TItem="MeetingContentDto" Property="Name" TextAlign="TextAlign.Center" Title="Status" Width="160px">
+                                <Template Context="data">
+                                    <RadzenButton Icon="remove_red_eye" Click="async () => { await ShowMeetingContentFileView(data); }" Variant="Variant.Flat" Shade="Shade.Default" Size="ButtonSize.Medium" Class="my-1 ms-1"></RadzenButton>
+                                </Template>
+                            </RadzenDataGridColumn>
+
                         </Columns>
                     </RadzenDataGrid>
                 </RadzenColumn>
@@ -193,3 +204,46 @@
         </RadzenCard>
     </RadzenColumn>
 </RadzenRow>
+
+
+<RZModel @ref="ScheduleFileView" Width="80vw" Height="90vh">
+
+    @if (!SelectedSchedule.Url.IsNullOrWhiteSpace())
+    {
+        <RZFileViewer URL="@SelectedSchedule.Url" Extension="@SelectedSchedule.Extentions"
+                      Name="@SelectedSchedule.Name">
+        </RZFileViewer>
+    }
+    else
+    {
+        <h1>Without File</h1>
+    }
+    <div style="margin-bottom: 10%"></div>
+    <div class="Row" style="float: right">
+        <div class="col">
+            <RadzenButton Text="Cancel" Click="HideScheduleFileView" ButtonStyle="ButtonStyle.Light" Class="me-1"/>
+        </div>
+    </div>
+</RZModel>
+
+
+<RZModel @ref="ContentFileView" Width="80vw" Height="90vh">
+    @if (!SelectedContent.Url.IsNullOrWhiteSpace())
+    {
+        <RZFileViewer URL="@SelectedContent.Url" Extension="@SelectedContent.Extentions"
+                      Name="@SelectedContent.Name">
+        </RZFileViewer>
+    }
+    else
+    {
+        <h1>Without File</h1>
+    }
+
+    <div style="margin-bottom: 10%"></div>
+
+    <div class="Row" style="float: right">
+        <div class="col">
+            <RadzenButton Text="Cancel" Click="HideMeetingContentFileView" ButtonStyle="ButtonStyle.Light" Class="me-1"/>
+        </div>
+    </div>
+</RZModel>

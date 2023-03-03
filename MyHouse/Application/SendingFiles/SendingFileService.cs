@@ -96,7 +96,7 @@ namespace Application.SendingFiles
                 notifications.Add(new Notification()
                 {
                     ReceiverId = item.ReceiverId,
-                    DestinationCode = item.FileId,
+                    DestinationCode = item.Id,
                     Title = $"You've just received documentary number" +
                             $":{file?.Code}"
                 });

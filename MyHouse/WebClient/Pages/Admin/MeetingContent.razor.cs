@@ -65,6 +65,8 @@ namespace WebClient.Pages.Admin
                     NewMeetingContent.Path = fileDto.Path;
                     NewMeetingContent.FileName = fileDto.FileName;
                     NewMeetingContent.Url = fileDto.Url;
+                    NewMeetingContent.Extentions = fileDto.Extension;
+
                 }
 
                 NewMeetingContent.CreatedBy = await GetUserIdAsync();
@@ -86,6 +88,8 @@ namespace WebClient.Pages.Admin
                     EditingMeetingContent.Path = fileDto.Path;
                     EditingMeetingContent.FileName = fileDto.FileName;
                     EditingMeetingContent.Url = fileDto.Url;
+                    EditingMeetingContent.Extentions = fileDto.Extension;
+
                 }
 
                 EditingMeetingContent.CreatedBy = await GetUserIdAsync();

@@ -68,7 +68,7 @@
                                     <Template>
                                         <div style="display: flex;justify-content: center;align-items: center;gap: 5px">
                                             <span >
-                                                @context.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Surname)?.Value
+                                                @context.User.Claims?.FirstOrDefault(x => x.Type == ClaimTypes.Surname)?.Value
                                             </span>
                                             <RadzenGravatar Email="user@example.com">
                                             </RadzenGravatar>
@@ -143,10 +143,15 @@
     {
         if (firstRender)
         {
-            Filter.UserName = await GetUserNameAsync();
-            Filter.Status = NotificationStatus.Unread;
-            NotificationCount = await _notificationService.CountUnreadNotificationOfUser(Filter);
-            StateHasChanged();
+            var auth = await AuthState;
+            if (auth.User.Identity.IsAuthenticated)
+            {
+                Filter.UserName = await GetUserNameAsync();
+                Filter.Status = NotificationStatus.Unread;
+                NotificationCount = await _notificationService.CountUnreadNotificationOfUser(Filter);
+                StateHasChanged();
+            }
+         
         }
     }
 

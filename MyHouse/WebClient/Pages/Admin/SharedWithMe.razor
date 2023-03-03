@@ -109,7 +109,7 @@
                         Style="width: 100%">
             <Columns>
 
-                <RadzenDataGridColumn TItem="DocumentFileWithNavPropertiesDto" Property="File.Name" TextAlign="TextAlign.Center" Title="Is Read" Width="160px">
+                <RadzenDataGridColumn TItem="DocumentFileWithNavPropertiesDto" Property="SendingFile.Status" TextAlign="TextAlign.Center" Title="Is Read" Width="160px">
                    
                     <Template Context="data">
                         <RadzenSwitch @bind-Value=@data.SendingFile.Status Disabled="true"/>

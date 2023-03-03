@@ -428,10 +428,11 @@ namespace WebClient.Pages.Admin
         {
             await GetDocumentFiles();
         }
-        void OnChangeSelectedFolder(TreeEventArgs args)
+        async Task OnChangeSelectedFolder(TreeEventArgs args)
         {
             SelectedFolder = (FileFolderDto) args.Value;
             Filter.DocumentFolderId = SelectedFolder.Id;
+            await GetDocumentFiles();
         }
 
         async Task OnEnterKeyPressed(KeyboardEventArgs value)

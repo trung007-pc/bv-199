@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SqlServ4r.EntityFramework;
 
@@ -11,9 +12,10 @@ using SqlServ4r.EntityFramework;
 namespace WebApi.Migrations
 {
     [DbContext(typeof(DreamContext))]
-    partial class DreamContextModelSnapshot : ModelSnapshot
+    [Migration("20230303020125_v22")]
+    partial class v22
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -582,7 +584,7 @@ namespace WebApi.Migrations
                     b.Property<Guid>("ReceiverId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("DocumentFileId")
+                    b.Property<Guid>("DocumentFileId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("SentDate")
@@ -992,15 +994,19 @@ namespace WebApi.Migrations
 
             modelBuilder.Entity("Domain.Notifications.Notification", b =>
                 {
-                    b.HasOne("Domain.DocumentFiles.DocumentFile", null)
+                    b.HasOne("Domain.DocumentFiles.DocumentFile", "DocumentFile")
                         .WithMany("Notifications")
-                        .HasForeignKey("DocumentFileId");
+                        .HasForeignKey("DocumentFileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Domain.Identity.Users.User", "User")
                         .WithMany("Notifications")
                         .HasForeignKey("ReceiverId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("DocumentFile");
 
                     b.Navigation("User");
                 });

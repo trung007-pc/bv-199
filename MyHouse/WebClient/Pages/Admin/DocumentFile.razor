@@ -95,12 +95,12 @@
 
     <Blazorise.Row>
         <Blazorise.Column ColumnSize="ColumnSize.Is2">
-            <RadzenTree Data=@FolderTree Change="OnChangeSelectedFolder" Style="width:100%">
+            <RadzenTree Data=@FolderTree Change=" async (e) => { await OnChangeSelectedFolder(e);}" Style="width:100%">
                 <RadzenTreeLevel TextProperty="Name" ChildrenProperty="ChildFolders"
                                  HasChildren=@(e => (e as FileFolderDto).ChildFolders.Any())
                                  Expanded="@(value => true)">
                     <Template >
-                        <div style="display: flex;width:100%;justify-content: space-between;align-items: center" @ondblclick="async () => { await GetDocumentFiles(); }">
+                        <div style="display: flex;width:100%;justify-content: space-between;align-items: center" >
                             <div style="display: flex">
                                 <RadzenIcon Icon="folder"/>
                                 <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3" Style="margin-bottom: 0">@context.Text</RadzenText>

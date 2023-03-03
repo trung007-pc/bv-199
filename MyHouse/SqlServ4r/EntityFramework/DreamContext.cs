@@ -188,9 +188,9 @@ namespace SqlServ4r.EntityFramework
                 .WithMany(x => x.Notifications)
                 .HasForeignKey(x=>x.ReceiverId);
             
-            builder.Entity<Notification>().HasOne<DocumentFile>(x => x.DocumentFile)
-                .WithMany(x => x.Notifications)
-                .HasForeignKey(x=>x.DestinationCode);
+            // builder.Entity<Notification>().HasOne<SendingFile>(x => x)
+            //     .WithMany(x => x.Notifications)
+            //     .HasForeignKey(x=>x.DestinationCode);
             
             
             builder.Entity<WorkSchedule>().HasOne<User>(x => x.User)
