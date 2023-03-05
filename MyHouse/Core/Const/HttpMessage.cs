@@ -13,7 +13,7 @@
         public const string Unauthorized = "Unauthorized";
         public const string Conflict = "The operation was updated by another user";
         public const  string EmptyContent = "Empty Content";
-
+        public static  InvalidBusiness InvalidBusiness = new InvalidBusiness();
 
     }
 
@@ -25,8 +25,13 @@
         public string DuplicateEmployeeCode = "Duplicate Employee Code";
         public string DuplicateRoleCode = "Duplicate Code Role";
         public string DuplicateCode = "Duplicate Code";
+        
+    }
 
-
+    public class InvalidBusiness
+    {
+        public string SharedDocumentFile = "Failed.Document is Shared To Another Person";
+        public string FileExistFolder = "Failed.Documents Still Exist In This Folder";
 
     }
     

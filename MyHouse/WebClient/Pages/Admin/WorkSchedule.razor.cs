@@ -29,6 +29,7 @@ namespace WebClient.Pages.Admin
 
 
         public string HeaderTitle = "Work Schedule";
+        public bool IsLoading { get; set; } = true;
 
 
         public WorkSchedule()
@@ -53,7 +54,9 @@ namespace WebClient.Pages.Admin
 
         public async Task GetWorkSchedules()
         {
+            IsLoading = true;
             WorkSchedules = await _unitTypeService.GetListAsync();
+            IsLoading = false;
         }
 
 
@@ -86,7 +89,7 @@ namespace WebClient.Pages.Admin
                 
                 if (EditFile is not null)
                 {
-                    var fileDto = await _uploadService.UploadDocumentFile(NewFile);
+                    var fileDto = await _uploadService.UploadDocumentFile(EditFile);
                     EditingWorkSchedule.Path = fileDto.Path;
                     EditingWorkSchedule.FileName = fileDto.FileName;
                     EditingWorkSchedule.Url = fileDto.Url;
@@ -131,11 +134,11 @@ namespace WebClient.Pages.Admin
         }
 
 
-        public Task ShowEditingModal(WorkScheduleDto unitTypeDto)
+        public Task ShowEditingModal(WorkScheduleDto dto)
         {
             EditingWorkSchedule = new CreateUpdateWorkScheduleDto();
-            EditingWorkSchedule = ObjectMapper.Map<WorkScheduleDto, CreateUpdateWorkScheduleDto>(unitTypeDto);
-            EditingWorkScheduleId = unitTypeDto.Id;
+            EditingWorkSchedule = ObjectMapper.Map<WorkScheduleDto, CreateUpdateWorkScheduleDto>(dto);
+            EditingWorkScheduleId = dto.Id;
             return EditingModal.Show();
         }
 

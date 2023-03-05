@@ -7,8 +7,8 @@ namespace Contract.DocumentFiles
     public class CreateUpdateDocumentFileDto
     {
         [Required(ErrorMessage = "Name is required")]
-        public string Name { get; set;}
-        
+        public string Name { get; set; }
+
         [Required(ErrorMessage = "Code is required")]
         public string Code { get; set; }
 
@@ -18,26 +18,28 @@ namespace Contract.DocumentFiles
 
         public bool AllowDownloadAndPrint { get; set; } = true;
         public bool IsDeleted { get; set; }
-        
+
         //media
         public string FileName { get; set; }
         public string Extentions { get; set; }
         public string AbsolutePath { get; set; }
         public string URL { get; set; }
 
+
         //foreign key
-        public Guid? IssuingAgencyId { get; set; }
-        public Guid? DocumentTypeId { get; set; }
-        
-        // [Required(ErrorMessage = "DocumentFolder is required")]
-        [NonEmptyGuid]
+        [NonEmptyGuid(ErrorMessage = "Please Issuing Agency")]
+        public Guid IssuingAgencyId { get; set; }
+
+        [NonEmptyGuid(ErrorMessage = "Please Document Type")]
+
+        public Guid DocumentTypeId { get; set; }
+
+        [NonEmptyGuid(ErrorMessage = "Please Select Folder")]
         public Guid DocumentFolderId { get; set; }
-        
-        
-        
-        
+
+
         public Guid? CreatedBy { get; set; }
-        
+
         public string? CreatedByUserName { get; set; }
     }
 }

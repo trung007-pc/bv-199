@@ -11,7 +11,7 @@ namespace Contract.CustomAttribute
         {
             if ((value is Guid) && Guid.Empty == (Guid)value)
             {
-                return new ValidationResult("Guid cannot be empty.");
+                return new ValidationResult(ErrorMessage,new[] { validationContext.MemberName });
             }
             return null;
         }

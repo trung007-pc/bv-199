@@ -8,6 +8,7 @@ using System.Net;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Application.Helpers;
 using Contract;
@@ -232,6 +233,8 @@ namespace Application.Identity.UserManager
             string accessToken = await GenerateTokenByUser(user);
             string refreshToken = GenerateRefreshToken();
 
+            user.RefreshToken = refreshToken; await _userManager.UpdateAsync(user);
+
             return new TokenDto() {AccessToken = accessToken, RefreshToken = refreshToken};
         }
 
@@ -289,34 +292,36 @@ namespace Application.Identity.UserManager
             return null;
         }
 
+
         public async Task<TokenDto> RefreshTokenAsync(TokenModel token)
         {
-            if (token is null) throw new GlobalException(HttpMessage.Unauthorized, HttpStatusCode.Unauthorized);
+            
+                if (token is null) throw new GlobalException(HttpMessage.Unauthorized, HttpStatusCode.Unauthorized);
 
 
-            var principal = GetPrincipalFromExpiredToken(token.AccessToken);
-            var userName = principal.Identity.Name;
+                var principal = GetPrincipalFromExpiredToken(token.AccessToken);
+                var userName = principal.Identity.Name;
 
-            var user = await _userManager.FindByNameAsync(userName);
+                var user = await _userManager.FindByNameAsync(userName);
 
-            if (user == null || user.RefreshToken != user.RefreshToken)
-                throw new GlobalException(HttpMessage.Unauthorized, HttpStatusCode.Unauthorized);
+                if (user == null || user.RefreshToken != token.RefreshToken)
+                    throw new GlobalException(HttpMessage.Unauthorized, HttpStatusCode.Unauthorized);
 
-            var refreshToken = GenerateRefreshToken();
-            var accessToken = await GenerateTokenByUser(user);
-            user.RefreshToken = refreshToken;
-            var result = await _userManager.UpdateAsync(user);
+                var refreshToken = GenerateRefreshToken();
+                var accessToken = await GenerateTokenByUser(user);
+                user.RefreshToken = refreshToken;
+                var result = await _userManager.UpdateAsync(user);
 
-            if (!result.Succeeded)
-            {
-                throw new GlobalException(HttpMessage.Conflict, HttpStatusCode.TooManyRequests);
-            }
+                if (!result.Succeeded)
+                {
+                     throw new GlobalException(HttpMessage.Conflict, HttpStatusCode.TooManyRequests);
+                }
 
-            return new TokenDto()
-            {
-                AccessToken = accessToken,
-                RefreshToken = refreshToken
-            };
+                return new TokenDto()
+                {
+                    AccessToken = accessToken,
+                    RefreshToken = refreshToken
+                };
         }
 
         public void Logout()

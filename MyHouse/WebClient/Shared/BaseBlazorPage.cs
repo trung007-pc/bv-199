@@ -43,7 +43,7 @@ namespace WebClient.Shared
         public Task<AuthenticationState> AuthState { get; set; }
 
         protected IMapper ObjectMapper { get;}
-        
+
         public BaseBlazorPage()
         {
             

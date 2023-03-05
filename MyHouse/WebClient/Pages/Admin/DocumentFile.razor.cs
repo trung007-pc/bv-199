@@ -63,7 +63,7 @@ namespace WebClient.Pages.Admin
         public Guid EditingDocumentFileId { get; set; }
          [Inject]  IMessageService _messageService { get; set; }
 
-         public DocumentFileFilter Filter { get; set; } = new DocumentFileFilter();
+        public DocumentFileFilter Filter { get; set; } = new DocumentFileFilter();
 
         public Modal CreateModal;
         public Modal EditingModal;
@@ -77,7 +77,9 @@ namespace WebClient.Pages.Admin
         public IBrowserFile? PdfFile { get; set; }
 
         public IBrowserFile? EditingFile { get; set; }
+        public bool IsLoading { get; set; } = true;
 
+        
 
 
         bool sidebar1Expanded = true;
@@ -120,7 +122,9 @@ namespace WebClient.Pages.Admin
 
         public async Task GetDocumentFiles()
         {
+            IsLoading = true;
             DocumentFileWithNavProperties = await _documentFileService.GetListWithNavPropertiesAsync(Filter);
+            IsLoading = false;
         }
 
         public async Task GetUsers()
@@ -454,10 +458,8 @@ namespace WebClient.Pages.Admin
 
          async Task DownloadFile(string url,Guid documentFileId)
         {
-            _navigationManager.NavigateTo(url);
             await _documentFileService.UpdateDownloadCountAsync(documentFileId);
-            await GetDocumentFiles();
-            StateHasChanged();
+            await JS.InvokeVoidAsync("downloadURI", url,DateTime.Now.Date.ToString());
         }
 
          public async Task CreateSendingFiles(Guid fileId)

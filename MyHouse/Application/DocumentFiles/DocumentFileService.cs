@@ -151,6 +151,11 @@ namespace Application.DocumentFiles
         {
             var item = await _documentFileRepository.FirstOrDefaultAsync(x => x.Id == id);
             if(item is null)  throw new GlobalException(HttpMessage.NotFound, HttpStatusCode.BadRequest);
+            var sendFile = await _sendingFileRepository
+                .FirstOrDefaultAsync(x => x.FileId == item.Id);
+            if(sendFile is not null){ throw new GlobalException(HttpMessage.InvalidBusiness.SharedDocumentFile,
+                HttpStatusCode.BadRequest);}
+            
             item.IsDeleted = true;
             await _documentFileRepository.UpdateAsync(item);
         }

@@ -1,10 +1,11 @@
 ﻿@page "/notifications"
 @using WebClient.Service.Notications
+@using WebClient.Service.SendingFiles
 @using Color = MudBlazor.Color
 @using Orientation = Radzen.Orientation
 @inject NavigationManager _navigationManager;
 @inherits BaseBlazorPage
-
+@inject SendingFileService _sendingFileService;
 @inject NotificationnService _notificationService;
 
 

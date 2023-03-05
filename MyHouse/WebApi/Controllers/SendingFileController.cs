@@ -50,5 +50,13 @@ namespace WebApi.Controllers
         {
             return await _sendingFileService.SendNotificationForDepartmentUsersAndDefineUsers(request);
         }
+
+        [HttpGet]
+        [Route("{id}")]
+
+        public async Task<SendingFileDto> GetAsync(Guid id)
+        {
+            return await _sendingFileService.GetAsync(id);
+        }
     }
 }

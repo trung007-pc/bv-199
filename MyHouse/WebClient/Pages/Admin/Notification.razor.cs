@@ -82,9 +82,11 @@ namespace WebClient.Pages.Admin
                             ObjectMapper.Map<NotificationDto, UpdateNotification>(dto);
                         updateNotifications.Status = true;
                         await _notificationService.UpdateWithReadingStatusAsync(updateNotifications);
+
                     },ActionType.Update,false);
                 }
-                _navigationManager.NavigateTo($"view-document-file?fileId={dto.DestinationCode}");
+                var sendingFile =  await _sendingFileService.GetAsync(dto.DestinationCode);
+                _navigationManager.NavigateTo($"view-document-file?fileId={sendingFile.FileId}",true);
             }
         }
 

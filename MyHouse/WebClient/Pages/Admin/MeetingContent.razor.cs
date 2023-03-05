@@ -30,7 +30,7 @@ namespace WebClient.Pages.Admin
 
         public string HeaderTitle = "Work Schedule";
 
-
+        public bool IsLoading { get; set; } = true;
         public MeetingContent()
         {
         }
@@ -51,7 +51,9 @@ namespace WebClient.Pages.Admin
 
         public async Task GetMeetingContents()
         {
+            IsLoading = true;
             MeetingContents = await _meetingContentService.GetListAsync();
+            IsLoading = false;
         }
 
 
@@ -84,7 +86,7 @@ namespace WebClient.Pages.Admin
             {
                 if (EditFile is not null)
                 {
-                    var fileDto = await _uploadService.UploadDocumentFile(NewFile);
+                    var fileDto = await _uploadService.UploadDocumentFile(EditFile);
                     EditingMeetingContent.Path = fileDto.Path;
                     EditingMeetingContent.FileName = fileDto.FileName;
                     EditingMeetingContent.Url = fileDto.Url;

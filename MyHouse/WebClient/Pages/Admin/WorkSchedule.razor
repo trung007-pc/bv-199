@@ -37,6 +37,7 @@
                     LogicalFilterOperator="LogicalFilterOperator.Or"
                     FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
                     AllowColumnPicking="true"
+                    IsLoading="IsLoading"
                     Style="width: 100%">
         <Columns>
             <RadzenDataGridColumn TItem="WorkScheduleDto" TextAlign="TextAlign.Center" Property="Name" Title="Name" Width="160px"/>
@@ -140,12 +141,14 @@
         </ModalHeader>
         <EditForm Model="EditingWorkSchedule" OnValidSubmit="async () => { await UpdateWorkSchedule(); }">
             <ModalBody>
+                <DataAnnotationsValidator/>
+
                 <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Name</RadzenText>
                 <RadzenTextBox Class="w-100" @bind-Value="EditingWorkSchedule.Name"/>
                 <ValidationMessage For="@(() => EditingWorkSchedule.Name)"/>
 
                 <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Node</RadzenText>
-                <RadzenTextArea Placeholder="Nhập vào đây..." @bind-Value="NewWorkSchedule.Node" Rows="10" Cols="30" Class="w-100"/>
+                <RadzenTextArea Placeholder="Nhập vào đây..." @bind-Value="EditingWorkSchedule.Node" Rows="10" Cols="30" Class="w-100"/>
                 <ValidationMessage For="@(() => EditingWorkSchedule.Node)"/>
                 <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Start Day</RadzenText>
                 <RadzenDatePicker Class="w-100" @bind-Value="EditingWorkSchedule.StartDay" DateFormat="dd/MM/yyyy"/>

@@ -33,5 +33,10 @@ namespace WebClient.Service.SendingFiles
         {
             return await RequestClient.PostAPIAsync<List<SendingFileDto>>("sending-file/send-notifications-user",request);
         }
+
+        public async Task<SendingFileDto> GetAsync(Guid id)
+        {
+            return await RequestClient.GetAPIAsync<SendingFileDto>($"sending-file/{id}");
+        }
     }
 }

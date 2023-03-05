@@ -106,5 +106,14 @@ namespace Application.SendingFiles
 
             return ObjectMapper.Map<List<SendingFile>, List<SendingFileDto>>(sendingFiles);
         }
+
+        public async Task<SendingFileDto> GetAsync(Guid id)
+        {
+           
+            var item = await _sendingFileRepository
+                .FirstOrDefaultAsync(x => x.Id == id);
+            if (item == null) throw new GlobalException(HttpMessage.NotFound, HttpStatusCode.BadRequest);
+            return ObjectMapper.Map<SendingFile,SendingFileDto>(item);
+        }
     }
 }

@@ -14,7 +14,9 @@ namespace Contract.SendingFiles
         Task<List<SendingFileDto>> CreateListAsync(List<CreateUpdateSendingFileDto> inputs);
 
         Task<List<SendingFileDto>> SendNotificationForDepartmentUsersAndDefineUsers(SendingFileRequest request);
-        
+
+        Task<SendingFileDto> GetAsync(Guid id);
+
 
 
     }

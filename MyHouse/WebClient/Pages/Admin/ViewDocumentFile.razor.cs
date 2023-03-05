@@ -42,15 +42,17 @@ namespace WebClient.Pages.Admin
 
         async Task DownloadFile(string url,Guid documentFileId)
         {
-            
+            DocumentFile.DownloadCount += 1;
          
             await JS.InvokeVoidAsync("downloadURI", url,DateTime.Now.Date.ToString());
             await _documentFileService.UpdateDownloadCountAsync(documentFileId);
             StateHasChanged();
         }
         
-        async  Task PrintFile()
+        async  Task PrintFile(Guid documentFileId)
         {
+            DocumentFile.PrintCount += 1;
+            await _documentFileService.UpdatePrintCountAsync(documentFileId);
             await JS.InvokeVoidAsync("printAsFile", "bv-199");
         }
     }

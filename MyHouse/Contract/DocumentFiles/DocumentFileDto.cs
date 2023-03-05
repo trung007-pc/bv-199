@@ -34,8 +34,8 @@ namespace Contract.DocumentFiles
         public string URL { get; set; }
 
         //foreign key
-        public Guid? IssuingAgencyId { get; set; }
-        public Guid? DocumentTypeId { get; set; }
+        public Guid IssuingAgencyId { get; set; }
+        public Guid DocumentTypeId { get; set; }
         public Guid DocumentFolderId { get; set; }
         public Guid CreatedBy { get; set; }
 

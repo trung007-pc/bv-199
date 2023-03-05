@@ -116,7 +116,8 @@ namespace Application.Notifications
             {
                 notifications = await _notificationRepository.GetQueryable()
                     .Where(x => x.ReceiverId == user.Id).OrderBy(x => x.Status)
-                    .ThenByDescending(x => x.SentDate).ToListAsync();
+                    .ThenByDescending(x => x.SentDate)
+                    .ToListAsync();
             }
             else
             {

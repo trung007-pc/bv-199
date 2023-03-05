@@ -134,6 +134,7 @@
     public NotificationFilter Filter { get; set; } = new NotificationFilter();
     public List<NotificationDto> Notifications { get; set; } = new List<NotificationDto>();
     public int NotificationCount { get; set; }
+    public bool IsLoading { get; set; } = true;
 
 
     [CascadingParameter]
@@ -144,12 +145,13 @@
         if (firstRender)
         {
             var auth = await AuthState;
-            if (auth.User.Identity.IsAuthenticated)
+            if (auth.User.Identity.IsAuthenticated )
             {
                 Filter.UserName = await GetUserNameAsync();
                 Filter.Status = NotificationStatus.Unread;
                 NotificationCount = await _notificationService.CountUnreadNotificationOfUser(Filter);
                 StateHasChanged();
+               
             }
          
         }
@@ -167,7 +169,7 @@
         }
     }
 
-    public async Task GetNotifications()
+        public async Task GetNotifications()
     {
         Notifications = await _notificationService.GetListByFilter(Filter);
     }

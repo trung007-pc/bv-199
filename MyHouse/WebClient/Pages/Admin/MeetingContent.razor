@@ -37,6 +37,7 @@
                     LogicalFilterOperator="LogicalFilterOperator.Or"
                     FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
                     AllowColumnPicking="true"
+                    IsLoading="IsLoading"
                     Style="width: 100%">
         <Columns>
             <RadzenDataGridColumn TItem="MeetingContentDto" TextAlign="TextAlign.Center" Property="Name" Title="Name" Width="160px"/>
@@ -114,18 +115,19 @@
         </ModalHeader>
         <EditForm Model="EditingMeetingContent" OnValidSubmit="async () => { await UpdateMeetingContent(); }">
             <ModalBody>
+                <DataAnnotationsValidator/>
                 <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Name</RadzenText>
                 <RadzenTextBox Class="w-100" @bind-Value="EditingMeetingContent.Name"/>
                 <ValidationMessage For="@(() => EditingMeetingContent.Name)"/>
 
                 <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Node</RadzenText>
-                <RadzenTextArea Placeholder="Nhập vào đây..." @bind-Value="NewMeetingContent.Node" Rows="10" Cols="30" Class="w-100"/>
+                <RadzenTextArea Placeholder="Nhập vào đây..." @bind-Value="EditingMeetingContent.Node" Rows="10" Cols="30" Class="w-100"/>
                 <ValidationMessage For="@(() => EditingMeetingContent.Node)"/>
                 <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Start Day</RadzenText>
                 <RadzenDatePicker Class="w-100" @bind-Value="EditingMeetingContent.CreationTime" DateFormat="dd/MM/yyyy"/>
                 <ValidationMessage For="@(() => EditingMeetingContent.CreationTime)"/>
 
-                  <RZBR></RZBR>
+                <RZBR></RZBR>
                 <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3" Style="display: inline">Is Public</RadzenText>
                 <RadzenSwitch @bind-Value=@EditingMeetingContent.IsPublic />
                 <ValidationMessage For="@(() => EditingMeetingContent.IsPublic)"/>
