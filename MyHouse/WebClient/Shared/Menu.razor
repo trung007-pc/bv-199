@@ -16,16 +16,21 @@
 
             </RadzenPanelMenuItem>
         }
+         @if (context.User.IsInRole("ADMIN") || context.User.IsInRole("REPORTS"))
+        {
+            <RadzenPanelMenuItem Text="Reports" Icon="view_list">
+                <RadzenPanelMenuItem Text="Positions" Path="positions" Icon="table_view"></RadzenPanelMenuItem>
+                <RadzenPanelMenuItem Text="Departments" Path="departments" Icon="table_view"></RadzenPanelMenuItem>
 
-
+            </RadzenPanelMenuItem>
+        }
         @if (context.User.IsInRole("ADMIN")
              || context.User.IsInRole("QUALITYMANAGER"))
         {
             <RadzenPanelMenuItem Text="Satisfaction Survey" Icon="tab">
                 <RadzenPanelMenuItem Text="Dashboard" Path="dashboard" Icon="dashboard"></RadzenPanelMenuItem>
                 <RadzenPanelMenuItem Text="Unit Reviews" Path="unit-reviews" Icon="table_view"></RadzenPanelMenuItem>
-                @* <RadzenPanelMenuItem Text="Units" Path="units" Icon="table_view"></RadzenPanelMenuItem> *@
-                @* <RadzenPanelMenuItem Text="Unit Types" Path="unit-types" Icon="table_view"></RadzenPanelMenuItem> *@
+              
             </RadzenPanelMenuItem>
         }
         @if (context.User.IsInRole("ADMIN")
@@ -37,7 +42,6 @@
                 <RadzenPanelMenuItem Text="Work Schedule" Path="work-schedule" Icon="table_view"></RadzenPanelMenuItem>
             </RadzenPanelMenuItem>
         }
-
         @if (context.User.IsInRole("ADMIN") ||
              context.User.IsInRole("DOCUMENTMANAGER") ||
              context.User.IsInRole("REPORTS"))
@@ -45,33 +49,22 @@
             <RadzenPanelMenuItem Text="Document Manager" Icon="account_box">
                 <RadzenPanelMenuItem Text="Document Files" Path="document-file" Icon="table_view"></RadzenPanelMenuItem>
                 <RadzenPanelMenuItem Text="Report" Path="rolesxxxx" Icon="table_view"></RadzenPanelMenuItem>
+                <RadzenPanelMenuItem Text="File Types" Path="file-types" Icon="table_view"></RadzenPanelMenuItem>
+                     <RadzenPanelMenuItem Text="File Folders" Path="file-folders" Icon="table_view"></RadzenPanelMenuItem>
+                <RadzenPanelMenuItem Text="Issuing Agency" Path="issuing-agency" Icon="table_view"></RadzenPanelMenuItem>
             </RadzenPanelMenuItem>
         }
-
-
-
         @if (context.User.IsInRole("ADMIN") || context.User.IsInRole("ManageCategories"))
         {
             <RadzenPanelMenuItem Text="Catalogue" Icon="view_list">
                 <RadzenPanelMenuItem Text="Departments" Path="departments" Icon="table_view"></RadzenPanelMenuItem>
-                <RadzenPanelMenuItem Text="Issuing Agency" Path="issuing-agency" Icon="table_view"></RadzenPanelMenuItem>
-                <RadzenPanelMenuItem Text="File Types" Path="file-types" Icon="table_view"></RadzenPanelMenuItem>
-
+               
+                
                 <RadzenPanelMenuItem Text="Positions" Path="positions" Icon="table_view"></RadzenPanelMenuItem>
-                <RadzenPanelMenuItem Text="File Folders" Path="file-folders" Icon="table_view"></RadzenPanelMenuItem>
+                <RadzenPanelMenuItem Text="Units" Path="units" Icon="table_view"></RadzenPanelMenuItem> 
+                <RadzenPanelMenuItem Text="Unit Types" Path="unit-types" Icon="table_view"></RadzenPanelMenuItem> 
             </RadzenPanelMenuItem>
         }
-        @if (context.User.IsInRole("ADMIN") || context.User.IsInRole("REPORTS"))
-        {
-            <RadzenPanelMenuItem Text="Reports" Icon="view_list">
-                <RadzenPanelMenuItem Text="Positions" Path="positions" Icon="table_view"></RadzenPanelMenuItem>
-                <RadzenPanelMenuItem Text="Departments" Path="departments" Icon="table_view"></RadzenPanelMenuItem>
-
-            </RadzenPanelMenuItem>
-        }
-
-
-
         @if (context.User.IsInRole("ADMIN"))
         {
             <RadzenPanelMenuItem Text="Administrator" Icon="account_box">
