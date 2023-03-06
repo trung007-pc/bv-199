@@ -129,9 +129,9 @@
                     </Template>
                 </RadzenDataGridColumn>
 
-                <RadzenDataGridColumn TItem="DocumentFileWithNavPropertiesDto" Property="File.CreationDate" TextAlign="TextAlign.Center" Title="Received Date" Width="160px">
+                <RadzenDataGridColumn TItem="DocumentFileWithNavPropertiesDto" Property="SendingFile.SentDate" TextAlign="TextAlign.Center" Title="Received Date" Width="160px">
                     <Template Context="data">
-                        @($"{data.File.CreationDate:dd/MM/yyyy}")
+                        @($"{data.SendingFile.SentDate:dd/MM/yyyy}")
                     </Template>
                 </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="DocumentFileWithNavPropertiesDto" Property="File.Name" Title="Action" TextAlign="TextAlign.Center" Filterable="false">

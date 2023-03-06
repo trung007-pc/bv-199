@@ -61,20 +61,8 @@ namespace Application.FileTypes
                 throw new GlobalException(HttpMessage.NotFound, HttpStatusCode.BadRequest);
             }
             
-            
-            var departments = 
-                await _fileTypeRepository.GetListAsync(x => x.ParentCode == id);
-
-            foreach (var item in departments)
-            {
-                item.ParentCode = null;
-            }
-            
-            _fileTypeRepository.UpdateRange(departments);
-
-           _fileTypeRepository.Remove(types);
-           
-            }
+            _fileTypeRepository.Remove(types);
+        }
 
         public async Task<List<FileTypeDto>> GetListAsync()
         {

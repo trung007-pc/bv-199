@@ -122,7 +122,7 @@ namespace SqlServ4r.EntityFramework
             
             
             
-            //1-n
+            //FILE MANAGER
             builder.Entity<DocumentFile>().HasOne<IssuingAgency>(x => x.IssuingAgency)
                 .WithMany(x => x.DocumentFiles)
                 .HasForeignKey(x => x.IssuingAgencyId)
@@ -134,7 +134,8 @@ namespace SqlServ4r.EntityFramework
             builder.Entity<DocumentFile>().HasOne<FileFolder>(x => x.FileFolder)
                 .WithMany(x => x.Files)
                 .HasForeignKey(x => x.DocumentFolderId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.SetNull);
 
 
             builder.Entity<DocumentFile>().HasOne<User>(x => x.User)
@@ -145,6 +146,7 @@ namespace SqlServ4r.EntityFramework
             builder.Entity<DocumentFile>().HasOne<FileType>(x => x.FileType)
                 .WithMany(x => x.DocumentFiles)
                 .HasForeignKey(x => x.DocumentTypeId)
+                .IsRequired(false)
                 .OnDelete(DeleteBehavior.SetNull);
 
             builder.Entity<FileVersion>().

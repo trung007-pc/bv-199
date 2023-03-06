@@ -76,7 +76,7 @@ namespace Application.MyDashboards
 
             myStatistics.ReadingRate = await _sendingFileRepository.GetReadingRateOfUser(filter.UserId);
             return myStatistics;
-        }
+        }   
         
         
     }

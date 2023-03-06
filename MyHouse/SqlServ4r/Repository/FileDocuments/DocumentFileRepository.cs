@@ -27,31 +27,30 @@ namespace SqlServ4r.Repository.FileDocuments
         public async Task<List<DocumentFileWithNavProperties>> GetFilesWithNavProperties(DocumentFileFilter filter)
         {
 
-            var query = from file in _context.DocumentFiles.Where(x => !x.IsDeleted)
+            var folderIds = new List<Guid?>();
+            if (filter.DocumentFolderId.HasValue)
+            {
+                var result =await GetChildFolderIdAsync(filter.DocumentFolderId.Value);
+                folderIds = result.Cast<Guid?>().ToList(); 
+                folderIds.Add(filter.DocumentFolderId.Value);
+               
+            }
+            
+            var query = from file in _context.DocumentFiles.Where(x => 
+                        !x.IsDeleted)
+                    .WhereIf(filter.StartDay.HasValue && filter.EndDay.HasValue
+                        , x => x.CreationDate >= filter.StartDay && x.CreationDate <= filter.EndDay)
+                    .WhereIf(folderIds.Count > 0 , x=>folderIds.Contains(x.DocumentFolderId))
+                    .WhereIf(!filter.Text.IsNullOrWhiteSpace(),
+                        x => x.Name.Contains(filter.Text)|| x.Code.Contains(filter.Text))
+                    .WhereIf(filter.FileTypeId.HasValue, x => x.DocumentTypeId == filter.FileTypeId)
+                    .WhereIf(filter.IssuingAgencyId.HasValue, x => x.IssuingAgency.Id == filter.IssuingAgencyId)
                 select new DocumentFileWithNavProperties
                 {
                     File = file,
                     FileType = file.FileType ,
-                    IssuingAgency = file.IssuingAgency
+                    IssuingAgency = file.IssuingAgency,
                 };
-
-            var folderIds = new List<Guid>();
-            if (filter.DocumentFolderId.HasValue)
-            {
-                folderIds = await GetChildFolderIdAsync(filter.DocumentFolderId.Value);
-                folderIds.Add(filter.DocumentFolderId.Value);
-            }
-
-
-            query = query.WhereIf(filter.StartDay.HasValue && filter.EndDay.HasValue
-                    , x => x.File.CreationDate >= filter.StartDay && x.File.CreationDate <= filter.EndDay)
-                .WhereIf(!filter.Text.IsNullOrWhiteSpace(),
-                    x => x.File.Name.Contains(filter.Text)
-                         || x.File.Code.Contains(filter.Text)
-                )
-                .WhereIf(filter.DocumentFolderId.HasValue, x => folderIds.Contains(x.File.DocumentFolderId))
-                .WhereIf(filter.FileTypeId.HasValue, x => x.File.DocumentTypeId == filter.FileTypeId)
-                .WhereIf(filter.IssuingAgencyId.HasValue, x => x.IssuingAgency.Id == filter.IssuingAgencyId);
 
 
             return await query.ToListAsync();
@@ -87,7 +86,7 @@ namespace SqlServ4r.Repository.FileDocuments
             
             var query = from file in _context.DocumentFiles.Where(x => 
                     !x.IsDeleted)
-                    .WhereIf(folderIds.Count > 0 , x=>folderIds.Contains(x.DocumentFolderId))
+                    .WhereIf(folderIds.Count > 0 , x=>folderIds.Contains(x.DocumentFolderId.GetValueOrDefault()))
                     .WhereIf(!filter.Text.IsNullOrWhiteSpace(),
                         x => x.Name.Contains(filter.Text)|| x.Code.Contains(filter.Text))
                     .WhereIf(filter.FileTypeId.HasValue, x => x.DocumentTypeId == filter.FileTypeId)

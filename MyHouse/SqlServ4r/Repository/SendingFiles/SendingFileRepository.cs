@@ -23,7 +23,11 @@ namespace SqlServ4r.Repository.SendingFiles
         {
            var receivedfiles = await _context.SendingFiles
                .Where(x => x.ReceiverId == userId).ToListAsync();
-           var rate = ((double)receivedfiles.Count(x => x.Status) / receivedfiles.Count)*100;
+           var rate = 100.0;
+           if (receivedfiles.Count > 0)
+           {
+               rate = ((double)receivedfiles.Count(x => x.Status) / receivedfiles.Count )*100;
+           }
            return rate;
         }
         

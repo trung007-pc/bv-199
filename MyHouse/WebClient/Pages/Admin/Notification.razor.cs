@@ -64,7 +64,7 @@ namespace WebClient.Pages.Admin
                 var notifications = Notifications.Where(x => x.Status && x.Visible).ToList();
                 var updateNotifications =
                     ObjectMapper.Map<List<NotificationDto>, List<UpdateNotification>>(notifications);
-                await _notificationService.UpdateListAsync(updateNotifications);
+                await _notificationService.UpdateListWithReadingStatusAsync(updateNotifications);
                 await GetNotifications();
             },ActionType.Update,true);
 

@@ -62,20 +62,8 @@ namespace Application.IssuingAgencys
                 throw new GlobalException(HttpMessage.NotFound, HttpStatusCode.BadRequest);
             }
             
-            
-            var departments = 
-                await  _issuingAgencyRepository.GetListAsync(x => x.ParentCode == id);
-
-            foreach (var item in departments)
-            {
-                item.ParentCode = null;
-            }
-            
-             _issuingAgencyRepository.UpdateRange(departments);
-
             _issuingAgencyRepository.Remove(agencys);
-           
-            }
+        }
 
         public async Task<List<IssuingAgencyDto>> GetListAsync()
         {

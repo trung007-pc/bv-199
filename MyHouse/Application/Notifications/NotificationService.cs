@@ -68,7 +68,7 @@ namespace Application.Notifications
             return result;
         }
 
-        public async Task<bool> UpdateListReadingStatusAsync(List<UpdateNotification> inputs)
+        public async Task<bool> UpdateListWithReadingStatusAsync(List<UpdateNotification> inputs)
         {
             await UpdateListAsync(inputs);
             var sendingFileIds = 

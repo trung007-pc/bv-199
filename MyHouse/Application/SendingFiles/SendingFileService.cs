@@ -66,9 +66,9 @@ namespace Application.SendingFiles
 
             var userDepartments = await _userDepartmentRepository.GetListAsync(x => request
                 .DepartmentIds.Contains(x.DepartmentId));
-            var userIds = userDepartments.Select(x => x.UserId).Distinct().ToList();
+            var userIds = userDepartments.Select(x => x.UserId).ToList();
             userIds.AddRange(request.DefineUsers);
-            userIds = userIds.Where(x => x != request.Sender).ToList();
+            userIds = userIds.Where(x => x != request.Sender).Distinct().ToList();
             
             
             var sendingFiles = new List<SendingFile>();

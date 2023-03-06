@@ -40,7 +40,7 @@ namespace Domain.DocumentFiles
         
         public Guid? IssuingAgencyId { get; set; }
         public Guid? DocumentTypeId { get; set; }
-        public Guid DocumentFolderId { get; set; }
+        public Guid? DocumentFolderId { get; set; }
         public Guid CreatedBy { get; set; }
         
         //naviagation

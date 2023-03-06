@@ -64,11 +64,6 @@ namespace Application.FileForders
             {
                 throw new GlobalException(HttpMessage.NotFound, HttpStatusCode.BadRequest);
             }
-
-            if (await _documentFileRepository.GetQueryable().AnyAsync(x => x.DocumentFolderId == folder.Id))
-            {
-                throw new GlobalException(HttpMessage.InvalidBusiness.FileExistFolder, HttpStatusCode.BadRequest);
-            }
             _fileFolderRepository.Remove(folder);
         }
 

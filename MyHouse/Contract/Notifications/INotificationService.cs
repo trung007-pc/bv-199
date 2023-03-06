@@ -12,7 +12,7 @@ namespace Contract.Notifications
         Task<NotificationDto> UpdateAsync(UpdateNotification input);
         
         Task<NotificationDto> UpdateWithReadingStatusAsync(UpdateNotification input);
-        Task<bool> UpdateListReadingStatusAsync(List<UpdateNotification> inputs);
+        Task<bool> UpdateListWithReadingStatusAsync(List<UpdateNotification> inputs);
 
         Task DeleteAsync(Guid id);
         

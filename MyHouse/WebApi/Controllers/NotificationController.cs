@@ -41,9 +41,9 @@ namespace WebApi.Controllers
 
         [HttpPut]
         [Route("update-list-reading-status")]
-        public async Task<bool> UpdateListReadingStatusAsync(List<UpdateNotification> inputs)
+        public async Task<bool> UpdateListWithReadingStatusAsync(List<UpdateNotification> inputs)
         {
-            return await _notificationService.UpdateListReadingStatusAsync(inputs);
+            return await _notificationService.UpdateListWithReadingStatusAsync(inputs);
         }
 
         public Task DeleteAsync(Guid id)

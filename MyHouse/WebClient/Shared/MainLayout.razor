@@ -1,6 +1,9 @@
 ﻿@using System.Security.Claims
+@using AutoMapper.Internal.Mappers
 @using Contract.Notifications
+@using Core.Enum
 @using WebClient.Service.Notications
+@using WebClient.Service.SendingFiles
 @using Color = MudBlazor.Color
 @using NotificationType = Core.Enum.NotificationType
 @using Variant = MudBlazor.Variant
@@ -8,7 +11,7 @@
 @inject NavigationManager _navManager
 @inject NotificationnService _notificationService
 @inject NavigationManager _navigationManager;
-
+@inject SendingFileService _sendingFileService;
 <RadzenLayout class="rz-shadow-3">
     <RadzenHeader>
         <RadzenRow Gap="0">
@@ -194,8 +197,8 @@
 
     public async Task ViewNotification(NotificationDto dto)
     {
-
-        if (dto.Type == NotificationType.Document)
+        
+    if (dto.Type == NotificationType.Document)
         {
             var updateNotification = new UpdateNotification()
             {
@@ -207,10 +210,11 @@
                 ReceiverId = dto.ReceiverId,
                 SentDate = dto.SentDate
             };
-            await _notificationService.UpdateAsync(updateNotification);
+            await _notificationService.UpdateWithReadingStatusAsync(updateNotification);
             NotificationCount = await _notificationService.CountUnreadNotificationOfUser(Filter);
             await ToggleNotification();
-            _navigationManager.NavigateTo($"view-document-file?fileId={dto.DestinationCode}");
+            var sendingFile =  await _sendingFileService.GetAsync(dto.DestinationCode);
+            _navigationManager.NavigateTo($"view-document-file?fileId={sendingFile.FileId}");
         }
         if (dto.Type == NotificationType.Task)
         {
