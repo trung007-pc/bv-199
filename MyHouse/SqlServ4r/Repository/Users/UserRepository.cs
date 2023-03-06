@@ -66,5 +66,27 @@ namespace SqlServ4r.Repository.Users
             return await query.ToListAsync();
 
         }
+
+        public async Task<UserWithNavigationProperties> GetWithNavigationProperties(Guid id)
+        {
+            var query = from user in _context.Users.Where(x=>x.Id == id)
+                select new UserWithNavigationProperties
+                {
+                    User = user,
+                    RoleNames = (from roleUser in _context.UserRoles
+                        join role in _context.Roles on roleUser.RoleId equals role.Id
+                        where roleUser.UserId == user.Id
+                        select role.Name).ToList(),
+                    Position  = _context.Positions.FirstOrDefault(x=>x.Id == user.PositionId),
+                    Departments = (from department in _context.Departments 
+                        join departmentUser in _context.UserDepartments
+                            on department.Id equals departmentUser.DepartmentId
+                        where departmentUser.UserId == user.Id
+                        select department).ToList()
+                  
+                };
+            
+            return await query.FirstOrDefaultAsync() ?? new UserWithNavigationProperties();
+        }
     }
 }

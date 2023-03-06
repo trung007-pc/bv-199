@@ -11,6 +11,7 @@ namespace SqlServ4r.Repository.Users
         (bool ExistEmail, bool ExistPhoneNumber,bool ExistEmployeeCode) CheckDuplicateInformation(string email,string phone,string employeeCode,Guid id);
 
         Task<List<UserWithNavigationProperties>> GetListWithNavigationProperties();
+        Task<UserWithNavigationProperties> GetWithNavigationProperties(Guid id);
 
     }
 }

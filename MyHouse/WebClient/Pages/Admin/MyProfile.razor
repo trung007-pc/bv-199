@@ -1,0 +1,73 @@
+﻿@page "/my-profile"
+@using Color = MudBlazor.Color
+@using WebClient.Service.Users
+@using ButtonType = Radzen.ButtonType
+@inherits BaseBlazorPage
+@inject UserManagerService _userDtoManagerService;
+
+<MudTabs Outlined="true" Position="@Position" Rounded="true" Border="true"
+
+         ApplyEffectsToContainer="true" Class="mt-8" PanelClass="pa-6">
+    <MudTabPanel Text="My Profile" Icon="@Icons.Material.Filled.Person" Style="min-width: 0">
+        <RadzenRow Gap="20px">
+
+            <RadzenColumn Size="6">
+                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3"> First Name </RadzenText>
+                <RadzenTextBox Class="w-100" @bind-Value="UserDto.User.FirstName" Disabled="true"/>
+
+                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3"> Last Name </RadzenText>
+                <RadzenTextBox Class="w-100" @bind-Value="UserDto.User.LastName" Disabled="true"/>
+
+                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Employee Code </RadzenText>
+                <RadzenTextBox Class="w-100" @bind-Value="UserDto.User.EmployeeCode" Disabled="true"/>
+
+
+                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Phone Number </RadzenText>
+                <RadzenTextBox Class="w-100" @bind-Value="UserDto.User.PhoneNumber" Disabled="true"/>
+                
+            </RadzenColumn>
+
+            <RadzenColumn Size="6">
+                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Position </RadzenText>
+                <RadzenTextBox Class="w-100" @bind-Value="UserDto.Position.Name" Disabled="true"/>
+
+
+                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Departments</RadzenText>
+                @{ int i = 0; }
+                @foreach (var item in UserDto.Departments)
+                {
+                    <RadzenBadge BadgeStyle="BadgeStyle.Info" IsPill="@true" Text="@item.Name" Class="ml-2"/>
+                    i++;
+                }
+
+                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Roles</RadzenText>
+                @{ int i1 = 0; }
+                @foreach (var item in  UserDto.RoleNames)
+                {
+                    <RadzenBadge BadgeStyle="BadgeStyle.Primary" IsPill="@true" Text="@item" Class="ml-2"/>
+                    i1++;
+                }
+
+            </RadzenColumn>
+        </RadzenRow>
+    </MudTabPanel>
+    <MudTabPanel Text="Reset Password" Icon="@Icons.Material.Filled.Key" >
+
+        <EditForm Model="NewPassword" OnValidSubmit="async () => { await ResetPassword(); }" style="width: 50%">
+
+                <DataAnnotationsValidator/>
+                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">New Password</RadzenText>
+                <RadzenPassword Class="w-100" @bind-Value="NewPassword.NewPassword" />
+                <ValidationMessage For="@(() => NewPassword.NewPassword)"/>
+
+                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">New Password Confirm</RadzenText>
+                <RadzenPassword Class="w-100" @bind-Value="NewPassword.NewPasswordConfirm"/>
+                <ValidationMessage For="@(() => NewPassword.NewPasswordConfirm)"/>
+
+                <RZBR></RZBR>
+                <RadzenButton Text="Save Changes" Icon="save" ButtonType="ButtonType.Submit"/>
+
+        </EditForm>
+
+    </MudTabPanel>
+</MudTabs>

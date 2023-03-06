@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using AutoMapper.Internal.Mappers;
@@ -7,6 +8,7 @@ using Contract.MeetingContents;
 using Core.Const;
 using Core.Exceptions;
 using Domain.MeetingContents;
+using Microsoft.EntityFrameworkCore;
 using SqlServ4r.Repository.MeetingContents;
 using Volo.Abp.DependencyInjection;
 
@@ -22,8 +24,8 @@ namespace Application.MeetingContents
         
         public async Task<List<MeetingContentDto>> GetListAsync()
         {
-            var contents = await _unitTypeRepository.ToListAsync();
-            var contentsDto = ObjectMapper.Map<List<MeetingContent>, List<MeetingContentDto>>(contents);
+            var contents = await _unitTypeRepository.GetListAsync();
+                var contentsDto = ObjectMapper.Map<List<MeetingContent>, List<MeetingContentDto>>(contents);
             return contentsDto;
         }
         

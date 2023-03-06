@@ -2,15 +2,12 @@
 
 namespace Contract.Identity.UserManager
 {
-    public class UserPasswordUpdateModel
+    public class NewUserPasswordDto
     {
-        [MinLength(6)]
+     
         public string UserName { get; set; }
         
-        [MinLength(6)]
-        public string? CurrentPassword { get; set; }
-        
-        [MinLength(6)]
+        [Required(ErrorMessage = "NewPassword Is Required")]
         public string? NewPassword { get; set; }
         
         

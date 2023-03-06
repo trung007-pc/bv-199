@@ -78,6 +78,11 @@ namespace Application.Identity.UserManager
             return ObjectMapper.Map<List<UserWithNavigationProperties>,List<UserWithNavigationPropertiesDto>>(users);
         }
 
+        public async Task<UserWithNavigationPropertiesDto> GetWithNavigationProperties(Guid id)
+        {
+           return  ObjectMapper.Map<UserWithNavigationProperties,UserWithNavigationPropertiesDto>(await _userRepository.GetWithNavigationProperties(id));
+        }
+
         public async Task<UserDto> CreateUserWithNavigationPropertiesAsync(CreateUserDto input)
         {
             var dto = await CreateAsync(input);
@@ -252,6 +257,24 @@ namespace Application.Identity.UserManager
             return ObjectMapper.Map<User, UserDto>(user);
         }
 
+        public async Task<bool> SetNewPasswordAsync(NewUserPasswordDto input)
+        {
+            var user = await _userManager.FindByNameAsync(input.UserName);
+            if (user == null)
+            {
+                throw new GlobalException(HttpMessage.CheckInformation, HttpStatusCode.BadRequest);
+            }
+            
+            var token  = await _userManager.GeneratePasswordResetTokenAsync(user);
+            var result =   await _userManager.ResetPasswordAsync(user, token, input.NewPassword);
+            if (!result.Succeeded)
+            {
+                throw new GlobalException(result.Errors.FirstOrDefault().Description, HttpStatusCode.BadRequest);
+            }
+            
+            return true;
+        }
+
         public async Task UpdateRolesForUser(string userName, List<string> roles)
         {
             var user = await _userManager.FindByNameAsync(userName);
@@ -280,17 +303,8 @@ namespace Application.Identity.UserManager
             throw new NotImplementedException();
         }
 
-        public async Task<UserPasswordUpdateModel> ChangePasswordAsync(UserPasswordUpdateModel userDto)
-        {
-
-            return null;
-        }
-
-        public async Task<UserDto> SetPasswordAsync(UserModel input)
-        {
-     
-            return null;
-        }
+    
+        
 
 
         public async Task<TokenDto> RefreshTokenAsync(TokenModel token)

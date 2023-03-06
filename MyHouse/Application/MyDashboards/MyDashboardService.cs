@@ -46,11 +46,10 @@ namespace Application.MyDashboards
         {
 
             var chart = new GlobalStatistics();
-            var meetingContents = await _meetingContentRepository.
-                GetListAsync(x => x.IsPublic
-                                  && x.CreationTime >= filter.StartDay && x.CreationTime <= filter.EndDay);
-            var workSchedules = await _workScheduleRepository
-                .GetListAsync(x =>x.CreationTime >= filter.StartDay && x.CreationTime <= filter.EndDay);
+            var meetingContents = await _meetingContentRepository.GetListAsync(filter.StartDay, 
+                filter.EndDay, true);
+
+            var workSchedules = await _workScheduleRepository.GetListAsync(filter.StartDay, filter.EndDay);
             
              var folders = await _fileFolderRepository.GetMostPopularFolder(filter.FolderTop);
           

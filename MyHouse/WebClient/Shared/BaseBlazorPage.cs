@@ -119,6 +119,12 @@ namespace WebClient.Shared
                             _notificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Upload File Succeeded ", Duration = 4000 });
                             break;
                         }
+                        
+                        case ActionType.Reset:
+                        {
+                            _notificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Reset Succeeded ", Duration = 4000 });
+                            break;
+                        }
                     
                     }
                 }

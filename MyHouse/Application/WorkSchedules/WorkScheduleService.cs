@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using AutoMapper.Internal.Mappers;
@@ -7,6 +8,7 @@ using Contract.WorkSchedules;
 using Core.Const;
 using Core.Exceptions;
 using Domain.WorkSchedules;
+using Microsoft.EntityFrameworkCore;
 using SqlServ4r.Repository.WorkSchedules;
 using Volo.Abp.DependencyInjection;
 
@@ -23,7 +25,7 @@ namespace Application.WorkSchedules
         
         public async Task<List<WorkScheduleDto>> GetListAsync()
         {
-            var workSchedules = await _workScheduleRepository.ToListAsync();
+            var workSchedules = await _workScheduleRepository.GetListAsync();
             var workSchedulesDto = ObjectMapper.Map<List<WorkSchedule>, List<WorkScheduleDto>>(workSchedules);
             return workSchedulesDto;
         }

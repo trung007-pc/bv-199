@@ -25,6 +25,7 @@ namespace WebClient.Pages.Admin
         public MyStatisticFilter MyStatisticFilter { get; set; } = new MyStatisticFilter();
 
         public bool IsLoading { get; set; } = true;
+        public bool IsLoadingChart { get; set; } = true;
         public Dictionary<string, DateRange> DateRanges { get; set; } = new Dictionary<string, DateRange>();
         public (DateTimeOffset? StartDay, DateTimeOffset? EndDay) Timeline = (null, null);
         
@@ -34,6 +35,7 @@ namespace WebClient.Pages.Admin
         public MeetingContentDto SelectedContent { get; set; }
         public WorkScheduleDto  SelectedSchedule { get; set; }
 
+
         protected override async Task OnInitializedAsync()
         {
            
@@ -41,17 +43,20 @@ namespace WebClient.Pages.Admin
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
             if (firstRender)
-            {
+            {            
                 await Init();
                 await GetGlobalStatistics();
                 await GetMyStatistics();
+                IsLoading = false;
                 StateHasChanged();
             }
         }
 
         public async Task GetGlobalStatistics()
         {
+            IsLoadingChart = true;
             GlobalStatistics = await _myDashboardService.GetGlobalStatistics(StatisticFilter);
+            IsLoadingChart = false;
         }
 
         public async Task GetMyStatistics()
