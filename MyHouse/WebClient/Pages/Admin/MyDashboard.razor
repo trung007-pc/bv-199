@@ -117,7 +117,7 @@ else
             <RadzenCard>
 
                 <div style="display: flex;align-items: center;gap: 3px">
-                    <RadzenIcon Icon="remove_red_eye" Style="font-size: 30px;color: #b02a37"></RadzenIcon>
+                    <RadzenIcon Icon="description" Style="font-size: 20px;color: #b02a37"></RadzenIcon>
                     <span style="font-size: 12px;color: grey;">Unread Documents</span>
                 </div>
 
@@ -127,16 +127,16 @@ else
                                 PageSizeOptions="PageSizeOptions"
                                 Style="width: 100%">
                     <Columns>
-                        <RadzenDataGridColumn TItem="DocumentFileWithNavPropertiesDto" Property="File.Name" TextAlign="TextAlign.Center" Title="Name" Width="160px" Sortable="false"/>
-                        <RadzenDataGridColumn TItem="DocumentFileWithNavPropertiesDto" Property="File.PublicationDate" TextAlign="TextAlign.Center" Title="Publication Date" Width="160px">
+                        <RadzenDataGridColumn TItem="DocumentFileWithNavPropertiesDto" Property="File.Name" TextAlign="TextAlign.Left" Title="Name" Width="260px" Sortable="false"/>
+                        <RadzenDataGridColumn TItem="DocumentFileWithNavPropertiesDto" Property="File.PublicationDate" TextAlign="TextAlign.Center" Title="Publication Date" Width="60px">
                             <Template Context="data">
                                 @($"{data.File.PublicationDate:dd/MM/yyyy}")
                             </Template>
                         </RadzenDataGridColumn>
 
-                        <RadzenDataGridColumn TItem="DocumentFileWithNavPropertiesDto" Property="File.Name" TextAlign="TextAlign.Center" Title="Status" Width="160px" Sortable="false">
+                        <RadzenDataGridColumn TItem="DocumentFileWithNavPropertiesDto" Property="File.Name" TextAlign="TextAlign.Center" Title="Status" Width="60px" Sortable="false">
                             <Template Context="data">
-                                <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="remove_red_eye" Click=" async () => { await GotoViewDocumentFile(data.SendingFile); }" Variant="Variant.Flat" Shade="Shade.Default" Size="ButtonSize.Medium" Class="my-1 ms-1"></RadzenButton>
+                                <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="remove_red_eye" Click=" async () => { await GotoViewDocumentFile(data.SendingFile); }" Variant="Variant.Flat" Shade="Shade.Default" Size="ButtonSize.Small" Class="my-1 ms-1"></RadzenButton>
                             </Template>
                         </RadzenDataGridColumn>
                     </Columns>
@@ -149,7 +149,7 @@ else
                 <RadzenRow Gap="10px">
                     <RadzenColumn Size="12">
                         <div style="display: flex;align-items: center;gap: 3px">
-                            <RadzenIcon Icon="work" Style="font-size: 40px;color: #6c757d"></RadzenIcon>
+                            <RadzenIcon Icon="calendar_month" Style="font-size: 20px;color: #6c757d"></RadzenIcon>
                             <span style="font-size: 12px;color: grey;">Work Schedules</span>
                         </div>
 
@@ -157,21 +157,21 @@ else
                                         Data="@GlobalStatistics.WorkSchedules" TItem="WorkScheduleDto" ColumnWidth="300px"
                                         Style="width: 100%">
                             <Columns>
-                                <RadzenDataGridColumn TItem="WorkScheduleDto" TextAlign="TextAlign.Center" Property="Name" Title="Name" Width="160px" Sortable="false"/>
-                                <RadzenDataGridColumn TItem="WorkScheduleDto" TextAlign="TextAlign.Center" Property="Status" Title="Status" Width="160px"  Sortable="false">
+                                <RadzenDataGridColumn TItem="WorkScheduleDto" TextAlign="TextAlign.Left" Property="Name" Title="Name" Width="160px" Sortable="false"/>
+                                <RadzenDataGridColumn TItem="WorkScheduleDto" TextAlign="TextAlign.Center" Property="Status" Title="Status" Width="80px"  Sortable="false">
                                     <Template Context="data">
                                         <MudIcon Icon="@Icons.Material.Filled.Stop" Title="Favorite" Color="SetColorByStatus(data.ScheduleStatus)"/> @data.ScheduleStatus
                                     </Template>
                                 </RadzenDataGridColumn>
-                                <RadzenDataGridColumn TItem="WorkScheduleDto" TextAlign="TextAlign.Center" Property="CreationTime" Title="Creation Time" Width="160px">
+                                <RadzenDataGridColumn TItem="WorkScheduleDto" TextAlign="TextAlign.Center" Property="CreationTime" Title="Creation Time" Width="60px">
                                     <Template Context="data">
                                         @($"{data.CreationTime:dd/MM/yyyy}")
                                     </Template>
                                 </RadzenDataGridColumn>
 
-                                <RadzenDataGridColumn TItem="WorkScheduleDto" Property="Name" TextAlign="TextAlign.Center" Title="Detail" Width="160px" Sortable="false">
+                                <RadzenDataGridColumn TItem="WorkScheduleDto" Property="Name" TextAlign="TextAlign.Center" Title="Detail" Width="60px" Sortable="false">
                                     <Template Context="data">   
-                                        <RadzenButton Icon="remove_red_eye" Click="async () => { await ShowScheduleFileView(data); }" Variant="Variant.Flat" Shade="Shade.Default" Size="ButtonSize.Medium" Class="my-1 ms-1"></RadzenButton>
+                                        <RadzenButton Icon="remove_red_eye" Click="async () => { await ShowScheduleFileView(data); }" Variant="Variant.Flat" Shade="Shade.Default" Size="ButtonSize.Small" Class="my-1 ms-1"></RadzenButton>
                                     </Template>
                                 </RadzenDataGridColumn>
 
@@ -183,7 +183,7 @@ else
 
                     <RadzenColumn Size="12">
                         <div style="display: flex;align-items: center;gap: 3px">
-                            <RadzenIcon Icon="groups_2" Style="font-size: 40px;color: #0b5ed7"></RadzenIcon>
+                            <RadzenIcon Icon="groups_2" Style="font-size: 20px;color: #0b5ed7"></RadzenIcon>
                             <span style="font-size: 12px;color: grey;">Meeting Contents</span>
                         </div>
 
@@ -192,16 +192,16 @@ else
                                         Data="@GlobalStatistics.MeetingContents" TItem="MeetingContentDto" ColumnWidth="300px"
                                         Style="width: 100%">
                             <Columns>
-                                <RadzenDataGridColumn TItem="MeetingContentDto" TextAlign="TextAlign.Center" Property="Name" Title="Name" Width="160px" Sortable="false"/>
-                                <RadzenDataGridColumn TItem="MeetingContentDto" TextAlign="TextAlign.Center" Property="CreationTime" Title="Creation Time" Width="160px">
+                                <RadzenDataGridColumn TItem="MeetingContentDto" TextAlign="TextAlign.Left" Property="Name" Title="Name" Width="160px" Sortable="false"/>
+                                <RadzenDataGridColumn TItem="MeetingContentDto" TextAlign="TextAlign.Center" Property="CreationTime" Title="Creation Time" Width="60px">
                                     <Template Context="data">
                                         @($"{data.CreationTime:dd/MM/yyyy}")
                                     </Template>
                                 </RadzenDataGridColumn>
 
-                                <RadzenDataGridColumn TItem="MeetingContentDto" Property="Name" TextAlign="TextAlign.Center" Title="Status" Width="160px" Sortable="false">
+                                <RadzenDataGridColumn TItem="MeetingContentDto" Property="Name" TextAlign="TextAlign.Center" Title="Status" Width="60px" Sortable="false">
                                     <Template Context="data">
-                                        <RadzenButton Icon="remove_red_eye" Click="async () => { await ShowMeetingContentFileView(data); }" Variant="Variant.Flat" Shade="Shade.Default" Size="ButtonSize.Medium" Class="my-1 ms-1"></RadzenButton>
+                                        <RadzenButton Icon="remove_red_eye" Click="async () => { await ShowMeetingContentFileView(data); }" Variant="Variant.Flat" Shade="Shade.Default" Size="ButtonSize.Small" Class="my-1 ms-1"></RadzenButton>
                                     </Template>
                                 </RadzenDataGridColumn>
 

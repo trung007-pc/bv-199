@@ -150,12 +150,12 @@
 
 
 @* Sending - FIle *@
-<RZModel @ref="@SendingFileModel" Width="70vw" Title="Send File" ShowTitle="true">
+<RZModel @ref="@SendingFileModel" Width="50vw" Title="Send File" Style="min-height:500px" ShowTitle="true">
     <RadzenAlert AlertStyle="AlertStyle.Success" ShowIcon="true" Variant="Variant.Flat" Shade="Shade.Lighter">
         Number:@DocumentFileDto.Code|Name:@DocumentFileDto.Name|Storage Number :@DocumentFileDto.StorageCode
     </RadzenAlert>
     <RadzenRow Gap="10">
-        <RadzenColumn Size="5">
+        <RadzenColumn Size="4">
             <RadzenText>Send By Department</RadzenText>
             <RadzenTree Data=@HierarchicalDepartments Style="width:100%"
                         AllowCheckBoxes="true"
@@ -175,10 +175,10 @@
                 </RadzenTreeLevel>
             </RadzenTree>
         </RadzenColumn>
-        <RadzenColumn Size="5">
+        <RadzenColumn Size="8">
             <RadzenText>Send By Identity</RadzenText>
             <RadzenDropDownDataGrid Multiple="true"
-                                    Style="width: 70%"
+                                    Style="width: 100%"
                                     AllowClear="true" AllowFiltering="true"
                                     Chips="true"
                                     FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"

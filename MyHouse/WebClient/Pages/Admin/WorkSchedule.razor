@@ -40,8 +40,8 @@
                     IsLoading="IsLoading"
                     Style="width: 100%">
         <Columns>
-            <RadzenDataGridColumn TItem="WorkScheduleDto" TextAlign="TextAlign.Center" Property="Name" Title="Name" Width="160px"/>
-            <RadzenDataGridColumn TItem="WorkScheduleDto" TextAlign="TextAlign.Center" Property="Node" Title="Node" Width="160px"/>
+            <RadzenDataGridColumn TItem="WorkScheduleDto" TextAlign="TextAlign.Left" Property="Name" Title="Name" Width="260px"/>
+            <RadzenDataGridColumn TItem="WorkScheduleDto" TextAlign="TextAlign.Left" Property="Node" Title="Node" Width="260px"/>
             <RadzenDataGridColumn TItem="WorkScheduleDto" TextAlign="TextAlign.Center" Property="CreationTime" Title="Creation Time" Width="160px">
                 <Template Context="data">
                     @($"{data.CreationTime:dd/MM/yyyy}")
@@ -93,6 +93,7 @@
                 <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Node</RadzenText>
                 <RadzenTextArea Placeholder="Nhập vào đây..." @bind-Value="NewWorkSchedule.Node" Rows="10" Cols="30" Class="w-100"/>
                 <ValidationMessage For="@(() => NewWorkSchedule.Node)"/>
+
                 <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Start Day</RadzenText>
                 <RadzenDatePicker Class="w-100" @bind-Value="NewWorkSchedule.StartDay" DateFormat="dd/MM/yyyy"/>
                 <ValidationMessage For="@(() => NewWorkSchedule.StartDay)"/>

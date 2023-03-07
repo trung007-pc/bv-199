@@ -74,13 +74,7 @@
                 <RadzenNumeric Class="w-100" @bind-Value="NewPosition.ODX"/>
                 <ValidationMessage For="@(() => NewPosition.ODX)"/>
 
-                <RadzenCheckBoxList @bind-Value=@Claims TValue="string" AllowSelectAll="true" SelectAllText="Select all items" Class="mb-5" Style="outline:none">
-                    <Items >
-                        <RadzenCheckBoxListItem Text="@ClaimNameTypes.READ" Value="@ClaimNameTypes.READ"/>
-                        <RadzenCheckBoxListItem Text="@ClaimNameTypes.WRITE" Value="@ClaimNameTypes.WRITE"/>
-                        <RadzenCheckBoxListItem Text="@ClaimNameTypes.CREATE" Value="@ClaimNameTypes.CREATE"/>
-                    </Items>
-                </RadzenCheckBoxList>
+               
             </ModalBody>
             <ModalFooter>
                 <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Click="@HideNewModal" Text="Cancel" Disabled="IsDisable"/>
@@ -111,13 +105,7 @@
                 <RadzenNumeric Class="w-100" @bind-Value="EditingPosition.ODX"/>
                 <ValidationMessage For="@(() => EditingPosition.ODX)"/>
 
-                <RadzenCheckBoxList @bind-Value=@Claims TValue="string" AllowSelectAll="true" SelectAllText="Select all items" Class="mb-5" Style="outline:none">
-                    <Items >
-                        <RadzenCheckBoxListItem Text="@ClaimNameTypes.READ" Value="@ClaimNameTypes.READ"/>
-                        <RadzenCheckBoxListItem Text="@ClaimNameTypes.WRITE" Value="@ClaimNameTypes.WRITE"/>
-                        <RadzenCheckBoxListItem Text="@ClaimNameTypes.CREATE" Value="@ClaimNameTypes.CREATE"/>
-                    </Items>
-                </RadzenCheckBoxList>
+                
             </ModalBody>
             <ModalFooter>
                 <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Click="@HideEditModal" Text="Cancel" Disabled="IsDisable"/>
