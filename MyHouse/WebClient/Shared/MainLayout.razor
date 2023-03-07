@@ -15,33 +15,22 @@
 <RadzenLayout class="rz-shadow-3">
     <RadzenHeader>
         <RadzenRow Gap="0">
-            <RadzenColumn Size="1">
+            <RadzenColumn Size="3">
+                <RadzenImage Path="/Images/Logo/Logo.png" Style="max-width:180px;align-items: center; padding:4px" Click="@(() => sidebar1Expanded = !sidebar1Expanded)"></RadzenImage>
                 <RadzenSidebarToggle Click="@(() => sidebar1Expanded = !sidebar1Expanded)"/>
             </RadzenColumn>
-
-            <RadzenColumn Size="8">
-            </RadzenColumn>
-
-            <RadzenColumn Size="1">
-
-            </RadzenColumn>
-
-            <RadzenColumn Size="2">
+           
+            <RadzenColumn Size="9">
                 @if (!_navManager.Uri.Contains("bv-199"))
                 {
                     <AuthorizeView>
                         <Authorized>
                             <div style="display: flex;justify-content: space-between;align-items: center">
                             <div @onclick="ToggleNotification" style="cursor: pointer">
-                              <MudBadge Content="NotificationCount" Color="Color.Primary" Overlap="true" Class="d-flex ml-auto">
-                                  <MudIcon Icon="@Icons.Material.Filled.Notifications" Color="Color.Default"/>
-                                        
+                              <MudBadge Content="NotificationCount" Color="Color.Error" Overlap="true" Class="d-flex ml-auto">
+                                  <MudIcon Icon="@Icons.Material.Filled.Notifications" Color="Color.Default"/>  
                                   <MudOverlay @bind-Visible="isVisible" OnClick="ToggleNotification" DarkBackground="false" ZIndex="99" AutoClose="true"/>
-
-                                     
-
                                   <MudPopover  Open="ShowNotification"
-                                  
                                               OverflowBehavior="OverflowBehavior.FlipAlways"
                                               AnchorOrigin="Origin.BottomRight" TransformOrigin="Origin.TopRight"
                                               Paper="false">
@@ -57,14 +46,12 @@
                                               <MudList Clickable="true" Dense="true" DisableGutters="true">
                                                   @foreach (var item in Notifications)
                                                   {
-                                                      <MudListItem Text="@item.Title" OnClick=" async () => {await ViewNotification(item);}" Icon="@Icons.Material.Filled.Bookmark"  IconColor="Color.Secondary" />
+                                                      <MudListItem Text="@item.Title" OnClick=" async () => {await ViewNotification(item);}" Icon="@Icons.Material.Filled.Bookmark"  IconColor="Color.Error" />
                                                   }
                                               </MudList>
                                           </div>
                                       </MudPaper>
                                   </MudPopover>
-
-
                               </MudBadge>
                                 </div>
                                 <RadzenProfileMenu Style="float: right">
@@ -115,8 +102,8 @@
     </RadzenBody>
     
     
-    <RadzenFooter Style="display: none">
-       
+    <RadzenFooter>
+       0000
     </RadzenFooter>
 </RadzenLayout>
 

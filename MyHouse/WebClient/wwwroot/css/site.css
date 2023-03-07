@@ -66,20 +66,20 @@
     --rz-series-22: #f64485;
     --rz-series-23: #58c544;
     --rz-series-24: #6a93ff;
+    --rz-199-menu: #188b82;
+    --rz-199-menu-light: #22a399;
+    --rz-199-menu-lighter: #00AB9D;
 }
-
-.rz-sidebar {
-    background-color: var(--rz-primary) !important;
-    border-right: var(--rz-primary-lighter) !important;
-    position: fixed;
-    overflow: auto;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    z-index: var(--rz-sidebar-z);
-    width: var(--rz-sidebar-width);
-    opacity: 1;
-    transition: var(--rz-transition-all);
+.rz-panel-menu .rz-navigation-item {
+    border-top: 1px solid rgba(255,255,255,0.2) !important;
+    border-bottom: 1px solid rgba(0,0,0,0.15) !important;
+}
+.rz-panel-menu .rz-navigation-item-active:before, .rz-panel-menu .rz-navigation-item-wrapper-active:before {
+    background-color: #f85d2c !important;
+}
+/*.rz-sidebar {
+    background-color: var(--rz-199-menu) !important;
+    border-right: var(--rz-199-menu) !important;
 }
 
 .rz-panel-menu {
@@ -90,16 +90,15 @@
     font-size: var(--rz-panel-menu-font-size);
     font-weight: var(--rz-panel-menu-font-weight);
     color: var(--rz-panel-menu-color);
-    background-color: var(--rz-primary) !important;
+    background-color: var(--rz-199-menu) !important;
 }
 
     .rz-panel-menu .rz-navigation-menu .rz-navigation-item-wrapper {
         margin: var(--rz-panel-menu-item-2nd-level-margin);
         border-radius: var(--rz-panel-menu-item-2nd-level-border-radius);
-        background-color: rgba(0,0,0,0.55) !important;
+        background-color: var(--rz-199-menu-light) !important;
         overflow: hidden;
     }
-
         .rz-panel-menu .rz-navigation-menu .rz-navigation-item-wrapper:hover {
             background-color: var(--rz-primary-light) !important;
             color: var(--rz-panel-menu-item-2nd-level-hover-color);
@@ -114,9 +113,13 @@
     }
 
     .rz-panel-menu .rz-navigation-item {
-        border-bottom: 1px solid rgba(255,255,255,0.2);
-        border-bottom: 1px solid rgba(0,0,0,0.15);
+        border-top: 1px solid rgba(255,255,255,0.2) !important;
+        border-bottom: 1px solid rgba(0,0,0,0.15) !important;
     }
+    .rz-panel-menu .rz-navigation-menu .rz-navigation-menu .rz-navigation-item-wrapper:hover {
+        background-color: var(--rz-primary-light) !important;
+        color: var(--rz-panel-menu-item-3rd-level-hover-color);
+    }*/
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
