@@ -24,7 +24,7 @@ namespace WebClient.Pages.Admin
 
         await  InvokeAsync(async () =>
          {
-            var result = await _userManagerService.SignUpAsync(UserDto);
+            // var result = await _userManagerService.SignUpAsync(UserDto);
             _navigationManager.NavigateTo("/login",true);
          }, ActionType.SignUp, true);
 

@@ -1,7 +1,6 @@
 ﻿@page "/"
 @page "/my-dashboard"
-@attribute [Authorize(Roles = "ADMIN")]
-
+@attribute [Authorize]
 @inherits BaseBlazorPage
 @using WebClient.Service.MyDashboards
 @inject MyDashboardService _myDashboardService;

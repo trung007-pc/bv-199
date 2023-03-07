@@ -1,4 +1,5 @@
 ﻿@page "/share-with-me"
+@attribute [Authorize]
 @inherits BaseBlazorPage
 @using WebClient.Service.DocumentFiles
 @using Variant = Radzen.Variant
@@ -207,8 +208,8 @@
 
     <div class="Row" style="float: right">
         <div class="col">
-            <RadzenButton Text="Ok" Click="async () => { await CreateSendingFiles(DocumentFileDto.Id); }" Class="me-1" Style="width: 80px;"/>
-            <RadzenButton Text="Cancel" Click="() => SendingFileModel.HideModel()" ButtonStyle="ButtonStyle.Light" Class="me-1"/>
+            <RadzenButton Text="Ok" Click="async () => { await CreateSendingFiles(DocumentFileDto.Id); }" Class="me-1" Style="width: 80px;" Disabled="IsDisable"/>
+            <RadzenButton Text="Cancel" Click="() => SendingFileModel.HideModel()" ButtonStyle="ButtonStyle.Light" Class="me-1" Disabled="IsDisable"/>
         </div>
     </div>
 </RZModel>

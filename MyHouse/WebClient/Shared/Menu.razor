@@ -16,14 +16,14 @@
 
             </RadzenPanelMenuItem>
         }
-         @if (context.User.IsInRole("ADMIN") || context.User.IsInRole("REPORTS"))
-        {
-            <RadzenPanelMenuItem Text="Reports" Icon="view_list">
-                <RadzenPanelMenuItem Text="Positions" Path="positions" Icon="table_view"></RadzenPanelMenuItem>
-                <RadzenPanelMenuItem Text="Departments" Path="departments" Icon="table_view"></RadzenPanelMenuItem>
-
-            </RadzenPanelMenuItem>
-        }
+        @*  @if (context.User.IsInRole("ADMIN") || context.User.IsInRole("REPORTS")) *@
+        @* { *@
+        @*     <RadzenPanelMenuItem Text="Reports" Icon="view_list"> *@
+        @*         <RadzenPanelMenuItem Text="Positions" Path="positions" Icon="table_view"></RadzenPanelMenuItem> *@
+        @*         <RadzenPanelMenuItem Text="Departments" Path="departments" Icon="table_view"></RadzenPanelMenuItem> *@
+        @* *@
+        @*     </RadzenPanelMenuItem> *@
+        @* } *@
         @if (context.User.IsInRole("ADMIN")
              || context.User.IsInRole("QUALITYMANAGER"))
         {

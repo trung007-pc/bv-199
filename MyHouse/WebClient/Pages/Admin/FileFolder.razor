@@ -1,5 +1,5 @@
 ﻿@page "/file-folders"
-@attribute [Authorize(Roles = "ADMIN")]
+@attribute [Authorize(Roles = "ADMIN,DOCUMENTMANAGER,REPORTS")]
 @using ButtonType = Radzen.ButtonType
 @inject FileFolderService _fileFolderService;
 @inherits BaseBlazorPage
@@ -104,8 +104,8 @@
 
             </ModalBody>
             <ModalFooter>
-                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Click="@HideNewModal" Text="Cancel"/>
-                <RadzenButton Text="Save Changes" Icon="save" ButtonType="ButtonType.Submit"/>
+                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Click="@HideNewModal" Text="Cancel" Disabled="IsDisable"/>
+                <RadzenButton Text="Save Changes" Icon="save" ButtonType="ButtonType.Submit" Disabled="IsDisable"/>
             </ModalFooter>
         </EditForm>
     </ModalContent>
@@ -159,8 +159,8 @@
                 </RadzenTabs>
             </ModalBody>
             <ModalFooter>
-                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Click="@HideEditModal" Text="Cancel"/>
-                <RadzenButton Text="Save Changes" Icon="save" ButtonType="ButtonType.Submit"/>
+                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Click="@HideEditModal" Text="Cancel" Disabled="IsDisable"/>
+                <RadzenButton Text="Save Changes" Icon="save" ButtonType="ButtonType.Submit" Disabled="IsDisable"/>
             </ModalFooter>
         </EditForm>
     </ModalContent>

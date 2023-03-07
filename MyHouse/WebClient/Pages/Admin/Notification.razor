@@ -1,4 +1,5 @@
 ﻿@page "/notifications"
+@attribute [Authorize]
 @using WebClient.Service.Notications
 @using WebClient.Service.SendingFiles
 @using Color = MudBlazor.Color
@@ -27,7 +28,7 @@
             <RadzenLabel Text="Select All" Component="CheckBox2" Style="margin-left: 8px; vertical-align: middle;"/>
         </div>
         <div>
-            <RadzenButton Text="Confirm Read" Click="async () => { await ConfirmRead(); }" Style="float: right" Icon="check"/>
+            <RadzenButton Text="Confirm Read" Click="async () => { await ConfirmRead(); }" Style="float: right" Icon="check" Disabled="IsDisable"/>
         </div>
     </div>
 

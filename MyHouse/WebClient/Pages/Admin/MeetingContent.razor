@@ -1,5 +1,5 @@
 ﻿@page "/meeting-content"
-@attribute [Authorize(Roles = "ADMIN,QUALITY MANAGER")]
+@attribute [Authorize(Roles = "ADMIN,GENERALPLANNING")]
 @using WebClient.Service.MeetingContents
 @using ButtonType = Radzen.ButtonType
 @inject MeetingContentService _meetingContentService;
@@ -101,8 +101,8 @@
 
             </ModalBody>
             <ModalFooter>
-                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Click="@HideNewModal" Text="Cancel"/>
-                <RadzenButton Text="Save Changes" Icon="save" ButtonType="ButtonType.Submit"/>
+                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Click="@HideNewModal" Text="Cancel" Disabled="IsDisable"/>
+                <RadzenButton Text="Save Changes" Icon="save" ButtonType="ButtonType.Submit" Disabled="IsDisable"/>
             </ModalFooter>
         </EditForm>
     </ModalContent>
@@ -143,8 +143,8 @@
                 </RZInputFile>
             </ModalBody>
             <ModalFooter>
-                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Click="@HideEditModal" Text="Cancel"/>
-                <RadzenButton Text="Save Changes" Icon="save" ButtonType="ButtonType.Submit"/>
+                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Click="@HideEditModal" Text="Cancel" Disabled="IsDisable"/>
+                <RadzenButton Text="Save Changes" Icon="save" ButtonType="ButtonType.Submit" Disabled="IsDisable"/>
             </ModalFooter>
         </EditForm>
     </ModalContent>

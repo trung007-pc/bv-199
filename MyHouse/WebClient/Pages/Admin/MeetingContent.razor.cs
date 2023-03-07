@@ -133,6 +133,7 @@ namespace WebClient.Pages.Admin
 
         public Task ShowEditingModal(MeetingContentDto unitTypeDto)
         {
+            EditFile = null;
             EditingMeetingContent = new CreateUpdateMeetingContentDto();
             EditingMeetingContent = ObjectMapper.Map<MeetingContentDto, CreateUpdateMeetingContentDto>(unitTypeDto);
             EditingMeetingContentId = unitTypeDto.Id;

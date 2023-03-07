@@ -136,6 +136,7 @@ namespace WebClient.Pages.Admin
 
         public Task ShowEditingModal(WorkScheduleDto dto)
         {
+            EditFile = null;
             EditingWorkSchedule = new CreateUpdateWorkScheduleDto();
             EditingWorkSchedule = ObjectMapper.Map<WorkScheduleDto, CreateUpdateWorkScheduleDto>(dto);
             EditingWorkScheduleId = dto.Id;

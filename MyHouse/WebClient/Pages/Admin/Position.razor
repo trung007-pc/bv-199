@@ -1,5 +1,5 @@
 ﻿@page "/positions"
-@attribute [Authorize(Roles = "ADMIN")]
+@attribute [Authorize(Roles = "ADMIN,MANAGECATEGORIES")]
 @using ButtonType = Radzen.ButtonType
 @inject PositionService _positionService;
 @inherits BaseBlazorPage
@@ -83,8 +83,8 @@
                 </RadzenCheckBoxList>
             </ModalBody>
             <ModalFooter>
-                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Click="@HideNewModal" Text="Cancel"/>
-                <RadzenButton Text="Save Changes" Icon="save" ButtonType="ButtonType.Submit"/>
+                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Click="@HideNewModal" Text="Cancel" Disabled="IsDisable"/>
+                <RadzenButton Text="Save Changes" Icon="save" ButtonType="ButtonType.Submit" Disabled="IsDisable"/>
             </ModalFooter>
         </EditForm>
     </ModalContent>
@@ -120,8 +120,8 @@
                 </RadzenCheckBoxList>
             </ModalBody>
             <ModalFooter>
-                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Click="@HideEditModal" Text="Cancel"/>
-                <RadzenButton Text="Save Changes" Icon="save" ButtonType="ButtonType.Submit"/>
+                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Click="@HideEditModal" Text="Cancel" Disabled="IsDisable"/>
+                <RadzenButton Text="Save Changes" Icon="save" ButtonType="ButtonType.Submit" Disabled="IsDisable"/>
             </ModalFooter>
         </EditForm>
     </ModalContent>

@@ -1,5 +1,5 @@
 ﻿@page "/document-file"
-@attribute [Authorize(Roles = "ADMIN")]
+@attribute [Authorize(Roles = "ADMIN,DOCUMENTMANAGER")]
 @using ButtonType = Radzen.ButtonType
 @inherits BaseBlazorPage
 @using Core.Const
@@ -259,8 +259,8 @@
 
             </ModalBody>
             <ModalFooter>
-                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Click="@HideNewModal" Text="Cancel"/>
-                <RadzenButton Text="Save Changes" Icon="save" ButtonType="ButtonType.Submit"/>
+                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Click="@HideNewModal" Text="Cancel" Disabled="IsDisable"/>
+                <RadzenButton Text="Save Changes" Icon="save" ButtonType="ButtonType.Submit" Disabled="IsDisable"/>
             </ModalFooter>
         </EditForm>
     </ModalContent>
@@ -377,8 +377,8 @@
 
             </ModalBody>
             <ModalFooter>
-                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Click="@HideEditingModal" Text="Cancel"/>
-                <RadzenButton Text="Save Changes" Icon="save" ButtonType="ButtonType.Submit"/>
+                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Click="@HideEditingModal" Text="Cancel" Disabled="IsDisable"/>
+                <RadzenButton Text="Save Changes" Icon="save" ButtonType="ButtonType.Submit" Disabled="IsDisable"/>
             </ModalFooter>
         </EditForm>
     </ModalContent>
