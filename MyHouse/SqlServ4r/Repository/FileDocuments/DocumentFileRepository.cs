@@ -77,16 +77,17 @@ namespace SqlServ4r.Repository.FileDocuments
             DocumentFileFilter filter
            )
         {
-            var folderIds = new List<Guid>();
+            var folderIds = new List<Guid?>();
             if (filter.DocumentFolderId.HasValue)
             {
-                folderIds = await GetChildFolderIdAsync(filter.DocumentFolderId.Value);
+                var result = await GetChildFolderIdAsync(filter.DocumentFolderId.Value);
+                folderIds = result.Cast<Guid?>().ToList();
                 folderIds.Add(filter.DocumentFolderId.Value);
             }
             
             var query = from file in _context.DocumentFiles.Where(x => 
-                    !x.IsDeleted)
-                    .WhereIf(folderIds.Count > 0 , x=>folderIds.Contains(x.DocumentFolderId.GetValueOrDefault()))
+                    !x.IsDeleted)   
+                    .WhereIf(folderIds.Count > 0 , x=>folderIds.Contains(x.DocumentFolderId))
                     .WhereIf(!filter.Text.IsNullOrWhiteSpace(),
                         x => x.Name.Contains(filter.Text)|| x.Code.Contains(filter.Text))
                     .WhereIf(filter.FileTypeId.HasValue, x => x.DocumentTypeId == filter.FileTypeId)
