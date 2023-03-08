@@ -35,7 +35,7 @@
                     </Blazorise.Column>
                     <Blazorise.Column ColumnSize="ColumnSize.Is9.OnDesktop.Is8.OnMobile" Style="display: flex;flex-direction:Column;justify-content: center">
                         <div>
-                            <RadzenBadge  Text="@data.Unit.Name" Style="color:#ffffff;font-size:1.3rem;background-color: #0eb1ae;padding: 10px" />
+                            <RadzenBadge Text="@data.Unit.Name" Style="color:#ffffff;font-size:1.3rem;background: var(--rz-primary);padding: 10px" />
                         </div>
                         <div>
                             <Rating MaxValue="5" @bind-SelectedValue="data.Rating" Style="color: gold;  font-size: calc(1.5em + 1.2vw);"/>
@@ -48,7 +48,7 @@
 </div>
 
 <div style="display: flex;justify-content: center">
-    <RadzenButton Click="async () => { await CreateUnitReviewsWithDetail(); }" ButtonStyle="ButtonStyle.Info" Text="Đánh Giá" Icon="rate_review" Size="ButtonSize.Large" Style="background-color: #0eb1ae"/>
+    <RadzenButton Click="async () => { await CreateUnitReviewsWithDetail(); }" ButtonStyle="ButtonStyle.Info" Text="Đánh Giá" Icon="rate_review" Size="ButtonSize.Large" Style="background: var(--rz-primary)" />
 </div>
 
 
