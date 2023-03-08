@@ -21,6 +21,7 @@ namespace WebApi.Controllers
         }
 
 
+        [HttpPost]
         public Task<NotificationDto> CreateAsync(CreateNotificationDto input)
         {
             throw new NotImplementedException();
@@ -46,11 +47,15 @@ namespace WebApi.Controllers
             return await _notificationService.UpdateListWithReadingStatusAsync(inputs);
         }
 
+        [HttpDelete]
+        [Route("{id}")]
         public Task DeleteAsync(Guid id)
         {
             throw new NotImplementedException();
         }
 
+        [HttpPost]
+        [Route("create-list")]
         public Task<List<NotificationDto>> CreateListAsync(List<CreateNotificationDto> inputs)
         {
             throw new NotImplementedException();

@@ -20,6 +20,7 @@ namespace WebApi.Controllers
             _sendingFileService = sendingFileService;
         }
         
+        [HttpPost]
         public Task<SendingFileDto> CreateAsync(CreateUpdateSendingFileDto input)
         {
             throw new NotImplementedException();
@@ -32,6 +33,8 @@ namespace WebApi.Controllers
             return await _sendingFileService.UpdateAsync(input, id);
         }
 
+        [HttpDelete]
+        [Route("{id}")]
         public Task DeleteAsync(Guid id)
         {
             throw new NotImplementedException();
@@ -53,7 +56,6 @@ namespace WebApi.Controllers
 
         [HttpGet]
         [Route("{id}")]
-
         public async Task<SendingFileDto> GetAsync(Guid id)
         {
             return await _sendingFileService.GetAsync(id);
