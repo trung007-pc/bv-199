@@ -25,6 +25,8 @@ namespace Domain.Identity.Users
         
         public string PhoneNumber { get; set; }
         public bool IsActive { get; set; } = true;
+        public bool IsDelete { get; set; }
+
         public string? RefreshToken { get; set;}
         
         

@@ -20,38 +20,38 @@
                 <RadzenSidebarToggle Click="@(() => sidebar1Expanded = !sidebar1Expanded)"/>
             </RadzenColumn>
             <RadzenColumn Size="9">
-                 <RadzenRow Gap="0">
-                     <RadzenColumn Size="10">
-                
-                    </RadzenColumn>
-                    <RadzenColumn Size="2">
+                <div style="display: flex">
+                    <div style="flex: 1"></div>
+                    <div>
                         @if (!_navManager.Uri.Contains("bv-199"))
                         {
                             <AuthorizeView>
                                 <Authorized>
 
-                                    <div style="display: flex;justify-content: space-between;align-items: center">
+                                    <div style="display: flex;justify-content: space-between;align-items: center;gap: 2vw">
                                         <div @onclick="ToggleNotification" style="cursor: pointer">
                                             <MudBadge Content="NotificationCount" Color="Color.Error" Overlap="true" Class="d-flex ml-auto">
-                                                <MudIcon Icon="@Icons.Material.Filled.Notifications" Color="Color.Default" />
-                                                <MudOverlay @bind-Visible="isVisible" OnClick="ToggleNotification" DarkBackground="false" ZIndex="99" AutoClose="true" />
+                                                <MudIcon Icon="@Icons.Material.Filled.Notifications" Color="Color.Default"/>
+                                                <MudOverlay @bind-Visible="isVisible" OnClick="ToggleNotification" DarkBackground="false" ZIndex="99" AutoClose="true"/>
                                                 <MudPopover Open="ShowNotification"
-                                                        OverflowBehavior="OverflowBehavior.FlipAlways"
-                                                        AnchorOrigin="Origin.BottomRight" TransformOrigin="Origin.TopRight"
-                                                        Paper="false">
+                                                            OverflowBehavior="OverflowBehavior.FlipAlways"
+                                                            AnchorOrigin="Origin.BottomRight" TransformOrigin="Origin.TopRight"
+                                                            Paper="false">
                                                     <MudPaper Outlined="true" Style="width: 30vw;padding:10px">
 
                                                         <div style="display: flex;justify-content: space-between;">
-                                                            <div><strong>Unread</strong></div>
                                                             <div>
-                                                                <RadzenLink @onclick="GoToNotificationPage" Text="See All" />
+                                                                <strong>Unread</strong>
+                                                            </div>
+                                                            <div>
+                                                                <RadzenLink @onclick="GoToNotificationPage" Text="See All"/>
                                                             </div>
                                                         </div>
                                                         <div class="content--2" style="height: 30vh;margin-bottom: 5px;overflow: auto">
                                                             <MudList Clickable="true" Dense="true" DisableGutters="true">
                                                                 @foreach (var item in Notifications)
                                                                 {
-                                                                    <MudListItem Text="@item.Title" OnClick=" async () => {await ViewNotification(item);}" Icon="@Icons.Material.Filled.Bookmark" IconColor="Color.Error" />
+                                                                    <MudListItem Text="@item.Title" OnClick="async () => { await ViewNotification(item); }" Icon="@Icons.Material.Filled.Bookmark" IconColor="Color.Error"/>
                                                                 }
                                                             </MudList>
                                                         </div>
@@ -82,9 +82,9 @@
                                 </Authorized>
                             </AuthorizeView>
                         }
-                    </RadzenColumn>
-                  </RadzenRow>
-             
+                    </div>
+                </div>
+
 
             </RadzenColumn>
         </RadzenRow>
@@ -111,17 +111,17 @@
     <RadzenBody Style="transform: none !important;">
         @Body
     </RadzenBody>
-    
-    
+
+
     <RadzenFooter>
-       0000
+        0000
     </RadzenFooter>
 </RadzenLayout>
 
 <RadzenNotification Style="z-index: 9999"/>
 <RadzenDialog/>
 <RadzenTooltip/>
-<MudThemeProvider />
+<MudThemeProvider/>
 <MudDialogProvider/>
 <MudSnackbarProvider/>
 
@@ -149,15 +149,13 @@
         if (firstRender)
         {
             var auth = await AuthState;
-            if (auth.User.Identity.IsAuthenticated )
+            if (auth.User.Identity.IsAuthenticated)
             {
                 Filter.UserName = await GetUserNameAsync();
                 Filter.Status = NotificationStatus.Unread;
                 NotificationCount = await _notificationService.CountUnreadNotificationOfUser(Filter);
                 StateHasChanged();
-               
             }
-         
         }
     }
 
@@ -173,12 +171,12 @@
         }
     }
 
-        public async Task GetNotifications()
+    public async Task GetNotifications()
     {
         Notifications = await _notificationService.GetListByFilter(Filter);
     }
 
-    public async  Task GoToNotificationPage()
+    public async Task GoToNotificationPage()
     {
         await ToggleNotification();
 
@@ -196,8 +194,7 @@
 
     public async Task ViewNotification(NotificationDto dto)
     {
-        
-    if (dto.Type == NotificationType.Document)
+        if (dto.Type == NotificationType.Document)
         {
             var updateNotification = new UpdateNotification()
             {
@@ -212,12 +209,11 @@
             await _notificationService.UpdateWithReadingStatusAsync(updateNotification);
             NotificationCount = await _notificationService.CountUnreadNotificationOfUser(Filter);
             await ToggleNotification();
-            var sendingFile =  await _sendingFileService.GetAsync(dto.DestinationCode);
+            var sendingFile = await _sendingFileService.GetAsync(dto.DestinationCode);
             _navigationManager.NavigateTo($"view-document-file?fileId={sendingFile.FileId}");
         }
         if (dto.Type == NotificationType.Task)
         {
-            
         }
     }
 

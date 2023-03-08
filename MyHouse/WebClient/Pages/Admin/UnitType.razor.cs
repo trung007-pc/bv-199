@@ -52,7 +52,7 @@ namespace WebClient.Pages.Admin
         }
          async Task CopyToClipboard(Guid id)
         {
-            string pathBase = Path.Combine(_navigationManager.BaseUri,$"bv-199/unit-review/{id.ToString()}");
+            string pathBase = Path.Combine(_navigationManager.BaseUri,$"bv/unit-review/{id.ToString()}");
             await _clipboardService.CopyToClipboard(pathBase);
             NotifyMessage(NotificationSeverity.Success,"Copied",2000);
         }

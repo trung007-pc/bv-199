@@ -212,18 +212,14 @@ namespace Application.Identity.UserManager
             {
                 throw new GlobalException(HttpMessage.NotFound, HttpStatusCode.BadRequest);
             }
-
-            var result = await _userManager.DeleteAsync(item);
-            if (!result.Succeeded)
-            {
-                throw new GlobalException(result.Errors?.FirstOrDefault().Description, HttpStatusCode.BadRequest);
-            }
+            item.IsDelete = true;
+            await _userRepository.UpdateAsync(item);
         }
 
         public async Task<TokenDto> SignInAsync(UserModel input)
         {
             var user = await _userManager.FindByNameAsync(input.UserName);
-            if (user == null)
+            if (user == null|| !user.IsActive|| user.IsDelete)
             {
                 throw new GlobalException(HttpMessage.CheckInformation, HttpStatusCode.BadRequest);
             }

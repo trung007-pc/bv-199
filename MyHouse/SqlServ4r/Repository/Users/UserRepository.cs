@@ -45,7 +45,7 @@ namespace SqlServ4r.Repository.Users
         public async Task<List<UserWithNavigationProperties>> GetListWithNavigationProperties()
         {   
 
-            var query = from user in _context.Users
+            var query = from user in _context.Users.Where(x=>!x.IsDelete)
                 select new UserWithNavigationProperties
                 {
                     User = user,
