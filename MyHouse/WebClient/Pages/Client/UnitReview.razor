@@ -8,6 +8,8 @@
 @using WebClient.Service.UnitReviews
 @using WebClient.Service.Units
 @using WebClient.Service.Upload
+@using DialogService = Radzen.DialogService
+@using DialogOptions = Radzen.DialogOptions
 
     
 
@@ -15,8 +17,8 @@
 <meta name="Nhằm mục tiêu nâng cao chất lượng khám, chữa bệnh, đáp ứng sự hài lòng người bệnh, Bệnh viện tổ chức khảo sát để tìm hiểu nguyện vọng người bệnh. Các ý kiến Bệnh viện bảo đảm giữ bí mật thông tin và không ảnh hưởng đến việc điều trị. Xin trân trọng cảm ơn!" content="nux&#x20;v&#xE0;&#x20;c&#xE1;c&#x20;th&#xE0;nh&#x20;ph&#x1EA7;n&#x20;c&#x1EE7;a&#x20;n&#xF3;,&#x20;kh&#xE1;i&#x20;ni&#x1EC7;m&#x20;image,&#x20;container&#x20;-&#x20;l&#x1EC7;nh&#x20;docker&#x20;c&#x01A1;&#x20;b&#x1EA3;n">
 
 
-<div style="margin: 0 auto;width: 100%;max-width: 200px;height: 143px;">
-    <RadzenImage Path="Images/Logo/Logo_BenhVien199.png" Style="width: 100%;height: 100%"/>
+<div style="margin: 0 auto;width: 100%;max-width: 250px;">
+    <RadzenImage Path="Images/Logo/Logo.png" Style="max-width:250px"/>
 </div>
 
 <h1 style="text-align: center;color:gold" class="animate-text">Khảo Sát Hài Lòng Người Bệnh</h1>
@@ -27,28 +29,26 @@
     <RadzenDataList WrapItems="true" AllowPaging="true" Data="@ReviewsWithNav" TItem="ReviewWithNavPropertiesModel" PageSize="20" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true">
         <Template Context="data">
             <RadzenCard Style="flex-basis: 400px;flex-grow: 0">
-                <Row>
-                    <Column ColumnSize="ColumnSize.Is3.OnDesktop.Is4.OnMobile" Style="height:150px;padding: 5px">
+                <Blazorise.Row>
+                    <Blazorise.Column ColumnSize="ColumnSize.Is3.OnDesktop.Is4.OnMobile" Style="height:150px;padding: 5px">
                         <RadzenImage Path=@data.Unit.ImageUrl Style="width:100%;height: 100%;object-fit: contain;border-radius: 5%"/>
-                    </Column>
-                    <Column ColumnSize="ColumnSize.Is9.OnDesktop.Is8.OnMobile" Style="display: flex;flex-direction:column;justify-content: center">
+                    </Blazorise.Column>
+                    <Blazorise.Column ColumnSize="ColumnSize.Is9.OnDesktop.Is8.OnMobile" Style="display: flex;flex-direction:Column;justify-content: center">
                         <div>
-                            <RadzenBadge  Text="@data.Unit.Name" Style="color:#ffffff;font-size:1.3rem;background-color: #0eb1ae;padding: 10px" />
+                            <RadzenBadge Text="@data.Unit.Name" Style="color:#ffffff;font-size:1.3rem;background: var(--rz-primary);padding: 10px" />
                         </div>
                         <div>
                             <Rating MaxValue="5" @bind-SelectedValue="data.Rating" Style="color: gold;  font-size: calc(1.5em + 1.2vw);"/>
                         </div>
-                    </Column>
-                </Row>
+                    </Blazorise.Column>
+                </Blazorise.Row>
             </RadzenCard>
-    
         </Template>
-      
     </RadzenDataList>
 </div>
 
 <div style="display: flex;justify-content: center">
-    <RadzenButton Click="async () => { await CreateUnitReviewsWithDetail(); }" ButtonStyle="ButtonStyle.Info" Text="Đánh Giá" Icon="rate_review" Size="ButtonSize.Large" Style="background-color: #0eb1ae"/>
+    <RadzenButton Click="async () => { await CreateUnitReviewsWithDetail(); }" ButtonStyle="ButtonStyle.Info" Text="Đánh Giá" Icon="rate_review" Size="ButtonSize.Large" Style="background: var(--rz-primary)" />
 </div>
 
 
@@ -56,7 +56,6 @@
 
 
 @code{
-    string Name { get; set; }
     string fileName;
     long? fileSize;
 
@@ -75,7 +74,7 @@
                              Accept="image/png, image/jpeg, image/gif"
                              Style="display: flex;align-items: center;min-width:123px;max-width: 130px;margin-bottom: 0;cursor: pointer;background-color: indigo"
                              Text="Choose File" Event="async (e) => {await  OnChangeFileAtNewModal(e); }"></RZInputFile>
-                <div class="row" style="float: right">
+                <div class="Row" style="float: right">
                     <div class="col">
                         <RadzenButton Text="Ok" Click="async () => await HideDiaLog(ds)" Class="me-1" Style="width: 80px;"/>
                         <RadzenButton Text="Cancel" Click="() => ds.Close(false)" ButtonStyle="ButtonStyle.Light" Class="me-1"/>

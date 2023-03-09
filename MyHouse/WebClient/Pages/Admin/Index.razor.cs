@@ -29,7 +29,7 @@ namespace WebClient.Pages.Admin
 
         private async Task call()
         {
-           await  _userManagerService.test();
+           // await  _userManagerService.test();
         }
         
         void OnChange(DateTime? value, string name, string format)

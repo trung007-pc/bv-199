@@ -32,7 +32,8 @@
       <PackageReference Include="EPPlus" Version="6.1.2" />
       <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="6.0.0" />
       <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.10.0" />
-      <PackageReference Include="Radzen.Blazor" Version="4.4.4" />
+      <PackageReference Include="MudBlazor" Version="6.1.9" />
+      <PackageReference Include="Radzen.Blazor" Version="4.7.1" />
       <PackageReference Include="Refit" Version="6.3.2" />
       <PackageReference Include="Refit.HttpClientFactory" Version="6.3.2" />
       <PackageReference Include="Refit.Newtonsoft.Json" Version="6.3.2" />
@@ -49,6 +50,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="MyAttributes" />
       <Folder Include="wwwroot\excels\userExcelSample" />
       <Folder Include="wwwroot\Images_" />
     </ItemGroup>

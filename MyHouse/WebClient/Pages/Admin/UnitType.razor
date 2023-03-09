@@ -1,5 +1,5 @@
 @page "/unit-types"
-@attribute [Authorize(Roles = "ADMIN,QUALITY MANAGER")]
+@attribute [Authorize(Roles = "ADMIN,MANAGECATEGORIES")]
 @using WebClient.Service.UnitTypes
 @using ButtonType = Radzen.ButtonType
 @inject UnitTypeService _unitTypeService;
@@ -7,8 +7,8 @@
 @inject TooltipService _tooltipService
 @inherits BaseBlazorPage
 @using Contract.UnitTypes;
-@using Microsoft.AspNetCore.Hosting
 @using WebClient.Service.JS
+@using Variant = Radzen.Variant
 @inject NavigationManager _navigationManager;
 
 <h3>UnitType</h3>
@@ -67,8 +67,8 @@
 
             </ModalBody>
             <ModalFooter>
-                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Click="@HideNewModal" Text="Cancel"/>
-                <RadzenButton Text="Save Changes" Icon="save" ButtonType="ButtonType.Submit"/>
+                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Click="@HideNewModal" Text="Cancel" Disabled="IsDisable"/>
+                <RadzenButton Text="Save Changes" Icon="save" ButtonType="ButtonType.Submit" Disabled="IsDisable"/>
             </ModalFooter>
         </EditForm>
     </ModalContent>
@@ -88,8 +88,8 @@
 
             </ModalBody>
             <ModalFooter>
-                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Click="@HideEditModal" Text="Cancel"/>
-                <RadzenButton Text="Save Changes" Icon="save" ButtonType="ButtonType.Submit"/>
+                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Click="@HideEditModal" Text="Cancel" Disabled="IsDisable"/>
+                <RadzenButton Text="Save Changes" Icon="save" ButtonType="ButtonType.Submit" Disabled="IsDisable"/>
             </ModalFooter>
         </EditForm>
     </ModalContent>

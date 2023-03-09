@@ -5,10 +5,12 @@ using Core.Enum;
 using Domain.Departments;
 using Domain.DocumentFiles;
 using Domain.FileVersions;
+using Domain.MeetingContents;
 using Domain.Notifications;
 using Domain.Positions;
 using Domain.SendingFiles;
 using Domain.UserDepartments;
+using Domain.WorkSchedules;
 using Microsoft.AspNetCore.Identity;
 
 namespace Domain.Identity.Users
@@ -23,6 +25,8 @@ namespace Domain.Identity.Users
         
         public string PhoneNumber { get; set; }
         public bool IsActive { get; set; } = true;
+        public bool IsDelete { get; set; }
+
         public string? RefreshToken { get; set;}
         
         
@@ -35,13 +39,19 @@ namespace Domain.Identity.Users
         
         //naviagation
         public List<Notification> Notifications { get; set; }
-        public List<SendingFile> SendingFiles { get; set;}
+        public List<SendingFile> SenderSendingFiles { get; set;}
+        
+        public List<SendingFile> ReceiverSendingFiles { get; set;}
+
         public Position Position { get; set; }
         public List<UserDepartment> UserDepartments { get; set;}
         public List<FileVersion> EditedFileVersions { get; set; }
         public List<DocumentFile> CreatedFiles { get; set; }
         
+        public List<WorkSchedule> WorkSchedules { get; set; }
         
+        public List<MeetingContent> MeetingContents { get; set;}
+
 
     }
 }

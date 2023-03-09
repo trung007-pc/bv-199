@@ -1,10 +1,11 @@
 ﻿@page "/file-types"
-@attribute [Authorize(Roles = "ADMIN")]
+@attribute [Authorize(Roles = "ADMIN,DOCUMENTMANAGER")]
 @using ButtonType = Radzen.ButtonType
 @inject FileTypeService _fileTypeService;
 @inherits BaseBlazorPage
 @using WebClient.Service.FileTypes
 @using Contract.FileTypes;
+@using Variant = Radzen.Variant
 
 <h3>File Type</h3>
 
@@ -102,8 +103,8 @@
 
             </ModalBody>
             <ModalFooter>
-                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Click="@HideNewModal" Text="Cancel"/>
-                <RadzenButton Text="Save Changes" Icon="save" ButtonType="ButtonType.Submit"/>
+                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Click="@HideNewModal" Text="Cancel" Disabled="IsDisable"/>
+                <RadzenButton Text="Save Changes" Icon="save" ButtonType="ButtonType.Submit" Disabled="IsDisable"/>
             </ModalFooter>
         </EditForm>
     </ModalContent>
@@ -157,8 +158,8 @@
                 </RadzenTabs>
             </ModalBody>
             <ModalFooter>
-                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Click="@HideEditModal" Text="Cancel"/>
-                <RadzenButton Text="Save Changes" Icon="save" ButtonType="ButtonType.Submit"/>
+                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Click="@HideEditModal" Text="Cancel" Disabled="IsDisable"/>
+                <RadzenButton Text="Save Changes" Icon="save" ButtonType="ButtonType.Submit" Disabled="IsDisable"/>
             </ModalFooter>
         </EditForm>
     </ModalContent>

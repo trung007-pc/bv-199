@@ -1,0 +1,17 @@
+﻿
+@inject IJSRuntime JS
+
+
+
+<div style="display: flex;justify-content: space-between;gap: 5px">
+    <RadzenButton Icon="undo" Click="async () => {await Back();}"></RadzenButton>
+        <RadzenButton Icon="redo" Click="async () => {await Next();}"></RadzenButton>
+    <RadzenButton Icon="zoom_in" Click="async () => {await ZoomIn();}"></RadzenButton>
+    <RadzenButton Icon="zoom_out" Click="async () => {await ZoomOut();}"></RadzenButton>
+    <RadzenButton Icon="360" Click="async () => {await Rotate();}"></RadzenButton>
+</div>
+<div id="my_pdf_viewer">
+    <div id="canvas_container" width style="width: 100%">
+        <canvas id="pdf_renderer" ></canvas>
+    </div>
+</div>

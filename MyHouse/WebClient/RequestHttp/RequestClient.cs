@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Mime;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Blazored.LocalStorage;
 using Blazorise;
@@ -97,7 +98,17 @@ namespace WebClient.RequestHttp
             return await ReturnApiResponse<T>(httpResponseMessage);
         }
         
-        
+        public static async Task<T> PatchAPIAsync<T>([Required] string URL, dynamic input,bool notifyOk = true)
+        {
+            HttpResponseMessage httpResponseMessage = new HttpResponseMessage();
+
+           
+            StringContent content =
+                new StringContent(JsonConvert.SerializeObject(input), Encoding.UTF8, "application/json");
+
+            httpResponseMessage = await _client.PatchAsync(URL, content);
+            return await ReturnApiResponse<T>(httpResponseMessage);
+        }
         
         
         public static async Task<T> PostAPIWithFileAsync<T>([Required] string URL, IBrowserFile file)
@@ -188,35 +199,47 @@ namespace WebClient.RequestHttp
         }
 
 
+        private static int callApi = 0;
+        private static SemaphoreSlim semaphore = new SemaphoreSlim(initialCount:1,1);
         private static async Task<T> HandleForUnauthorization<T>(HttpResponseMessage httpResponseMessage)
         {
-            var request = await httpResponseMessage.RequestMessage.CloneHttpRequestMessageAsync();
-            
-            var accessToken = await _localStorage.GetItemAsync<string>("my-access-token");
-            var refreshToken = await _localStorage.GetItemAsync<string>("my-refresh-token");
-            var tokenModel = new TokenModel() {AccessToken = accessToken, RefreshToken = refreshToken};
-            var response = await PostToRefreshTokenAsync<ApiIdentityResponse>("user/refresh-token", tokenModel);
-            AttachToken(response.AccessToken);
-            await _localStorage.SetItemAsync("my-access-token", response.AccessToken);
-            await _localStorage.SetItemAsync("my-refresh-token", response.RefreshToken);
 
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", response.AccessToken);
-            var responseMessage = await _client.SendAsync(request);
-
-
-            if (responseMessage.IsSuccessStatusCode)
+             await semaphore.WaitAsync();
+            try
             {
-                string? jsonResponse = await responseMessage.Content.ReadAsStringAsync() ?? null;
-                return JsonConvert.DeserializeObject<T>(jsonResponse);
-                ;
-            }
+                var request = await httpResponseMessage.RequestMessage.CloneHttpRequestMessageAsync();
             
-            if (httpResponseMessage.StatusCode == HttpStatusCode.InternalServerError)
-            {
-                throw new ServerErrorException("error-server");
-            }
+                var accessToken = await _localStorage.GetItemAsync<string>("my-access-token");
+                var refreshToken = await _localStorage.GetItemAsync<string>("my-refresh-token");
+                var tokenModel = new TokenModel() {AccessToken = accessToken, RefreshToken = refreshToken};
+                var response = await PostToRefreshTokenAsync<ApiIdentityResponse>("user/refresh-token", tokenModel);
+                AttachToken(response.AccessToken);
+                await _localStorage.SetItemAsync("my-access-token", response.AccessToken);
+                await _localStorage.SetItemAsync("my-refresh-token", response.RefreshToken);
 
-            throw new Exception("AAAAAAAAAAAAA");
+                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", response.AccessToken);
+                var responseMessage = await _client.SendAsync(request);
+
+
+                if (responseMessage.IsSuccessStatusCode)
+                {
+                    string? jsonResponse = await responseMessage.Content.ReadAsStringAsync() ?? null;
+                    return JsonConvert.DeserializeObject<T>(jsonResponse);
+                    ;
+                }
+            
+                if (httpResponseMessage.StatusCode == HttpStatusCode.InternalServerError)
+                {
+                    throw new ServerErrorException("error-server");
+                }
+
+                throw new Exception("AAAAAAAAAAAAA");
+            }
+            finally
+            {
+                semaphore.Release();
+            }
+           
         }
         
         public static async Task<T> PostToRefreshTokenAsync<T>([Required] string URL, dynamic input)

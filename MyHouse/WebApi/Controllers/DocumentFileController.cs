@@ -19,8 +19,21 @@ namespace WebApi.Controllers
         {
             _documentFileService = fileFolderService;
         }
-
         
+        [HttpPost]
+        [Route("get-shared-list-with-me")]
+        public async Task<List<DocumentFileWithNavPropertiesDto>> GetSharedListWithMeAsync(DocumentFileFilter filter)
+        {
+           return  await _documentFileService.GetSharedListWithMeAsync(filter);
+        }
+
+        [HttpGet]
+        [Route("{id}")]
+        public async Task<DocumentFileDto> GetAsync(Guid id)
+        {
+            return await _documentFileService.GetAsync(id);
+        }
+
         [HttpPost]
         public async Task<DocumentFileDto> CreateAsync(CreateUpdateDocumentFileDto input)
         {
@@ -41,7 +54,7 @@ namespace WebApi.Controllers
             await _documentFileService.DeleteAsync(id);
         }
 
-        [HttpPost]
+        [HttpPatch]
         [Route("update-download-count/{id}")]
         public async Task UpdateDownloadCountAsync(Guid id)
         {
@@ -49,7 +62,7 @@ namespace WebApi.Controllers
 
         }
         
-        [HttpPost]
+        [HttpPatch]
         [Route("update-print-count/{id}")]
         public async Task UpdatePrintCountAsync(Guid id)
         {

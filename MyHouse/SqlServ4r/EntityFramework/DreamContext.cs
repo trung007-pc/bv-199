@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Threading.Tasks;
 using Domain.Departments;
 using Domain.DocumentFiles;
 using Domain.FileFolders;
@@ -13,6 +14,7 @@ using Domain.Identity.UserRoles;
 using Domain.Identity.Users;
 using Domain.Identity.UserTokens;
 using Domain.IssuingAgencys;
+using Domain.MeetingContents;
 using Domain.Notifications;
 using Domain.Positions;
 using Domain.SendingFiles;
@@ -22,6 +24,7 @@ using Domain.UnitReviews;
 using Domain.Units;
 using Domain.UnitTypes;
 using Domain.UserDepartments;
+using Domain.WorkSchedules;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -43,11 +46,14 @@ namespace SqlServ4r.EntityFramework
         public DbSet<FileFolder> FileFolders { get; set; }
         public DbSet<FileType> FileTypes { get; set; }
         public DbSet<IssuingAgency> IssuingAgencies { get; set; }
-        public DbSet<DocumentFile> Files { get; set; }
+        public DbSet<DocumentFile> DocumentFiles { get; set; }
         public DbSet<FileVersion>  FileVersions { get; set; }
         
         public DbSet<SendingFile> SendingFiles { get; set; }
         public DbSet<Notification> Notifications { get; set; }
+        
+        public DbSet<WorkSchedule> WorkSchedules { get; set; }
+        public DbSet<MeetingContent> MeetingContents { get; set; }
 
 
 
@@ -56,7 +62,7 @@ namespace SqlServ4r.EntityFramework
         public DreamContext(DbContextOptions<DreamContext> options):base(options)
         {
             
-            
+
         }
         
         protected override void OnModelCreating (ModelBuilder builder) {
@@ -116,7 +122,7 @@ namespace SqlServ4r.EntityFramework
             
             
             
-            //1-n
+            //FILE MANAGER
             builder.Entity<DocumentFile>().HasOne<IssuingAgency>(x => x.IssuingAgency)
                 .WithMany(x => x.DocumentFiles)
                 .HasForeignKey(x => x.IssuingAgencyId)
@@ -128,7 +134,8 @@ namespace SqlServ4r.EntityFramework
             builder.Entity<DocumentFile>().HasOne<FileFolder>(x => x.FileFolder)
                 .WithMany(x => x.Files)
                 .HasForeignKey(x => x.DocumentFolderId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.SetNull);
 
 
             builder.Entity<DocumentFile>().HasOne<User>(x => x.User)
@@ -139,6 +146,7 @@ namespace SqlServ4r.EntityFramework
             builder.Entity<DocumentFile>().HasOne<FileType>(x => x.FileType)
                 .WithMany(x => x.DocumentFiles)
                 .HasForeignKey(x => x.DocumentTypeId)
+                .IsRequired(false)
                 .OnDelete(DeleteBehavior.SetNull);
 
             builder.Entity<FileVersion>().
@@ -158,11 +166,16 @@ namespace SqlServ4r.EntityFramework
             
             // user - sendingfile - file
             
-            builder.Entity<SendingFile>().HasKey(sc => new { sc.Id,sc.FileId,sc.ReceiverId });
+            builder.Entity<SendingFile>().HasKey(sc => new { sc.Id });
+
+            builder.Entity<SendingFile>().HasOne<User>(x => x.ReceiverUser)
+                .WithMany(x => x.ReceiverSendingFiles)
+                .HasForeignKey(x => x.ReceiverId)
+                .OnDelete(DeleteBehavior.Restrict);
             
-            builder.Entity<SendingFile>().HasOne<User>(x => x.User)
-                .WithMany(x => x.SendingFiles)
-                .HasForeignKey(x=>x.ReceiverId);
+            builder.Entity<SendingFile>().HasOne<User>(x => x.SenderUser)
+                .WithMany(x => x.SenderSendingFiles)
+                .HasForeignKey(x=>x.SenderId);
             
             builder.Entity<SendingFile>().HasOne<DocumentFile>(x => x.DocumentFile)
                 .WithMany(x => x.SendingFiles)
@@ -177,15 +190,22 @@ namespace SqlServ4r.EntityFramework
                 .WithMany(x => x.Notifications)
                 .HasForeignKey(x=>x.ReceiverId);
             
-            builder.Entity<Notification>().HasOne<DocumentFile>(x => x.DocumentFile)
-                .WithMany(x => x.Notifications)
-                .HasForeignKey(x=>x.DestinationCode);
+            // builder.Entity<Notification>().HasOne<SendingFile>(x => x)
+            //     .WithMany(x => x.Notifications)
+            //     .HasForeignKey(x=>x.DestinationCode);
             
             
+            builder.Entity<WorkSchedule>().HasOne<User>(x => x.User)
+                .WithMany(x => x.WorkSchedules)
+                .HasForeignKey(x => x.CreatedBy)
+                .IsRequired(true)
+                .OnDelete(DeleteBehavior.Restrict);
             
-            
-            
-            
+            builder.Entity<MeetingContent>().HasOne<User>(x => x.User)
+                .WithMany(x => x.MeetingContents)
+                .HasForeignKey(x => x.CreatedBy)
+                .IsRequired(true)
+                .OnDelete(DeleteBehavior.Restrict);
             
             
             
@@ -247,10 +267,10 @@ namespace SqlServ4r.EntityFramework
 
                 entity.HasIndex(p => p.StorageCode)
                     .IsUnique(true);
-                entity.HasIndex(p => p.Name)
-                    .IsUnique(true);
-                entity.HasIndex(p => p.Code)     
-                    .IsUnique(true);
+                entity.HasIndex(p => p.Name);
+
+                entity.HasIndex(p => p.Code);
+
             });
 
             builder.Entity<FileType>(entity => {
@@ -273,10 +293,15 @@ namespace SqlServ4r.EntityFramework
                     .IsUnique(true);
             });
             
+            builder.Entity<WorkSchedule>(entity =>
+            {
+                entity.HasIndex(p => p.Name);
+            });
             
-            
-            
-            
+            builder.Entity<MeetingContent>(entity =>
+            {
+                entity.HasIndex(p => p.Name);
+            });
             
         }
         

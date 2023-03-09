@@ -367,3 +367,6 @@ FodyWeavers.xsd
 
 #image
 Myhouse/WebApi/wwwroot/images/
+##pdf
+Myhouse/WebApi/wwwroot/document-files/
+Myhouse/WebClient/wwwroot/document-files/

@@ -11,6 +11,7 @@
         SignOut,
         SignUp,
         Review,
-        UploadFile
+        UploadFile,
+        Reset
     }
 }

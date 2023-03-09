@@ -1,0 +1,215 @@
+﻿@page "/share-with-me"
+@attribute [Authorize]
+@inherits BaseBlazorPage
+@using WebClient.Service.DocumentFiles
+@using Variant = Radzen.Variant
+@using Contract.DocumentFiles;
+@using Contract.FileFolders
+@using Contract.Identity.UserManager
+@using WebClient.Service.FileFolders
+@using Contract.Departments
+@using Core.Const
+@using Microsoft.AspNetCore.Components
+@using WebClient.Service.Departments
+@using WebClient.Service.FileTypes
+@using WebClient.Service.IssuingAgencys
+@using WebClient.Service.SendingFiles
+@using WebClient.Service.Users
+@inject DocumentFileService _documentFileService;
+@inject NavigationManager _navigationManager;
+@inject FileFolderService _fileFolderService;
+@inject DepartmentService _departmentService;
+@inject SendingFileService _sendingFileService;
+@inject UserManagerService _userManagerService;
+@inject IssuingAgencyService _issuingAgencyService;
+@inject FileTypeService _fileTypeService;
+
+<div style="display: flex;justify-content: space-between;align-items: center">
+    <div>
+        <RadzenBreadCrumb >
+            <RadzenBreadCrumbItem Path="/" Icon="home" Style="font-size: 20px"/>
+            <RadzenBreadCrumbItem Text="@HeaderTitle" Style="font-weight: 300"/>
+        </RadzenBreadCrumb>
+    </div>
+</div>
+
+<RZBR></RZBR>
+
+<RadzenCard>
+    <Blazorise.Row Style="display:flex;align-items: center">
+        <Blazorise.Column ColumnSize="ColumnSize.Is2" Style="display:flex;align-items: center">
+            <RadzenIcon Icon="calendar_today" Style="margin-right: 7px;font-size: 28px;color: deeppink"/>
+            <DateRangePicker @bind-StartDate="Timeline.StartDay"
+                             @bind-EndDate="Timeline.EndDay" Ranges="DateRanges" DateFormat="@DateFormatType.DateFormat" OnClosed="OnChangedDate" class="form-control form-control-md" placeholder="Select Date...">
+            </DateRangePicker>
+        </Blazorise.Column>
+
+        <Blazorise.Column ColumnSize="ColumnSize.Is2" Style="display:flex;align-items: center">
+            <RadzenDropDown AllowClear="true" AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                            @bind-Value=@Filter.IssuingAgencyId Multiple="false"
+                            Change="OnChangeSelectedAgency"
+                            TextProperty="Name"
+                            ValueProperty="Id"
+                            Placeholder="Select Agency"
+                            Data=@HierarchicalIssuingAgencies
+                            Class="w-100"/>
+        </Blazorise.Column>
+
+        <Blazorise.Column ColumnSize="ColumnSize.Is2" Style="display:flex;align-items: center">
+
+            <RadzenDropDown AllowClear="true" AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                            @bind-Value=@Filter.FileTypeId Multiple="false"
+                            TextProperty="Name"
+                            Change="OnChangeSelectedType"
+                            ValueProperty="Id"
+                            Placeholder="Select Type"
+                            Data=@FileTypes
+                            Class="w-100"/>
+        </Blazorise.Column>
+
+
+        <Blazorise.Column ColumnSize="ColumnSize.Is6" Style="display:flex;align-items: center">
+
+            <div class="search-input">
+                <RadzenTextBox Trim="true" Placeholder="Search..." @onkeyup="async (ars) => await OnEnterKeyPressed(ars)" @bind-Value="Filter.Text" class="w-100" Style="border: none;outline: none"/>
+            </div>
+            <RadzenButton Click="@GetDocumentFiles" Icon="search" Style="border-radius: 0"/>
+
+        </Blazorise.Column>
+
+    </Blazorise.Row>
+</RadzenCard>
+
+
+<RadzenRow Gap="10">
+    <RadzenColumn Size="2">
+
+        <RadzenTree Data=@FolderTree Change="OnChangeSelectedFolder" Style="width:100%">
+            <RadzenTreeLevel TextProperty="Name" ChildrenProperty="ChildFolders"
+                             HasChildren=@(e => (e as FileFolderDto).ChildFolders.Any())
+                             Expanded="@(value => true)">
+                <Template >
+                    <div style="display: flex;width:100%;justify-content: space-between;align-items: center">
+                        <div style="display: flex">
+                            <RadzenIcon Icon="folder"/>
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3" Style="margin-bottom: 0">@context.Text</RadzenText>
+                        </div>
+                    </div>
+
+                </Template>
+            </RadzenTreeLevel>
+        </RadzenTree>
+    </RadzenColumn>
+
+    <RadzenColumn Size="10">
+        <RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" AllowAlternatingRows="false" AllowSorting="true" PageSize="20" AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true"
+                        Data="@DocumentFileWithNavProperties" TItem="DocumentFileWithNavPropertiesDto" ColumnWidth="300px"
+                        AllowColumnPicking="true"
+
+                        PageSizeOptions="PageSizeOptions"
+                        Style="width: 100%">
+            <Columns>
+
+                <RadzenDataGridColumn TItem="DocumentFileWithNavPropertiesDto" Property="SendingFile.Status" TextAlign="TextAlign.Center" Title="Is Read" Width="160px">
+                   
+                    <Template Context="data">
+                        <RadzenSwitch @bind-Value=@data.SendingFile.Status Disabled="true"/>
+
+                    </Template>
+                </RadzenDataGridColumn>
+
+                <RadzenDataGridColumn TItem="DocumentFileWithNavPropertiesDto" Property="File.Name" TextAlign="TextAlign.Center" Title="Name" Width="160px"/>
+                <RadzenDataGridColumn TItem="DocumentFileWithNavPropertiesDto" Property="File.Code" TextAlign="TextAlign.Center" Title="Code" Width="160px"/>
+                <RadzenDataGridColumn TItem="DocumentFileWithNavPropertiesDto" Property="File.StorageCode" TextAlign="TextAlign.Center" Title="Storage Code" Width="160px"/>
+                <RadzenDataGridColumn TItem="DocumentFileWithNavPropertiesDto" Property="IssuingAgency.Name" TextAlign="TextAlign.Center" Title="Agency" Width="160px"/>
+                <RadzenDataGridColumn TItem="DocumentFileWithNavPropertiesDto" Property="FileType.Name" TextAlign="TextAlign.Center" Title="Type" Width="160px"/>
+
+                <RadzenDataGridColumn TItem="DocumentFileWithNavPropertiesDto" Property="File.PublicationDate" TextAlign="TextAlign.Center" Title="Publication Date" Width="160px">
+                    <Template Context="data">
+                        @($"{data.File.PublicationDate:dd/MM/yyyy}")
+                    </Template>
+                </RadzenDataGridColumn>
+
+                <RadzenDataGridColumn TItem="DocumentFileWithNavPropertiesDto" Property="SendingFile.SentDate" TextAlign="TextAlign.Center" Title="Received Date" Width="160px">
+                    <Template Context="data">
+                        @($"{data.SendingFile.SentDate:dd/MM/yyyy}")
+                    </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="DocumentFileWithNavPropertiesDto" Property="File.Name" Title="Action" TextAlign="TextAlign.Center" Filterable="false">
+                    <Template Context="data">
+                        <RadzenButton ButtonStyle="ButtonStyle.Primary" Icon="send" Click="async () => { await ShowSendingFile(data.File); }" Variant="Variant.Flat" Shade="Shade.Lighter" Size="ButtonSize.Medium" Class="my-1 ms-1">
+                        </RadzenButton>
+                        <RadzenButton ButtonStyle="ButtonStyle.Light" Click="async () => { await ViewDocumentFile(data); }" Icon="remove_red_eye" Variant="Variant.Flat" Shade="Shade.Default" Size="ButtonSize.Medium" Class="my-1 ms-1">
+                        </RadzenButton>
+                    </Template>
+                </RadzenDataGridColumn>
+            </Columns>
+        </RadzenDataGrid>
+    </RadzenColumn>
+</RadzenRow>
+
+
+@* Sending - FIle *@
+<RZModel @ref="@SendingFileModel" Width="50vw" Title="Send File" Style="min-height:500px" ShowTitle="true">
+    <RadzenAlert AlertStyle="AlertStyle.Success" ShowIcon="true" Variant="Variant.Flat" Shade="Shade.Lighter">
+        Number:@DocumentFileDto.Code|Name:@DocumentFileDto.Name|Storage Number :@DocumentFileDto.StorageCode
+    </RadzenAlert>
+    <RadzenRow Gap="10">
+        <RadzenColumn Size="4">
+            <RadzenText>Send By Department</RadzenText>
+            <RadzenTree Data=@HierarchicalDepartments Style="width:100%"
+                        AllowCheckBoxes="true"
+                        @bind-CheckedValues="SelectedDepartments">
+                <RadzenTreeLevel TextProperty="Name" ChildrenProperty="ChildDepartment"
+                                 Expanded="@(value => true)"
+                                 HasChildren=@(e => (e as DepartmentDto).ChildDepartment.Any())>
+                    <Template Context="data">
+                        <div style="display: flex;width:100%;justify-content: space-between;align-items: center">
+                            <div style="display: flex">
+                                <RadzenIcon Icon="home_work"/>
+                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3" Style="margin-bottom: 0">@data.Text</RadzenText>
+                            </div>
+                        </div>
+
+                    </Template>
+                </RadzenTreeLevel>
+            </RadzenTree>
+        </RadzenColumn>
+        <RadzenColumn Size="8">
+            <RadzenText>Send By Identity</RadzenText>
+            <RadzenDropDownDataGrid Multiple="true"
+                                    Style="width: 100%"
+                                    AllowClear="true" AllowFiltering="true"
+                                    Chips="true"
+                                    FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                    TextProperty="FullName"
+                                    ValueProperty="Id"
+                                    @bind-Value="SelectedUserIds"
+                                    Data=@Users>
+
+                <Columns>
+                    <RadzenDropDownDataGridColumn Width="60px" Sortable="false">
+                        <Template Context="data">
+                            <RadzenCheckBox TriState="false" Value="@(SelectedUserIds != null && SelectedUserIds.Any(x => x == ((UserDto) data).Id))"
+                                            TValue="bool"/>
+                        </Template>
+                    </RadzenDropDownDataGridColumn>
+                    <RadzenDropDownDataGridColumn Property="FullName" Title="Full Name" Width="200px"/>
+                    <RadzenDropDownDataGridColumn Property="PhoneNumber" Title="Phone Number" Width="200px"/>
+                    <RadzenDropDownDataGridColumn Property="EmployeeCode" Title="Employee Code" Width="200px"/>
+                </Columns>
+
+
+            </RadzenDropDownDataGrid>
+
+        </RadzenColumn>
+    </RadzenRow>
+
+
+    <div class="Row" style="float: right">
+        <div class="col">
+            <RadzenButton Text="Ok" Click="async () => { await CreateSendingFiles(DocumentFileDto.Id); }" Class="me-1" Style="width: 80px;" Disabled="IsDisable"/>
+            <RadzenButton Text="Cancel" Click="() => SendingFileModel.HideModel()" ButtonStyle="ButtonStyle.Light" Class="me-1" Disabled="IsDisable"/>
+        </div>
+    </div>
+</RZModel>

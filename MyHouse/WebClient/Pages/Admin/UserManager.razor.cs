@@ -52,6 +52,7 @@ namespace WebClient.Pages.Admin
         public bool IsLoading { get; set; } = true;
 
         public bool TriggeredWithoutFile { get; set; } = false;
+        
       
 
 

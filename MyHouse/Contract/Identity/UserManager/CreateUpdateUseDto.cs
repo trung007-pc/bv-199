@@ -15,7 +15,8 @@ namespace Contract.Identity.UserManager
         public DateTime? DOB { get; set; } 
         public string PhoneNumber { get; set; }
         public string? Email { get; set; }
-        
+        public bool IsActive { get; set; }
+
         public List<string> DepartmentCodes { get; set; } =  new List<string>();
         public string PositionCode { get; set; }
         public List<string> RoleCodes { get; set; } = new List<string>();

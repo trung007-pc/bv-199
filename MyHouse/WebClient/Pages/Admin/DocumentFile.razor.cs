@@ -6,10 +6,13 @@ using System.Threading.Tasks;
 using AutoMapper.Internal.Mappers;
 using BlazorDateRangePicker;
 using Blazorise;
+using Contract.Departments;
 using Contract.DocumentFiles;
 using Contract.FileFolders;
 using Contract.FileTypes;
+using Contract.Identity.UserManager;
 using Contract.IssuingAgencys;
+using Contract.SendingFiles;
 using Core.Enum;
 using Core.Extension;
 using Microsoft.AspNetCore.Components;
@@ -19,6 +22,7 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.JSInterop;
 using Radzen;
+using WebClient.Components;
 using WebClient.Exceptions;
 using WebClient.Setting;
 
@@ -38,11 +42,19 @@ namespace WebClient.Pages.Admin
 
         public List<FileFolderDto> FolderTree { get; set; }  = new List<FileFolderDto>();
         public List<FileFolderDto> HierarchicalFileFolders { get; set; } = new List<FileFolderDto>();
+        
+        public IEnumerable<DepartmentDto> HierarchicalDepartments { get; set; } = new List<DepartmentDto>();
+        public List<DepartmentDto> Departments { get; set; } = new List<DepartmentDto>();
+        public IEnumerable<object> SelectedDepartments = new List<DepartmentDto>();
 
+        public IEnumerable<UserDto> Users = new List<UserDto>();
+        public IEnumerable<Guid> SelectedUserIds = new List<Guid>();
 
         public CreateUpdateDocumentFileDto NewDocumentFile { get; set; } = new CreateUpdateDocumentFileDto();
         public CreateUpdateDocumentFileDto EditingDocumentFile { get; set; } = new CreateUpdateDocumentFileDto();
         public DocumentFileDto ViewDocumentFile { get; set; } = new DocumentFileDto();
+        
+        public DocumentFileDto DocumentFileDto { get; set; } = new DocumentFileDto();
 
         public FileFolderDto SelectedFolder { get; set; }  = new FileFolderDto();
         public List<FileFolderDto> Folders { get; set; }  = new List<FileFolderDto>();
@@ -51,11 +63,12 @@ namespace WebClient.Pages.Admin
         public Guid EditingDocumentFileId { get; set; }
          [Inject]  IMessageService _messageService { get; set; }
 
-         public DocumentFileFilter Filter { get; set; } = new DocumentFileFilter();
+        public DocumentFileFilter Filter { get; set; } = new DocumentFileFilter();
 
         public Modal CreateModal;
         public Modal EditingModal;
         public Modal ViewModal;
+        public RZModel SendingFileModel;
 
         public string HeaderTitle = "Document File";
 
@@ -64,8 +77,9 @@ namespace WebClient.Pages.Admin
         public IBrowserFile? PdfFile { get; set; }
 
         public IBrowserFile? EditingFile { get; set; }
+        public bool IsLoading { get; set; } = true;
 
-        private bool Test1 { get; set; }
+        
 
 
         bool sidebar1Expanded = true;
@@ -87,19 +101,35 @@ namespace WebClient.Pages.Admin
             {
                 await InvokeAsync(async () =>
                 {
-                    DateRanges = await GetDateRangePickers();
+
+                    await InitTime();
                     await GetDocumentFiles();
                     await GetFileTypes();
                     await GetIssuingAgencies();
                     await GetFileFolders();
+                    await GetDepartments();
+                    await GetUsers();
                     StateHasChanged();
                 }, ActionType.GetList, false);
             }
         }
 
+        public async Task InitTime()
+        {
+            (DateRanges,Timeline.StartDay,Timeline.EndDay) = await GetDateRangePickersWithDefault();
+            (Filter.StartDay, Filter.EndDay) = GetDateTimeFromOffSet(Timeline.StartDay,Timeline.EndDay);
+        }
+
         public async Task GetDocumentFiles()
         {
+            IsLoading = true;
             DocumentFileWithNavProperties = await _documentFileService.GetListWithNavPropertiesAsync(Filter);
+            IsLoading = false;
+        }
+
+        public async Task GetUsers()
+        {
+           Users = await _userManagerService.GetListAsync();
         }
         
         public async Task GetFileTypes()
@@ -128,7 +158,19 @@ namespace WebClient.Pages.Admin
             }
             
         }
-        
+        public async Task GetDepartments()
+        {
+            Departments = await _departmentService.GetListAsync();
+            HierarchicalDepartments = Departments;
+            foreach (var item in HierarchicalDepartments)
+            {
+                var childDepartments = 
+                    HierarchicalDepartments.Where(x => x.ParentCode == item.Id).ToList();
+                item.ChildDepartment = childDepartments;
+            }
+            HierarchicalDepartments = HierarchicalDepartments.Where(x => x.ParentCode == null);
+            
+        }
         
         public async Task GetFileFolders()
         {
@@ -339,12 +381,27 @@ namespace WebClient.Pages.Admin
         {
             ViewModal.Hide();
         }
+
+
+        public async Task ShowSendingFile(DocumentFileDto dto)
+        {
+            SelectedDepartments = new List<DepartmentDto>();
+            SelectedUserIds = new List<Guid>();
+            DocumentFileDto = dto;
+            await SendingFileModel.ShowModel();
+        }
+
+        public void HideSendingFile()
+        {
+             SendingFileModel.HideModel();
+        }
         
         
         public void ShowNewModal()
         {
             
             NewDocumentFile = new CreateUpdateDocumentFileDto();
+            NewFile = null;
             CreateModal.Show();
         }
 
@@ -383,10 +440,11 @@ namespace WebClient.Pages.Admin
         {
             await GetDocumentFiles();
         }
-        void OnChangeSelectedFolder(TreeEventArgs args)
+        async Task OnChangeSelectedFolder(TreeEventArgs args)
         {
             SelectedFolder = (FileFolderDto) args.Value;
             Filter.DocumentFolderId = SelectedFolder.Id;
+            await GetDocumentFiles();
         }
 
         async Task OnEnterKeyPressed(KeyboardEventArgs value)
@@ -400,16 +458,38 @@ namespace WebClient.Pages.Admin
 
          async Task DownloadFile(string url,Guid documentFileId)
         {
-            _navigationManager.NavigateTo(url);
             await _documentFileService.UpdateDownloadCountAsync(documentFileId);
-            await GetDocumentFiles();
-            StateHasChanged();
+            await JS.InvokeVoidAsync("downloadURI", url,DateTime.Now.Date.ToString());
         }
+
+         public async Task CreateSendingFiles(Guid fileId)
+         {
+            await  InvokeAsync(async () =>
+            {
+                var request = new SendingFileRequest()
+                {
+                    Sender = await GetUserIdAsync(),
+                    DepartmentIds =  (SelectedDepartments.OfType<DepartmentDto>())
+                        .Where(x => x.ChildDepartment.Count == 0)
+                        .Select(x => x.Id).ToList(),
+                    DefineUsers = SelectedUserIds.ToList(),
+                    FileId = fileId,
+                };
+
+                await _sendingFileService.SendNotificationForDepartmentUsersAndDefineUsers(request);
+                
+                 SendingFileModel.HideModel();
+             }, ActionType.Create, true);
+         }
 
          async Task PrintFile(Guid documentFileId)
          {
              await _documentFileService.UpdatePrintCountAsync(documentFileId);
+         }
 
+          void GotoViewDocumentFile(Guid fileId)
+         {
+              _navigationManager.NavigateTo($"view-document-file?fileId={fileId}");
          }
          
     }

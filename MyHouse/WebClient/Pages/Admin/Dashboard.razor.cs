@@ -8,7 +8,7 @@ using Contract.Dashboards;
 using Contract.UnitTypes;
 using Core.Enum;
 using Radzen;
-
+    
 namespace WebClient.Pages.Admin
 {
     public partial class Dashboard

@@ -6,11 +6,15 @@ using Contract.FileTypes;
 using Contract.Identity.RoleManager;
 using Contract.Identity.UserManager;
 using Contract.IssuingAgencys;
+using Contract.MeetingContents;
+using Contract.Notifications;
 using Contract.Positions;
+using Contract.SendingFiles;
 using Contract.UnitReviewDetails;
 using Contract.UnitReviews;
 using Contract.Units;
 using Contract.UnitTypes;
+using Contract.WorkSchedules;
 using WebClient.Pages.Admin;
 using WebClient.Pages.Client;
 
@@ -48,7 +52,10 @@ namespace WebClient
             CreateMap<IssuingAgencyDto, CreateUpdateIssuingAgencyDto>().ReverseMap();
             CreateMap<DocumentFileDto, CreateUpdateDocumentFileDto>().ReverseMap();
 
-
+            CreateMap<NotificationDto, UpdateNotification>().ReverseMap();
+            CreateMap<SendingFileDto, CreateUpdateSendingFileDto>().ReverseMap();
+            CreateMap<WorkScheduleDto, CreateUpdateWorkScheduleDto>().ReverseMap();
+            CreateMap<MeetingContentDto, CreateUpdateMeetingContentDto>().ReverseMap();
         }
     }
 }

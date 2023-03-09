@@ -50,6 +50,16 @@ namespace Application.Uploads
             return new FileDto(){FileName = fileModel.FileName , Path = fileModel.Path,Url = fileModel.Url};
         }
 
+        // public async Task<FileDto> UploadDocumentFile(IFormFile file)
+        // {
+        //     string pathBase = Path.Combine(_environment.WebRootPath,_configuration["Media:DOCUMENT_FILE"]);
+        //     var fileModel = await FileHelper.UploadFile(file, pathBase,new List<string>()
+        //     {
+        //         ".xlsx,.pdf, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet , application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        //     }, _configuration["Media:BASE_DOCUMENT_FILE_URL"]);
+        //     return new FileDto(){FileName = fileModel.FileName , Path = fileModel.Path,Url = fileModel.Url,Extension= fileModel.Extension};
+        // }
+        
         public async Task<FileDto> UploadDocumentFile(IFormFile file)
         {
             string pathBase = Path.Combine(_environment.WebRootPath,_configuration["Media:DOCUMENT_FILE"]);

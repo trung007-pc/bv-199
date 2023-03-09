@@ -34,6 +34,13 @@ namespace WebApi.Controllers
            return  await _userManagerService.GetListWithNavigationAsync();
         }
 
+        [HttpGet]   
+        [Route("get-with-nav-properties/{id}")]
+        public async Task<UserWithNavigationPropertiesDto> GetWithNavigationProperties(Guid id)
+        {
+            return await _userManagerService.GetWithNavigationProperties(id);
+        }
+
         [HttpPost]
         [Route("create-user-with-roles")]
         public async Task<UserDto> CreateUserWithNavigationPropertiesAsync(CreateUserDto input)
@@ -108,28 +115,23 @@ namespace WebApi.Controllers
             return await _userManagerService.SignUpAsync(input);
         }
 
-        
+        [HttpPost]
+        [Route("set-password")]
+        public async Task<bool> SetNewPasswordAsync(NewUserPasswordDto input)
+        {
+            return await _userManagerService.SetNewPasswordAsync(input);
+
+        }
+
+
         [HttpPost]
         [Route("update-profile")]
         public async Task<UserProfileModel> UpdateUserProfileAsync(UserProfileModel userProfileModel)
         {
             return await _userManagerService.UpdateUserProfileAsync(userProfileModel);
         }
-
-        [HttpPost]
-        [Route("change-password")]
-        public async Task<UserPasswordUpdateModel> ChangePasswordAsync(UserPasswordUpdateModel user)
-        {
-            return await _userManagerService.ChangePasswordAsync(user);
-        }
         
-
-        [HttpPost]
-        [Route("set-password")]
-        public  async Task<UserDto> SetPasswordAsync(UserModel input)
-        {
-            return await _userManagerService.SetPasswordAsync(input);
-        }
+        
 
         [HttpPost]
         [Route("refresh-token")]
@@ -138,20 +140,6 @@ namespace WebApi.Controllers
         {
             return await _userManagerService.RefreshTokenAsync(token);
         }
-
         
-        [HttpPost]
-        [Route("upload-file")]
-        public bool UploadFile()
-        {
-            return true;
-        }
-        
-        [HttpGet]
-        [Route("xxxxx")]
-        public void Logout()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

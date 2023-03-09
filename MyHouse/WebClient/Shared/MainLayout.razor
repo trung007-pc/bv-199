@@ -1,75 +1,129 @@
 ﻿@using System.Security.Claims
+@using AutoMapper.Internal.Mappers
+@using Contract.Notifications
+@using Core.Enum
+@using WebClient.Service.Notications
+@using WebClient.Service.SendingFiles
+@using Color = MudBlazor.Color
+@using NotificationType = Core.Enum.NotificationType
+@using Variant = MudBlazor.Variant
 @inherits LayoutComponentBase
 @inject NavigationManager _navManager
-    
+@inject NotificationnService _notificationService
+@inject NavigationManager _navigationManager;
+@inject SendingFileService _sendingFileService;
 <RadzenLayout class="rz-shadow-3">
     <RadzenHeader>
-        <div class="box">
-            <RadzenSidebarToggle Click="@(() => sidebar1Expanded = !sidebar1Expanded)"/>
-            <div>
-                   @if (!_navManager.Uri.Contains("bv-199"))
-                   {
-                       <AuthorizeView>
-                           <Authorized>
-                               <RadzenProfileMenu>
-                                   <Template>
-                                       <div class="box">
-                                           <h3 >
-                                               @context.User.Claims.FirstOrDefault(x=>x.Type == ClaimTypes.Surname)?.Value
-                                           </h3>
-                                           <RadzenGravatar Email="user@example.com">
-                                           </RadzenGravatar>
-                                       </div>
-                                   </Template>
-                                   <ChildContent>
-                                       <RadzenProfileMenuItem Text="Logout" Path="logout" Icon="announcement"></RadzenProfileMenuItem>
-                                   </ChildContent>
-                               </RadzenProfileMenu>
-                           </Authorized>
-                       </AuthorizeView>
-                   }
-            </div>
-        </div>
+        <RadzenRow Gap="0">
+            <RadzenColumn Size="3">
+                <RadzenImage Path="/Images/Logo/Logo.png" Style="max-width:180px;align-items: center; padding:4px" Click="@(() => sidebar1Expanded = !sidebar1Expanded)"></RadzenImage>
+                <RadzenSidebarToggle Click="@(() => sidebar1Expanded = !sidebar1Expanded)"/>
+            </RadzenColumn>
+            <RadzenColumn Size="9">
+                <div style="display: flex">
+                    <div style="flex: 1"></div>
+                    <div>
+                        @if (!_navManager.Uri.Contains("bv-199"))
+                        {
+                            <AuthorizeView>
+                                <Authorized>
+
+                                    <div style="display: flex;justify-content: space-between;align-items: center;gap: 2vw">
+                                        <div @onclick="ToggleNotification" style="cursor: pointer">
+                                            <MudBadge Content="NotificationCount" Color="Color.Error" Overlap="true" Class="d-flex ml-auto">
+                                                <MudIcon Icon="@Icons.Material.Filled.Notifications" Color="Color.Default"/>
+                                                <MudOverlay @bind-Visible="isVisible" OnClick="ToggleNotification" DarkBackground="false" ZIndex="99" AutoClose="true"/>
+                                                <MudPopover Open="ShowNotification"
+                                                            OverflowBehavior="OverflowBehavior.FlipAlways"
+                                                            AnchorOrigin="Origin.BottomRight" TransformOrigin="Origin.TopRight"
+                                                            Paper="false">
+                                                    <MudPaper Outlined="true" Style="width: 30vw;padding:10px">
+
+                                                        <div style="display: flex;justify-content: space-between;">
+                                                            <div>
+                                                                <strong>Unread</strong>
+                                                            </div>
+                                                            <div>
+                                                                <RadzenLink @onclick="GoToNotificationPage" Text="See All"/>
+                                                            </div>
+                                                        </div>
+                                                        <div class="content--2" style="height: 30vh;margin-bottom: 5px;overflow: auto">
+                                                            <MudList Clickable="true" Dense="true" DisableGutters="true">
+                                                                @foreach (var item in Notifications)
+                                                                {
+                                                                    <MudListItem Text="@item.Title" OnClick="async () => { await ViewNotification(item); }" Icon="@Icons.Material.Filled.Bookmark" IconColor="Color.Error"/>
+                                                                }
+                                                            </MudList>
+                                                        </div>
+                                                    </MudPaper>
+                                                </MudPopover>
+                                            </MudBadge>
+                                        </div>
+
+
+                                        <RadzenProfileMenu Style="float: right">
+                                            <Template>
+                                                <div style="display: flex;justify-content: center;align-items: center;gap: 5px">
+                                                    <span>
+                                                        @context.User.Claims?.FirstOrDefault(x => x.Type == ClaimTypes.Surname)?.Value
+                                                    </span>
+                                                    <RadzenGravatar Email="user@example.com">
+                                                    </RadzenGravatar>
+                                                </div>
+                                            </Template>
+                                            <ChildContent>
+                                                <RadzenProfileMenuItem Text="My Profile" Path="my-profile" Icon="manage_accounts"></RadzenProfileMenuItem>
+
+                                                <RadzenProfileMenuItem Text="Logout" Path="logout" Icon="announcement"></RadzenProfileMenuItem>
+                                            </ChildContent>
+                                        </RadzenProfileMenu>
+
+                                    </div>
+                                </Authorized>
+                            </AuthorizeView>
+                        }
+                    </div>
+                </div>
+
+
+            </RadzenColumn>
+        </RadzenRow>
+
 
     </RadzenHeader>
-   @if (!_navManager.Uri.Contains("bv-199"))
-   {
-       <RadzenSidebar @bind-Expanded="@sidebar1Expanded">
+    @if (!_navManager.Uri.Contains("bv-199"))
+    {
+        <RadzenSidebar @bind-Expanded="@sidebar1Expanded">
 
-           <AuthorizeView>
-               <Authorized>
-                   <RadzenPanelMenu>
-                       <Menu></Menu>
-                   </RadzenPanelMenu>
-               </Authorized>
-               <NotAuthorized>
-               </NotAuthorized>
-           </AuthorizeView>
+            <AuthorizeView>
+                <Authorized>
+                    <RadzenPanelMenu>
+                        <Menu></Menu>
+                    </RadzenPanelMenu>
+                </Authorized>
+                <NotAuthorized>
+                </NotAuthorized>
+            </AuthorizeView>
 
-       </RadzenSidebar>
-   }
+        </RadzenSidebar>
+    }
 
-   <RadzenBody Style="transform: none !important;">
+    <RadzenBody Style="transform: none !important;">
         @Body
-       @* <ErrorBoundary> *@
-       @*     <ChildContent> *@
-       @*           @Body *@
-       @*     </ChildContent> *@
-       @*     <ErrorContent> *@
-       @*           @Body *@
-       @*     </ErrorContent> *@
-       @* </ErrorBoundary> *@
-    
-   </RadzenBody>
-   
-    <RadzenFooter Style="display: none" >
-        Footer
+    </RadzenBody>
+
+
+    <RadzenFooter Style="height:20px">
+        V2.0.1 Copyright ©2022 BV199. All Rights Reserved
     </RadzenFooter>
 </RadzenLayout>
 
 <RadzenNotification Style="z-index: 9999"/>
 <RadzenDialog/>
 <RadzenTooltip/>
+<MudThemeProvider/>
+<MudDialogProvider/>
+<MudSnackbarProvider/>
 
 
 @code {
@@ -79,14 +133,88 @@
     bool sidebar4Expanded = true;
     bool sidebar5Expanded = true;
     bool sidebar6Expanded = true;
+    bool ShowNotification = false;
+    bool isVisible = false;
+    public NotificationFilter Filter { get; set; } = new NotificationFilter();
+    public List<NotificationDto> Notifications { get; set; } = new List<NotificationDto>();
+    public int NotificationCount { get; set; }
+    public bool IsLoading { get; set; } = true;
 
 
-    // ErrorBoundary? boundary;
-    //
-    // protected override void OnParametersSet()
-    // {
-    //     boundary?.Recover();
-    //     
-    // }
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthState { get; set; }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            var auth = await AuthState;
+            if (auth.User.Identity.IsAuthenticated)
+            {
+                Filter.UserName = await GetUserNameAsync();
+                Filter.Status = NotificationStatus.Unread;
+                NotificationCount = await _notificationService.CountUnreadNotificationOfUser(Filter);
+                StateHasChanged();
+            }
+        }
+    }
+
+
+    public async Task ToggleNotification()
+    {
+        ShowNotification = !ShowNotification;
+        isVisible = false;
+        if (ShowNotification)
+        {
+            await GetNotifications();
+            isVisible = true;
+        }
+    }
+
+    public async Task GetNotifications()
+    {
+        Notifications = await _notificationService.GetListByFilter(Filter);
+    }
+
+    public async Task GoToNotificationPage()
+    {
+        await ToggleNotification();
+
+        _navigationManager.NavigateTo($"notifications");
+    }
+
+
+    public async Task<string> GetUserNameAsync()
+    {
+        var authState = await AuthState;
+        var user = authState.User;
+
+        return user.Identity.Name;
+    }
+
+    public async Task ViewNotification(NotificationDto dto)
+    {
+        if (dto.Type == NotificationType.Document)
+        {
+            var updateNotification = new UpdateNotification()
+            {
+                Id = dto.Id,
+                Status = true,
+                Title = dto.Title,
+                Type = dto.Type,
+                DestinationCode = dto.DestinationCode,
+                ReceiverId = dto.ReceiverId,
+                SentDate = dto.SentDate
+            };
+            await _notificationService.UpdateWithReadingStatusAsync(updateNotification);
+            NotificationCount = await _notificationService.CountUnreadNotificationOfUser(Filter);
+            await ToggleNotification();
+            var sendingFile = await _sendingFileService.GetAsync(dto.DestinationCode);
+            _navigationManager.NavigateTo($"view-document-file?fileId={sendingFile.FileId}");
+        }
+        if (dto.Type == NotificationType.Task)
+        {
+        }
+    }
 
 }

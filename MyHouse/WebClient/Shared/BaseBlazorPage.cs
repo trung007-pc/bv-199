@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
+using System.Security.Claims;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -41,7 +43,8 @@ namespace WebClient.Shared
         public Task<AuthenticationState> AuthState { get; set; }
 
         protected IMapper ObjectMapper { get;}
-        
+        public bool IsDisable  { get; set; }
+
         public BaseBlazorPage()
         {
             
@@ -56,9 +59,10 @@ namespace WebClient.Shared
 
         public async Task<bool> InvokeAsync(Func<Task> action, ActionType type, bool showNotification = false)
         {
-         
+
             try
             {
+                IsDisable = true;
                 await action();
 
                 if (showNotification)
@@ -67,61 +71,99 @@ namespace WebClient.Shared
                     {
                         case ActionType.Create:
                         {
-                            _notificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Tạo Thành Công", Duration = 4000 });
+                            _notificationService.Notify(new NotificationMessage
+                                {Severity = NotificationSeverity.Success, Summary = "Tạo Thành Công", Duration = 4000});
                             break;
                         }
                         case ActionType.Update:
                         {
-                            _notificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Cập Nhật Thành cộng", Duration = 4000 });
+                            _notificationService.Notify(new NotificationMessage
+                            {
+                                Severity = NotificationSeverity.Success, Summary = "Cập Nhật Thành cộng",
+                                Duration = 4000
+                            });
                             break;
                         }
                         case ActionType.Get:
                         {
-                            _notificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Lấy về Thành cộng", Duration = 4000 });
+                            _notificationService.Notify(new NotificationMessage
+                            {
+                                Severity = NotificationSeverity.Success, Summary = "Lấy về Thành cộng", Duration = 4000
+                            });
                             break;
                         }
                         case ActionType.GetList:
                         {
-                            _notificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Lấy về Thành cộng", Duration = 4000 });
+                            _notificationService.Notify(new NotificationMessage
+                            {
+                                Severity = NotificationSeverity.Success, Summary = "Lấy về Thành cộng", Duration = 4000
+                            });
                             break;
                         }
                         case ActionType.Delete:
                         {
-                            _notificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Xóa Thành cộng", Duration = 4000 });
+                            _notificationService.Notify(new NotificationMessage
+                                {Severity = NotificationSeverity.Success, Summary = "Xóa Thành cộng", Duration = 4000});
                             break;
                         }
                         case ActionType.SignIn:
                         {
-                            _notificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Sign In Success", Duration = 4000 });
+                            _notificationService.Notify(new NotificationMessage
+                            {
+                                Severity = NotificationSeverity.Success, Summary = "Sign In Success", Duration = 4000
+                            });
                             break;
                         }
                         case ActionType.SignOut:
                         {
-                            _notificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Sign Out Success", Duration = 4000 });
+                            _notificationService.Notify(new NotificationMessage
+                            {
+                                Severity = NotificationSeverity.Success, Summary = "Sign Out Success", Duration = 4000
+                            });
                             break;
                         }
                         case ActionType.SignUp:
                         {
-                            _notificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Sign Up Success", Duration = 4000 });
+                            _notificationService.Notify(new NotificationMessage
+                            {
+                                Severity = NotificationSeverity.Success, Summary = "Sign Up Success", Duration = 4000
+                            });
                             break;
                         }
-                        
+
                         case ActionType.Review:
                         {
-                            _notificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Đánh giá thành công", Duration = 4000 });
+                            _notificationService.Notify(new NotificationMessage
+                            {
+                                Severity = NotificationSeverity.Success, Summary = "Đánh giá thành công",
+                                Duration = 4000
+                            });
                             break;
                         }
-                        
+
                         case ActionType.UploadFile:
                         {
-                            _notificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Upload File Succeeded ", Duration = 4000 });
+                            _notificationService.Notify(new NotificationMessage
+                            {
+                                Severity = NotificationSeverity.Success, Summary = "Upload File Succeeded ",
+                                Duration = 4000
+                            });
                             break;
                         }
-                    
+
+                        case ActionType.Reset:
+                        {
+                            _notificationService.Notify(new NotificationMessage
+                            {
+                                Severity = NotificationSeverity.Success, Summary = "Reset Succeeded ", Duration = 4000
+                            });
+                            break;
+                        }
+
                     }
                 }
-                
-                
+
+
                 return true;
             }
             catch (Exception e)
@@ -130,28 +172,41 @@ namespace WebClient.Shared
 
                 if (exceptionType == typeof(BadRequestException))
                 {
-                    _notificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error Summary", Detail = e.Message, Duration = 4000});
+                    _notificationService.Notify(new NotificationMessage
+                    {
+                        Severity = NotificationSeverity.Error, Summary = "Error Summary", Detail = e.Message,
+                        Duration = 4000
+                    });
 
                 }
+
                 if (exceptionType == typeof(UnauthorizedException))
                 {
-                    _notificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Warning, Summary = "your token is so old. please log in again to get a new token. 4s later you automatically logout", Detail = e.Message, Duration = 4000});
+                    _notificationService.Notify(new NotificationMessage
+                    {
+                        Severity = NotificationSeverity.Warning,
+                        Summary =
+                            "your token is so old. please log in again to get a new token. 4s later you automatically logout",
+                        Detail = e.Message, Duration = 4000
+                    });
                     Thread.Sleep(4000);
-                     _navigationManager.NavigateTo("login",true);
+                    _navigationManager.NavigateTo("login", true);
                 }
+
                 if (exceptionType == typeof(ServerErrorException))
                 {
-                    _navigationManager.NavigateTo("server-error",true);
+                    _navigationManager.NavigateTo("server-error", true);
                 }
 
                 if (exceptionType == typeof(DbConnectionException))
                 {
-                    _navigationManager.NavigateTo("connection-error",true);
+                    _navigationManager.NavigateTo("connection-error", true);
                 }
 
                 if (exceptionType == typeof(ConflictException))
                 {
-                    _notificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Warning, Summary = "", Detail = e.Message, Duration = 4000});
+                    _notificationService.Notify(new NotificationMessage
+                        {Severity = NotificationSeverity.Warning, Summary = "", Detail = e.Message, Duration = 4000});
                 }
 
                 if (exceptionType == typeof(TooManyRequests))
@@ -161,17 +216,28 @@ namespace WebClient.Shared
 
                 if (exceptionType == typeof(NotFoundFile))
                 {
-                    _notificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Warning, Summary = "Not Found File", Detail = e.Message, Duration = 4000});
+                    _notificationService.Notify(new NotificationMessage
+                    {
+                        Severity = NotificationSeverity.Warning, Summary = "Not Found File", Detail = e.Message,
+                        Duration = 4000
+                    });
                 }
-                
+
                 if (exceptionType == typeof(FailedOperation))
                 {
-                    _notificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Warning, Summary = "The Failed Operation", Detail =e.Message, Duration = 4000});
+                    _notificationService.Notify(new NotificationMessage
+                    {
+                        Severity = NotificationSeverity.Warning, Summary = "The Failed Operation", Detail = e.Message,
+                        Duration = 4000
+                    });
 
                 }
-                
+
                 // _navigationManager.NavigateTo("server-error",true);
 
+            }finally
+            {
+                IsDisable = false;
             }
 
             return false;
@@ -238,8 +304,17 @@ namespace WebClient.Shared
                       Start = now.AddMonths(-1).FirstDayOfMonth(),
                       End = now.AddMonths(-1).LastDayOfMonth()
                   }
+              },
+              {
+                  DateRangeType._3MonthsAgo.GetDescriptionOrName(),
+                  new DateRange()
+                  {
+                      Start = now.AddMonths(-3).FirstDayOfMonth(),
+                      End = now.Add(new TimeSpan(23,59,59))
+                  }
               }
               
+          
           };
 
           
@@ -249,11 +324,24 @@ namespace WebClient.Shared
 
         }
 
+        protected async Task<(Dictionary<string, DateRange>DateRanges,DateTimeOffset StartDay,DateTimeOffset EndDay)>
+            GetDateRangePickersWithDefault()
+        {
+           var dateRanges = await GetDateRangePickers();
+            
+            var dateRange = dateRanges.
+                FirstOrDefault(x => x.Key ==  DateRangeType._3MonthsAgo.GetDescriptionOrName()).Value;
+
+            return (dateRanges, dateRange.Start, dateRange.End);
+        }
+
         protected (DateTime?,DateTime?) GetDateTimeFromOffSet(DateTimeOffset? fromDateOffset, DateTimeOffset? toDateTimeOffset)
         {
             if (!fromDateOffset.HasValue || !toDateTimeOffset.HasValue) return (null, null);
             return (fromDateOffset.Value.DateTime, toDateTimeOffset.Value.DateTime);
         }
+        
+        
 
         public async Task<string> GetUserNameAsync()
         {
@@ -262,6 +350,14 @@ namespace WebClient.Shared
 
             return user.Identity.Name;
         }
+        
+        public async Task<Guid> GetUserIdAsync()
+        {
+            var authState = await AuthState;
+            var user = authState.User;
+            return Guid.Parse(user.Claims?.FirstOrDefault(x=>x.Type == ClaimTypes.PrimarySid)?.Value);
+        }
+        
 
         public async Task<bool> IsAuthenticatedAsync()
         {

@@ -24,6 +24,17 @@ namespace WebClient.Service.DocumentFiles
             return await RequestClient.GetAPIAsync<List<DocumentFileDto>>("document-file");
         }
 
+        public async Task<List<DocumentFileWithNavPropertiesDto>> GetSharedListWithMeAsync(DocumentFileFilter filter)
+        {
+            return await RequestClient.PostAPIAsync<List<DocumentFileWithNavPropertiesDto>>($"document-file/get-shared-list-with-me",filter);
+
+        }
+        
+        public async Task<DocumentFileDto> GetAsync(Guid id)
+        {
+            return await RequestClient.GetAPIAsync<DocumentFileDto>($"document-file/{id}");
+        }
+
         public async Task<DocumentFileDto> CreateAsync(CreateUpdateDocumentFileDto input)
         {
             return await RequestClient.PostAPIAsync<DocumentFileDto>("document-file",input);
@@ -43,12 +54,12 @@ namespace WebClient.Service.DocumentFiles
 
         public async Task UpdateDownloadCountAsync(Guid id)
         {
-            await RequestClient.PostAPIAsync<Task>($"document-file/update-download-count/{id}",null);
+            await RequestClient.PatchAPIAsync<Task>($"document-file/update-download-count/{id}",null);
         }
 
         public async Task UpdatePrintCountAsync(Guid id)
         {
-            await RequestClient.PostAPIAsync<Task>($"document-file/{id}",null);
+            await RequestClient.PatchAPIAsync<Task>($"document-file/update-print-count/{id}",null);
         }
     }
 }

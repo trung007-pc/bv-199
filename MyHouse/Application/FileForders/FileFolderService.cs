@@ -8,6 +8,7 @@ using Core.Const;
 using Core.Exceptions;
 using Domain.FileFolders;
 using Microsoft.EntityFrameworkCore;
+using SqlServ4r.Repository.FileDocuments;
 using SqlServ4r.Repository.FileFolders;
 using Volo.Abp.DependencyInjection;
 
@@ -16,9 +17,12 @@ namespace Application.FileForders
     public class FileFolderService : ServiceBase, IFileFolderService,ITransientDependency
     {
         private readonly FileFolderRepository _fileFolderRepository;
-        public FileFolderService(FileFolderRepository fileFolderRepository)
+        private readonly DocumentFileRepository _documentFileRepository;
+        public FileFolderService(FileFolderRepository fileFolderRepository,
+            DocumentFileRepository documentFileRepository)
         {
             _fileFolderRepository = fileFolderRepository;
+            _documentFileRepository = documentFileRepository;
         }
         
         
@@ -54,27 +58,14 @@ namespace Application.FileForders
 
         public async Task DeleteAsync(Guid id)
         {
-            var folders = await _fileFolderRepository.FirstOrDefaultAsync(x => x.Id == id);
+            var folder = await _fileFolderRepository.FirstOrDefaultAsync(x => x.Id == id);
 
-            if (folders is null)
+            if (folder is null)
             {
                 throw new GlobalException(HttpMessage.NotFound, HttpStatusCode.BadRequest);
             }
-            
-            
-            var departments = 
-                await _fileFolderRepository.GetListAsync(x => x.ParentCode == id);
-
-            foreach (var item in departments)
-            {
-                item.ParentCode = null;
-            }
-            
-            _fileFolderRepository.UpdateRange(departments);
-
-           _fileFolderRepository.Remove(folders);
-           
-            }
+            _fileFolderRepository.Remove(folder);
+        }
 
         public async Task<List<FileFolderDto>> GetListAsync()
         {

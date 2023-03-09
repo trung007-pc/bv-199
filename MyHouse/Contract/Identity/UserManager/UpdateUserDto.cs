@@ -33,6 +33,8 @@ namespace Contract.Identity.UserManager
         public Gender Gender { get; set; } 
         public DateTime DOB { get; set; }
         
+        public bool IsActive { get; set; }
+
         [Required(ErrorMessage = "Phone Number is required")]
         [RegularExpression(ContentRegularExpression.NUMBER_PHONE,ErrorMessage = "Phone Number has to 10 number")]
         public string PhoneNumber { get; set; }

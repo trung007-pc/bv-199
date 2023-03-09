@@ -13,7 +13,7 @@ namespace Contract.DocumentFiles
 
 
         public string Name { get; set;}
-        public string? Code { get; set; }
+        public string Code { get; set; }
         
         public DateTime PublicationDate { get; set; }
         public DateTime CreationDate { get; set; }
@@ -21,7 +21,7 @@ namespace Contract.DocumentFiles
         
         
         public string StorageCode { get; set; }
-        public bool IsPrint { get; set; }
+        public bool AllowDownloadAndPrint { get; set; }
         public bool IsDeleted { get; set; }
         public int Views { get; set; }
         public int DownloadCount { get; set; }
@@ -34,8 +34,8 @@ namespace Contract.DocumentFiles
         public string URL { get; set; }
 
         //foreign key
-        public Guid? IssuingAgencyId { get; set; }
-        public Guid? DocumentTypeId { get; set; }
+        public Guid IssuingAgencyId { get; set; }
+        public Guid DocumentTypeId { get; set; }
         public Guid DocumentFolderId { get; set; }
         public Guid CreatedBy { get; set; }
 

@@ -1,4 +1,4 @@
-@page "/"
+
 @page "/index"
   
 @attribute [Authorize]
@@ -7,7 +7,34 @@
 
 @using System.Web
 @using WebClient.Service.Users
+@using Color = MudBlazor.Color
+@using Variant = MudBlazor.Variant
+
+@code {
+	private bool _isOpen = false;
+
+	public void ToggleOpen() => _isOpen = !_isOpen;
+
+}
+
+<a href="https://localhost:7093/StaticFiles/Document-Files/26-02-2023/20230226155548_20230222145519_Hieu-Minh-Le-Java-Full-stack-Engineer.pdf" download>sssss</a>
+@* <RZPdfViewer></RZPdfViewer> *@
 
 
 <h1 style="color: red">Hello Index</h1>
+<MudProgressCircular Color="Color.Info" Indeterminate="true" />
+<MudProgressCircular Color="Color.Info" Indeterminate="false" />
 
+
+<MudProgressLinear Color="Color.Primary" Striped="true" Indeterminate="true" Class="my-7" />
+
+
+<MudAvatar Color="Color.Primary">M</MudAvatar>
+<MudAlert Severity="Severity.Normal">The reactor type is RBMK-1000</MudAlert>
+<MudAlert Severity="Severity.Info">The reactor was fired up successfully</MudAlert>
+
+
+
+@code{
+ 
+}

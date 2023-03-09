@@ -22,6 +22,8 @@
 @using Contract.Departments
 @using WebClient.Service.Departments
 @using WebClient.Service.Positions
+@using Variant = Radzen.Variant
+@using Color = Blazorise.Color
 
 <h3>@HeaderTitle</h3>
 
@@ -45,7 +47,7 @@
 
 
 <RadzenCard>
-    <RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" AllowAlternatingRows="false" PageSize="20" AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true"
+    <RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" AllowAlternatingBlazorise.Rows="false" PageSize="20" AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true"
                     Data="@Users" TItem="UserWithNavigationPropertiesDto" ColumnWidth="300px"
                     AllowSorting="true"
                     FilterMode="FilterMode.Simple"
@@ -72,6 +74,12 @@
 
             <RadzenDataGridColumn TItem="UserWithNavigationPropertiesDto" Property="User.PhoneNumber" TextAlign="TextAlign.Center" Title="Phone Number" Width="160px"/>
             <RadzenDataGridColumn TItem="UserWithNavigationPropertiesDto" Property="User.Email" TextAlign="TextAlign.Center" Title="Email" Width="160px"/>
+            <RadzenDataGridColumn TItem="UserWithNavigationPropertiesDto" Property="User.IsActive" FormatString="{0:d}" TextAlign="TextAlign.Center" Title="Is Active" Width="160px">
+            <Template Context="data">
+                <RadzenSwitch @bind-Value=@data.User.IsActive Disabled="true"/>
+                </Template>
+            </RadzenDataGridColumn>
+
             <RadzenDataGridColumn TItem="UserWithNavigationPropertiesDto" Property="Position.Name" TextAlign="TextAlign.Center" Title="Position" Width="160px"/>
             <RadzenDataGridColumn TItem="UserWithNavigationPropertiesDto" Property="Position.Name" TextAlign="TextAlign.Center" Title="Department" >
 
@@ -123,8 +131,8 @@
                     <Tabs>
                         <RadzenTabsItem Text="User">
                             <DataAnnotationsValidator/>
-                            <Row>
-                                <Column ColumnSize="ColumnSize.Is6.OnDesktop">
+                            <Blazorise.Row>
+                                <Blazorise.Column ColumnSize="ColumnSize.Is6.OnDesktop">
                                     <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3"> First Name </RadzenText>
                                     <RadzenTextBox Class="w-100" @bind-Value="NewUser.FirstName"/>
                                     <ValidationMessage For="@(() => NewUser.FirstName)"/>
@@ -144,10 +152,15 @@
                                     <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Password</RadzenText>
                                     <RadzenPassword Class="w-100" @bind-Value="NewUser.Password"/>
                                     <ValidationMessage For="@(() => NewUser.Password)"/>
+                                    
+                                    <RZBR></RZBR>
+                                    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3" Style="display: inline">Is Active</RadzenText>
+                                    <RadzenSwitch @bind-Value=@NewUser.IsActive />
+                                    <ValidationMessage For="@(() => NewUser.IsActive)"/>
 
 
-                                </Column>
-                                <Column ColumnSize="ColumnSize.Is6.OnDesktop">
+                                </Blazorise.Column>
+                                <Blazorise.Column ColumnSize="ColumnSize.Is6.OnDesktop">
                                     <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Enter again Password </RadzenText>
                                     <RadzenPassword Class="w-100" @bind-Value="NewUser.PasswordConfirm"/>
                                     <ValidationMessage For="@(() => NewUser.PasswordConfirm)"/>
@@ -159,6 +172,9 @@
                                     <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Date Of Birth</RadzenText>
                                     <RadzenDatePicker @bind-Value=@NewUser.DOB DateFormat="dd/MM/yyyy" Class="w-100"/>
                                     <ValidationMessage For="@(() => NewUser.DOB)"/>
+                                    
+                             
+                                    
                                     <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Gender</RadzenText>
                                     <RadzenRadioButtonList @bind-Value="NewUser.Gender" Style="display:flex;margin-bottom: 10px">
                                         <Items>
@@ -186,8 +202,8 @@
                                                     Class="w-100"/>
 
 
-                                </Column>
-                            </Row>
+                                </Blazorise.Column>
+                            </Blazorise.Row>
 
 
                         </RadzenTabsItem>
@@ -220,8 +236,8 @@
 
             </ModalBody>
             <ModalFooter>
-                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Click="@HideNewModal" Text="Cancel"/>
-                <RadzenButton Text="Save Changes" Icon="save" ButtonType="ButtonType.Submit"/>
+                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Click="@HideNewModal" Text="Cancel" Disabled="IsDisable"/>
+                <RadzenButton Text="Save Changes" Icon="save" ButtonType="ButtonType.Submit" Disabled="IsDisable"/>
             </ModalFooter>
         </EditForm>
     </ModalContent>
@@ -238,8 +254,8 @@
                 <Tabs>
                     <RadzenTabsItem Text="User">
                         <DataAnnotationsValidator/>
-                        <Row>
-                            <Column ColumnSize="ColumnSize.Is6.OnDesktop">
+                        <Blazorise.Row>
+                            <Blazorise.Column ColumnSize="ColumnSize.Is6.OnDesktop">
 
                                 <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3"> First Name </RadzenText>
                                 <RadzenTextBox Class="w-100" @bind-Value="EditingUser.FirstName"/>
@@ -257,9 +273,14 @@
                                 <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Phone Number </RadzenText>
                                 <RadzenTextBox Class="w-100" @bind-Value="EditingUser.PhoneNumber"/>
                                 <ValidationMessage For="@(() => EditingUser.PhoneNumber)"/>
-                            </Column>
+                                
+                                <RZBR></RZBR>
+                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3" Style="display: inline">Is Active</RadzenText>
+                                <RadzenSwitch @bind-Value=@EditingUser.IsActive />
+                                <ValidationMessage For="@(() => EditingUser.IsActive)"/>
+                            </Blazorise.Column>
 
-                            <Column ColumnSize="ColumnSize.Is6.OnDesktop">
+                            <Blazorise.Column ColumnSize="ColumnSize.Is6.OnDesktop">
 
 
                                 <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Email</RadzenText>
@@ -307,8 +328,8 @@
                                     <RadzenPassword Class="w-100" @bind-Value="EditingUser.PasswordConfirm"/>
                                     <ValidationMessage For="@(() => EditingUser.PasswordConfirm)"/>
                                 }
-                            </Column>
-                        </Row>
+                            </Blazorise.Column>
+                        </Blazorise.Row>
 
                     </RadzenTabsItem>
                     <RadzenTabsItem Text="Departments">
@@ -323,7 +344,7 @@
                                     <Template Context="data">
                                         <div style="display: flex;width:100%;justify-content: space-between;align-items: center">
                                             <div style="display: flex">
-                                                <img src="https://upload.wikimedia.org/wikipedia/commons/4/44/BMW.svg" style="width: 20px; margin-right: 8px;"/>
+                                                
                                                 <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3" Style="margin-bottom: 0">@data.Text</RadzenText>
                                             </div>
                                         </div>
@@ -339,8 +360,8 @@
             
             </ModalBody>
             <ModalFooter>
-                <RadzenButton ButtonStyle="ButtonStyle.Light" Text="Cancel" Icon="cancel" Click="@HideEditingModal"/>
-                <RadzenButton Text="Save Changes" Icon="save" ButtonType="ButtonType.Submit"/>
+                <RadzenButton ButtonStyle="ButtonStyle.Light" Text="Cancel" Icon="cancel" Click="@HideEditingModal" Disabled="IsDisable"/>
+                <RadzenButton Text="Save Changes" Icon="save" ButtonType="ButtonType.Submit" Disabled="IsDisable"/>
             </ModalFooter>
         </EditForm>
     </ModalContent>
@@ -382,7 +403,7 @@
                         <RadzenAlert AlertStyle="AlertStyle.Danger" ShowIcon="true" Variant="Variant.Flat" Shade="Shade.Lighter">
                             Invalid Format
                         </RadzenAlert>
-                        <RadzenDataGrid AllowColumnResize="true" AllowAlternatingRows="false" PageSize="5" AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true"
+                        <RadzenDataGrid AllowColumnResize="true" AllowAlternatingBlazorise.Rows="false" PageSize="5" AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true"
                                         Data="@UserValidatorExcel.InvalidCells" TItem="Cell" ColumnWidth="300px"
                                         Style="width: 100%">
                             <Columns>

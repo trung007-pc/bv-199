@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Domain.Notifications;
 using JetBrains.Annotations;
 using SqlServ4r.EntityFramework;
@@ -12,5 +13,7 @@ namespace SqlServ4r.Repository.Notifications
         public NotificationRepository([NotNull] DreamContext context) : base(context)
         {
         }
+        
+       
     }
 }

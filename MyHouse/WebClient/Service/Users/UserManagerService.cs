@@ -31,6 +31,11 @@ namespace WebClient.Service.Users
              return await RequestClient.GetAPIAsync<List<UserWithNavigationPropertiesDto>>("user/get-list-with-nav");
         }
 
+        public async Task<UserWithNavigationPropertiesDto> GetWithNavigationProperties(Guid id)
+        {
+            return await RequestClient.GetAPIAsync<UserWithNavigationPropertiesDto>($"user/get-with-nav-properties/{id}");
+        }
+
         public async Task<UserDto> CreateUserWithNavigationPropertiesAsync(CreateUserDto input)
         {
             return await RequestClient.PostAPIAsync<UserDto>("user/create-user-with-roles", input);
@@ -96,6 +101,10 @@ namespace WebClient.Service.Users
             return await RequestClient.PostAPIAsync<UserDto>("user/sign-up", input);
         }
 
+        public async Task<bool> SetNewPasswordAsync(NewUserPasswordDto input)
+        {
+            return await RequestClient.PostAPIAsync<bool>("user/set-password", input);
+        }
 
 
         public Task<UserProfileModel> UpdateUserProfileAsync(UserProfileModel userProfileModel)
@@ -103,15 +112,8 @@ namespace WebClient.Service.Users
             throw new NotImplementedException();
         }
 
-        public Task<UserPasswordUpdateModel> ChangePasswordAsync(UserPasswordUpdateModel user)
-        {
-            throw new NotImplementedException();
-        }
 
-        public Task<UserDto> SetPasswordAsync(UserModel input)
-        {
-            throw new NotImplementedException();
-        }
+        
 
         public Task<TokenDto> RefreshTokenAsync(TokenModel token)
         {
@@ -122,11 +124,6 @@ namespace WebClient.Service.Users
         {
             ((ApiAuthenticationStateProvider)_authenticationStateProvider).MarkUserAsLoggedOut();
         }
-
-
-        public async Task test()
-        { 
-            await RequestClient.GetAPIAsync<Task>("test/alo");
-        }
+        
     }
 }

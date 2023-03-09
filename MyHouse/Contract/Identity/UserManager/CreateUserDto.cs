@@ -54,6 +54,8 @@ namespace Contract.Identity.UserManager
         [RegularExpression(ContentRegularExpression.EMAIL, ErrorMessage = "Email has to @gmail.com format")]
         public string? Email { get; set; } 
         
+        public bool IsActive { get; set; }
+
         public List<string> Roles { get; set; } = new List<string>();
         
         

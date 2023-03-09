@@ -10,7 +10,8 @@ namespace WebClient.Pages.Admin
 {
     public partial class Login
     {
-        
+
+        public bool IsLoading = false;
         public Login()
         {
             
@@ -34,12 +35,13 @@ namespace WebClient.Pages.Admin
         {
 
             var userModel = new UserModel() {UserName = args.Username, Password = args.Password};
-            
+            IsLoading = true;
             await InvokeAsync(async () =>
             {
                 await  _userManagerService.SignInAsync(userModel);
                 _navigationManager.NavigateTo("/",true);
             }, ActionType.SignIn, true);
+            IsLoading = false;
 
         }
         

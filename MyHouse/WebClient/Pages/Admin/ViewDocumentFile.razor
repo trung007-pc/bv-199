@@ -1,0 +1,54 @@
+﻿@page "/view-document-file"
+@attribute [Authorize]
+@using WebClient.Service.DocumentFiles
+@inherits BaseBlazorPage
+@inject NavigationManager _navigationManager;
+@inject DocumentFileService _documentFileService;
+
+@inject IJSRuntime JS
+
+
+<div style="display: flex;justify-content:space-between;padding: 5px;align-items: center">
+    @if (DocumentFile.AllowDownloadAndPrint)
+    {
+        <div>
+            <RadzenButton Text="Download" Click="async () => { await DownloadFile(DocumentFile.URL, DocumentFile.Id); }" Icon="download"/>
+            @if (DocumentFile.Extentions?.Contains("pdf") == true)
+            {
+                <RadzenButton Text="Print" Icon="local_printshop" Click="async () => { await PrintFile(DocumentFile.Id); }"/>
+
+            }
+
+        </div>
+    }
+
+    <div  style="display: flex;align-items: center;gap: 10px;font-size: 24px;justify-content: right">
+        <div style="display: flex;align-items: center;gap:5px;color: blueviolet"><RadzenIcon Icon="cloud_download" style="font-size: 40px"></RadzenIcon><span style="font-size: 18px">@DocumentFile.DownloadCount</span></div>
+        <div style="display: flex;align-items: center;gap: 5px;color: blue"> <RadzenIcon Icon="print" style="font-size: 40px"></RadzenIcon><span style="font-size: 18px">@DocumentFile.PrintCount</span></div>
+    </div>
+
+</div>
+<RZBR></RZBR>
+<div>
+    @if (DocumentFile.Extentions?.Contains("pdf") == true)
+    {
+        if (!DocumentFile.URL.IsNullOrWhiteSpace())
+        {
+            <iframe id="bv-199" src="@DocumentFile.URL#toolbar=0" type="application/pdf" style="width: 100%;height: 80vh;"></iframe>
+        }
+    }
+    else
+    {
+        <RadzenCard Style="background-color: #e8e8fa">
+            <RadzenText TextStyle="TextStyle.H4" Style="color: #6f42c1">
+                <b>File Infomation</b>
+            </RadzenText>
+            <RadzenText TextStyle="TextStyle.Body1">
+                <span Style="color: #6f42c1">File Name:</span>@DocumentFile.Name
+            </RadzenText>
+            <RadzenText TextStyle="TextStyle.Body1">
+                <span Style="color: #6f42c1">File Type:</span>@DocumentFile.Extentions
+            </RadzenText>
+        </RadzenCard>
+    }
+</div>

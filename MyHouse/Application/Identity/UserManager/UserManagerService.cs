@@ -8,6 +8,7 @@ using System.Net;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Application.Helpers;
 using Contract;
@@ -75,6 +76,11 @@ namespace Application.Identity.UserManager
         {
             var users = await _userRepository.GetListWithNavigationProperties();
             return ObjectMapper.Map<List<UserWithNavigationProperties>,List<UserWithNavigationPropertiesDto>>(users);
+        }
+
+        public async Task<UserWithNavigationPropertiesDto> GetWithNavigationProperties(Guid id)
+        {
+           return  ObjectMapper.Map<UserWithNavigationProperties,UserWithNavigationPropertiesDto>(await _userRepository.GetWithNavigationProperties(id));
         }
 
         public async Task<UserDto> CreateUserWithNavigationPropertiesAsync(CreateUserDto input)
@@ -146,6 +152,7 @@ namespace Application.Identity.UserManager
         public async Task<List<UserDto>> GetListAsync()
         {
             var users = await _userManager.Users.ToListAsync();
+            
             return ObjectMapper.Map<List<User>, List<UserDto>>(users);
         }
 
@@ -205,18 +212,14 @@ namespace Application.Identity.UserManager
             {
                 throw new GlobalException(HttpMessage.NotFound, HttpStatusCode.BadRequest);
             }
-
-            var result = await _userManager.DeleteAsync(item);
-            if (!result.Succeeded)
-            {
-                throw new GlobalException(result.Errors?.FirstOrDefault().Description, HttpStatusCode.BadRequest);
-            }
+            item.IsDelete = true;
+            await _userRepository.UpdateAsync(item);
         }
 
         public async Task<TokenDto> SignInAsync(UserModel input)
         {
             var user = await _userManager.FindByNameAsync(input.UserName);
-            if (user == null)
+            if (user == null|| !user.IsActive|| user.IsDelete)
             {
                 throw new GlobalException(HttpMessage.CheckInformation, HttpStatusCode.BadRequest);
             }
@@ -230,6 +233,8 @@ namespace Application.Identity.UserManager
 
             string accessToken = await GenerateTokenByUser(user);
             string refreshToken = GenerateRefreshToken();
+
+            user.RefreshToken = refreshToken; await _userManager.UpdateAsync(user);
 
             return new TokenDto() {AccessToken = accessToken, RefreshToken = refreshToken};
         }
@@ -246,6 +251,24 @@ namespace Application.Identity.UserManager
             }
 
             return ObjectMapper.Map<User, UserDto>(user);
+        }
+
+        public async Task<bool> SetNewPasswordAsync(NewUserPasswordDto input)
+        {
+            var user = await _userManager.FindByNameAsync(input.UserName);
+            if (user == null)
+            {
+                throw new GlobalException(HttpMessage.CheckInformation, HttpStatusCode.BadRequest);
+            }
+            
+            var token  = await _userManager.GeneratePasswordResetTokenAsync(user);
+            var result =   await _userManager.ResetPasswordAsync(user, token, input.NewPassword);
+            if (!result.Succeeded)
+            {
+                throw new GlobalException(result.Errors.FirstOrDefault().Description, HttpStatusCode.BadRequest);
+            }
+            
+            return true;
         }
 
         public async Task UpdateRolesForUser(string userName, List<string> roles)
@@ -276,46 +299,39 @@ namespace Application.Identity.UserManager
             throw new NotImplementedException();
         }
 
-        public async Task<UserPasswordUpdateModel> ChangePasswordAsync(UserPasswordUpdateModel userDto)
-        {
+    
+        
 
-            return null;
-        }
-
-        public async Task<UserDto> SetPasswordAsync(UserModel input)
-        {
-     
-            return null;
-        }
 
         public async Task<TokenDto> RefreshTokenAsync(TokenModel token)
         {
-            if (token is null) throw new GlobalException(HttpMessage.Unauthorized, HttpStatusCode.Unauthorized);
+            
+                if (token is null) throw new GlobalException(HttpMessage.Unauthorized, HttpStatusCode.Unauthorized);
 
 
-            var principal = GetPrincipalFromExpiredToken(token.AccessToken);
-            var userName = principal.Identity.Name;
+                var principal = GetPrincipalFromExpiredToken(token.AccessToken);
+                var userName = principal.Identity.Name;
 
-            var user = await _userManager.FindByNameAsync(userName);
+                var user = await _userManager.FindByNameAsync(userName);
 
-            if (user == null || user.RefreshToken != user.RefreshToken)
-                throw new GlobalException(HttpMessage.Unauthorized, HttpStatusCode.Unauthorized);
+                if (user == null || user.RefreshToken != token.RefreshToken)
+                    throw new GlobalException(HttpMessage.Unauthorized, HttpStatusCode.Unauthorized);
 
-            var refreshToken = GenerateRefreshToken();
-            var accessToken = await GenerateTokenByUser(user);
-            user.RefreshToken = refreshToken;
-            var result = await _userManager.UpdateAsync(user);
+                var refreshToken = GenerateRefreshToken();
+                var accessToken = await GenerateTokenByUser(user);
+                user.RefreshToken = refreshToken;
+                var result = await _userManager.UpdateAsync(user);
 
-            if (!result.Succeeded)
-            {
-                throw new GlobalException(HttpMessage.Conflict, HttpStatusCode.TooManyRequests);
-            }
+                if (!result.Succeeded)
+                {
+                     throw new GlobalException(HttpMessage.Conflict, HttpStatusCode.TooManyRequests);
+                }
 
-            return new TokenDto()
-            {
-                AccessToken = accessToken,
-                RefreshToken = refreshToken
-            };
+                return new TokenDto()
+                {
+                    AccessToken = accessToken,
+                    RefreshToken = refreshToken
+                };
         }
 
         public void Logout()
@@ -341,6 +357,7 @@ namespace Application.Identity.UserManager
                 claims.Add(new Claim(ClaimTypes.Role, item));
             }
             
+            claims.Add(new Claim(ClaimTypes.PrimarySid, user.Id.ToString()));
             claims.Add(new Claim(ClaimTypes.Name, user.UserName));
             claims.Add(new Claim(ClaimTypes.Surname,user.FirstName +" "+ user.LastName));
 
