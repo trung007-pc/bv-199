@@ -10,7 +10,7 @@ namespace WebClient.Components
         {
             if (firstRender)
             {
-               await JS.InvokeVoidAsync("RunPdf","https://localhost:7093/StaticFiles/Document-Files/26-02-2023/20230226155548_20230222145519_Hieu-Minh-Le-Java-Full-stack-Engineer.pdf");
+               await JS.InvokeVoidAsync("RunPdf","https://localhost:7083/temp.pdf");
             }
         }
 

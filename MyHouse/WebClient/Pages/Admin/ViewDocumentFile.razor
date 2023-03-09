@@ -29,12 +29,18 @@
 
 </div>
 <RZBR></RZBR>
-<div>
+<div style="position: relative">
     @if (DocumentFile.Extentions?.Contains("pdf") == true)
     {
         if (!DocumentFile.URL.IsNullOrWhiteSpace())
         {
-            <iframe id="bv-199" src="@DocumentFile.URL#toolbar=0" type="application/pdf" style="width: 100%;height: 80vh;"></iframe>
+            <iframe id="bv-199" src="@DocumentFile.URL#toolbar=1" type="application/pdf" style="width: 100%;height: 80vh;">
+               
+            </iframe>
+            
+            <div style="position: absolute;right: 1%;top: 0.6%;background-color: #323639;width: 165px;height: 43px">
+                <img src="how-to-create-pdf-document.png" style="width: 100%;height: 100%"/>
+            </div>
         }
     }
     else
