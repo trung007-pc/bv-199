@@ -1,8 +1,11 @@
+using System.Linq;
+using System.Reflection;
 using Blazored.LocalStorage;
 using Blazorise;
 using Blazorise.Bootstrap;
 using Blazorise.Icons.FontAwesome;
 using Domain.FileFolders;
+using FluentValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Http.Features;
@@ -14,6 +17,7 @@ using Radzen;
 
 using WebClient.Data;
 using WebClient.Identity;
+using WebClient.LanguageResources;
 using WebClient.RequestHttp;
 using WebClient.Service.Dashboards;
 using WebClient.Service.Departments;
@@ -47,6 +51,9 @@ builder.Services.AddMudServices();
 RequestClient.Initialize(builder.Configuration);
 
 //service
+builder.Services.AddSingleton<JsonStringLocalizer>();
+
+
 builder.Services.AddSingleton<WeatherForecastService>();
 builder.Services.AddScoped<RoleManagerService, RoleManagerService>();
 builder.Services.AddTransient<UserManagerService,UserManagerService>();
@@ -68,7 +75,6 @@ builder.Services.AddTransient<MeetingContentService>();
 builder.Services.AddTransient<WorkScheduleService>();
 builder.Services.AddTransient<MyDashboardService>();
 
-
 builder.Services.AddScoped<DownloadFileService>();
 builder.Services.AddScoped<TooltipService>();
 builder.Services.AddScoped<ClipboardService>();
@@ -77,6 +83,15 @@ builder.Services.AddScoped<NotificationService>();
 builder.Services.AddBlazoredLocalStorage();
 builder.Services.AddAuthorizationCore();
 builder.Services.AddScoped<AuthenticationStateProvider , ApiAuthenticationStateProvider >();
+
+
+//note:
+var assembly = Assembly.GetExecutingAssembly();
+var types = assembly.GetTypes().Where(t => typeof(IValidator).IsAssignableFrom(t) && t.IsClass);
+foreach (var type in types)
+{
+    builder.Services.AddTransient( type);
+}
 
 
 

@@ -1,0 +1,169 @@
+﻿{
+    "Hello": "Hello World!",
+
+
+    "Create": "Tạo mới",
+    "Update" : "Cập nhật",
+    "Delete": "Xóa",
+    "Cancel": "Hủy",
+    "SaveChanges": "Lưu thay đổi",
+    "NotAnyImportFile": "  Bạn chưa chọn bất kỳ tệp nào",
+    "FileSoBig": "Kích thước tệp quá lớn. vui lòng chọn tệp có ít hơn 10Mb",
+    "Menu:DepartmentsPersonal" : "My Work",
+    "Menu:SatisfactionSurvey" : "Khảo sát hài lòng",
+    "Menu:WorkScheduleMeeting" : "Lịch làm việc - Họp",
+    "Menu:DocumentManager" : "Quản lý tài liệu",
+    "Menu:Catalogue" : "Danh mục",
+    "Menu:Administrator" : "Quản trị hệ thống",
+
+
+    "Enum:Gender:0": "Nữ",
+    "Enum:Gender:1": "Nam",
+    "Enum:Gender:2": "Unknown",
+
+
+    "Enum:ScheduleStatus:1": "Hủy",
+    "Enum:ScheduleStatus:2": "Dự kiến",
+    "Enum:ScheduleStatus:3": "Ban hành",
+    "Enum:ScheduleStatus:4": "Kết thúc",
+
+    "Enum:DateRangeType:1": "Hôm nay",
+    "Enum:DateRangeType:2": "Hôm qua",
+    "Enum:DateRangeType:3": "7 ngày trước",
+    "Enum:DateRangeType:4": "30 ngày trước",
+    "Enum:DateRangeType:5": "Tháng trước",
+    "Enum:DateRangeType:6": "Tháng này",
+    "Enum:DateRangeType:7": "3 tháng trước",
+    "Enum:DateRangeType:8": "Năm trước",
+
+
+
+
+    "Name": "Tên",
+    "Code": "Mã",
+    "Note": "Ghi chú",
+    "Type": "Kiểu",
+    "Photo": "Hình ảnh",
+    "ODX" : "Sắp xếp",
+    "Action": "Hoạt động",
+    "Status": "Trạng thái",
+    "Detail": "Chi tiết",
+    "UploadFile": "Tải lên tài liệu",
+    "UploadImage": "Tải lên hình ảnh",
+    "Confirmation": "Xác nhận",
+    "CreationTime": "Thời gian tạo",
+    "CreationDay": "CNgày tạo",
+    "SelectDate": "Chọn ngày...",
+    "SelectAll": "Chọn tất cả",
+    "StartDay": "Ngày bắt đầu",
+    "EndDay": "Ngày kết thúc",
+    "Export Excel File": "Xuất Excel",
+    "Folders": "Folders",
+    "PhoneNumber": "Số điện thoại",
+    "DownloadFile": "Download File",
+    "IsPublic": "Công bố",
+    "Attached": "Đính kèm",
+    "IsRead": "Đã Đọc",
+    "SentDate": "Ngày gữi",
+    "FullName": "Họ và tên",
+    "OK": "OK",
+    
+    "Confirmation.Message": "Bạn có chắc chắn xác nhận?",
+    
+    
+    "SelectAgency": "Chọn Cơ Quan",
+    "SelectType": "Chọn Kiểu",
+    
+    
+
+
+    "Role" : "Vai trò",
+    "User": "Người dùng",
+    "User.UserName": "Tên tài khoản",
+    "User.EmployeeCode": "Mã nhân viên",
+    "User.FirstName": "Tên",
+    "User.LastName": "Họ",
+    "User.Gender": "Giới tính",
+    "User.DOB": "Ngày sinh",
+    "User.PhoneNumber": "Số điện thoại",
+    "User.Email": "Email",
+    "User.IsActive": "Kích hoạt",
+    "User.Password": "Mật khẩu",
+    "User.Position": "Vị trí",
+    "User.Departments": "Phòng ban",
+    "User.Roles": "Vai trò",
+    "User.ResetPassword": "Mật khẩu mới",
+    "User.PasswordConfirmation": "Nhập lại mật khẩu",
+    "User.ImportExcelFile": "Import Excel File",
+    "User.DownloadSampleFile": "Tải file mẫu",
+    "User.DownloadInstructionFile": "Tải file mẫu",
+    "User.UploadExcelFile" : "Upload Excel File",
+    "Department": "Bộ phận",
+    "Department.Information": "Thông tin bộ phận",
+    "Position": "Vị trí",
+    "Unit": "Vị trí KSHL",
+    "Unit.Note": "Ghi chú",
+    "UnitType": "Nhóm KSHL",
+
+    "UnitReview": "Ý kiến KSHL",
+    "UnitReview.EnclosedImage": "Hình ảnh",
+    "UnitReview.AveragePoint": "Đánh giá",
+
+    "Folder.Information": "Thông tin folder",
+
+
+
+    "DocumentFile": "File tài liệu",
+    "DocumentFile.StorageCode": "Số lưu trữ",
+    "DocumentFile.Agency": "Đơn vị",
+    "DocumentFile.PublicationDate": "Ngày công bố",
+    "DocumentFile.IssuingAgency": "Cơ quan cấp",
+    "DocumentFile.CreationDate": "Ngày nhận",
+    "DocumentFile.AllowPrintAndDownload": "cho phép tải và in",
+    "DocumentFile.SendByDepartment": "Send cho bộ phận",
+    "DocumentFile.SendByIdentity": "Send cho cá nhân",
+
+    "SharedWithMe": "Đã chia sẽ với tôi",
+
+    "Report": "Báo cáo",
+    "FileType": "Loại văn bản",
+    "FileType.Information": "Thông tin loại",
+    "FileFolder": "Thư mục tài liệu",
+    "IssuingAgency": "Đơn vị ban hành",
+    "IssuingAgency.Information": "Thông tin đơn vị",
+    "MeetingContent": "Nội dung họp",
+    "MeetingContent.IsPublish": "Ban hành",
+
+
+    "WorkSchedule": "Lịch làm việc",
+    "WorkSchedule.IsPublic": "IsPublic",
+    "WorkSchedule.ScheduleStatus": "Trạng thái",
+    "SurveyDashboard": "Tổng quan",
+    "SurveyDashboard.TotalReviews": "Tổng đánh giá:",
+    "SurveyDashboard.Star": "Sao",
+    "SurveyDashboard.Unknown": "Không xác định",
+    "SurveyDashboard.AverageRatting": "Trung bình",
+    "SurveyDashboard.Rating": "Xếp hạng",
+
+
+
+
+
+    "Notifications": "Thông báo",
+    "Notifications.ConfirmRead": "Xác nhận đọc",
+    "Notification.Announcement": "Bạn nhận được mã tài liệu là: {0}",
+    "MyDocuments": "Tài liệu của tôi",
+    "MyDocuments.SelectAgency": "Chọn đơn vị",
+    "MyDocuments.SelectType": "Chọn loại tài liệu",
+    "MyDocuments.IsRead": "Đã xem",
+    "MyDashboard": "My Dashboard",
+    "MyDashboard.PopularFolders": "Thư mục phổ biến",
+    "MyDashboard.ReadingRate": "Tỷ lệ đọc",
+    "MyDashboard.Tasks": "Công việc",
+    "MyDashboard.UnreadDocuments": "Tài liệu chưa đọc",
+    "MyDashboard.WorkSchedules": "Lịch làm việc",
+    "MyDashboard.MeetingContents": "Lịch họp"
+    
+   
+
+}

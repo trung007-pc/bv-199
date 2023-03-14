@@ -7,8 +7,10 @@ using BlazorDateRangePicker;
 using Contract.Dashboards;
 using Contract.UnitTypes;
 using Core.Enum;
+using Microsoft.AspNetCore.Components;
 using Radzen;
-    
+using WebClient.LanguageResources;
+
 namespace WebClient.Pages.Admin
 {
     public partial class Dashboard
@@ -27,7 +29,7 @@ namespace WebClient.Pages.Admin
         public DashboardFilter Filter { get; set; }
         public List<UnitTypeDto> Types { get; set; }
 
-
+       
         public Dashboard()
         {
             Filter = new DashboardFilter();
@@ -44,6 +46,7 @@ namespace WebClient.Pages.Admin
             {
                 await InvokeAsync(async () =>
                 {
+                    HeaderTitle = L["SurveyDashboard"];
                     DateRanges = await GetDateRangePickers();
                     await GetUnitStatisticsByReviewDateRange();
                     await GetUnitTypes();

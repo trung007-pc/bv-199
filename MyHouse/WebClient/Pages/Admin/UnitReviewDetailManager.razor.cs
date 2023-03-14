@@ -29,12 +29,7 @@ namespace WebClient.Pages.Admin
         public string HeaderTitle { get; set; } = "Review Detail ";
 
 
-
-        protected override Task OnInitializedAsync()
-        {
-            
-            return base.OnInitializedAsync();
-        }
+        
 
 
         protected async override Task OnAfterRenderAsync(bool firstRender)

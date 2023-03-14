@@ -11,7 +11,7 @@
 @using Variant = Radzen.Variant
 @inject NavigationManager _navigationManager;
 
-<h3>UnitType</h3>
+<h3>@L["UnitType"]</h3>
 
 <div style="display: flex;justify-content: space-between;align-items: center">
     <div>
@@ -21,7 +21,7 @@
         </RadzenBreadCrumb>
     </div>
     <div>
-        <RadzenButton Text="Create" Icon="post_add" Click="@ShowNewModal" Style="margin-bottom: 20px;"/>
+        <RadzenButton Text="@L["Create"]" Icon="post_add" Click="@ShowNewModal" Style="margin-bottom: 20px;"/>
     </div>
 </div>
 
@@ -35,8 +35,8 @@
                     AllowColumnPicking="true"
                     Style="width: 100%">
         <Columns>
-            <RadzenDataGridColumn TItem="UnitTypeDto" TextAlign="TextAlign.Center" Property="Name" Title="Name" Frozen="true" Width="160px"/>
-            <RadzenDataGridColumn TItem="UnitTypeDto" Property="Name" TextAlign="TextAlign.Center" Title="Action" Frozen="true" Width="160px" Filterable="false">
+            <RadzenDataGridColumn TItem="UnitTypeDto" TextAlign="TextAlign.Center" Property="Name" Title="@L["Name"]" Frozen="true" Width="160px"/>
+            <RadzenDataGridColumn TItem="UnitTypeDto" Property="Name" TextAlign="TextAlign.Center" Title="@L["Action"]" Frozen="true" Width="160px" Filterable="false">
                 <Template Context="data">
 
                     <RadzenButton MouseEnter="ShowTooltip" Click="async () => { await CopyToClipboard(data.Id); }" Icon="content_copy" ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat" Size="ButtonSize.Medium">
@@ -55,20 +55,20 @@
 <Modal @ref="CreateModal">
     <ModalContent Size="ModalSize.Large" Centered="true">
         <ModalHeader>
-            <ModalTitle>Unit Type</ModalTitle>
+            <ModalTitle>@L["UnitType"]</ModalTitle>
         </ModalHeader>
         <EditForm Model="NewUnitType" OnValidSubmit="async () => { await CreateUnitType(); }">
             <ModalBody>
 
                 <DataAnnotationsValidator/>
-                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Name</RadzenText>
+                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["Name"]</RadzenText>
                 <RadzenTextBox Class="w-100" @bind-Value="NewUnitType.Name"/>
                 <ValidationMessage For="@(() => NewUnitType.Name)"/>
 
             </ModalBody>
             <ModalFooter>
-                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Click="@HideNewModal" Text="Cancel" Disabled="IsDisable"/>
-                <RadzenButton Text="Save Changes" Icon="save" ButtonType="ButtonType.Submit" Disabled="IsDisable"/>
+                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Click="@HideNewModal" Text="@L["Cancel"]" Disabled="IsDisable"/>
+                <RadzenButton Text="@L["SaveChanges"]" Icon="save" ButtonType="ButtonType.Submit" Disabled="IsDisable"/>
             </ModalFooter>
         </EditForm>
     </ModalContent>
@@ -77,19 +77,19 @@
 <Modal @ref="EditingModal">
     <ModalContent Size="ModalSize.Large" Centered="true">
         <ModalHeader>
-            <ModalTitle>Unit Type</ModalTitle>
+            <ModalTitle>@L["UnitType"]</ModalTitle>
         </ModalHeader>
         <EditForm Model="EditingUnitType" OnValidSubmit="async () => { await UpdateUnitType(); }">
             <ModalBody>
                 <DataAnnotationsValidator/>
-                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Name</RadzenText>
+                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["Name"]</RadzenText>
                 <RadzenTextBox Class="w-100" @bind-Value="EditingUnitType.Name"/>
                 <ValidationMessage For="@(() => EditingUnitType.Name)"/>
 
             </ModalBody>
             <ModalFooter>
-                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Click="@HideEditModal" Text="Cancel" Disabled="IsDisable"/>
-                <RadzenButton Text="Save Changes" Icon="save" ButtonType="ButtonType.Submit" Disabled="IsDisable"/>
+                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Click="@HideEditModal" Text="@L["Cancel"]" Disabled="IsDisable"/>
+                <RadzenButton Text="@L["SaveChanges"]" Icon="save" ButtonType="ButtonType.Submit" Disabled="IsDisable"/>
             </ModalFooter>
         </EditForm>
     </ModalContent>

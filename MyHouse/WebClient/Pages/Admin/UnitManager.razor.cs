@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Http;
 using Radzen;
 using WebClient.Components;
+using WebClient.LanguageResources;
 using WebClient.Service.Upload;
 
 namespace WebClient.Pages.Admin
@@ -37,6 +38,7 @@ namespace WebClient.Pages.Admin
 
 
         public string HeaderTitle { get; set; } = "Unit";
+
         
         public UnitManager()
         {
@@ -52,6 +54,7 @@ namespace WebClient.Pages.Admin
             {
                 await InvokeAsync(async () =>
                 {
+                    HeaderTitle = L["Unit"];
                     await GetDateRangePickers();
                     await GetList();
                     await GetUnitTypes();
@@ -105,7 +108,7 @@ namespace WebClient.Pages.Admin
 
         public async Task ShowConfirmMessage(Guid id)
         {
-            if ( await _messageService.Confirm( "Are you sure you want to confirm?", "Confirmation" ) )
+            if ( await _messageService.Confirm( L["Confirmation.Message"], L["Confirmation"] ) )
             {
                 await InvokeAsync(async () =>
                 {

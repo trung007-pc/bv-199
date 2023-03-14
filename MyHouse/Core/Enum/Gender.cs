@@ -5,10 +5,10 @@ namespace Core.Enum
     public enum Gender
     {
         [Description("Female")]
-        Female,
+        Female = 0,
         [Description("Male")]
-        Male,
+        Male = 1,
         [Description("Unknown")]
-        Unknown
+        Unknown = 2
     }
 }

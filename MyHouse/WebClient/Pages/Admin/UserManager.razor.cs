@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Components.Forms;
 using Radzen;
 using WebClient.Exceptions;
 using WebClient.Helper;
+using WebClient.LanguageResources;
 
 namespace WebClient.Pages.Admin
 {
@@ -50,11 +51,9 @@ namespace WebClient.Pages.Admin
 
         public string HeaderTitle = "User";
         public bool IsLoading { get; set; } = true;
-
         public bool TriggeredWithoutFile { get; set; } = false;
         
-      
-
+        
 
         public UserManager()
         {
@@ -160,7 +159,7 @@ namespace WebClient.Pages.Admin
         
         public async Task ShowConfirmMessage(Guid id)
         {
-            if ( await _messageService.Confirm( "Are you sure you want to confirm?", "Confirmation" ) )
+            if ( await _messageService.Confirm( L["Confirmation.Message"], L["Confirmation"] ) )
             {
                 await DeleteUser(id);
             }

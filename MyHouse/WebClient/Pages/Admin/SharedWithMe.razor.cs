@@ -12,9 +12,11 @@ using Contract.IssuingAgencys;
 using Contract.SendingFiles;
 using Core.Enum;
 using Core.Extension;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Radzen;
 using WebClient.Components;
+using WebClient.LanguageResources;
 
 namespace WebClient.Pages.Admin
 {
@@ -45,12 +47,13 @@ namespace WebClient.Pages.Admin
         public (DateTimeOffset? StartDay, DateTimeOffset? EndDay) Timeline = (null, null);
         public Dictionary<string, DateRange> DateRanges { get; set; } = new Dictionary<string, DateRange>();
 
-        
+
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
             if (firstRender)
             {
+                HeaderTitle = L["SharedWithMe"];
                 DateRanges = await GetDateRangePickers();
                 await GetDocumentFiles();
                 await GetFileFolders();

@@ -97,8 +97,8 @@ namespace Application.SendingFiles
                 {
                     ReceiverId = item.ReceiverId,
                     DestinationCode = item.Id,
-                    Title = $"You've just received documentary number" +
-                            $":{file?.Code}"
+                    Title = $"{file?.Code}"
+                            
                 });
             }
 

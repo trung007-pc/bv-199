@@ -50,7 +50,7 @@
                             Change="OnChangeSelectedAgency"
                             TextProperty="Name"
                             ValueProperty="Id"
-                            Placeholder="Select Agency"
+                            Placeholder="@L["SelectAgency"]"
                             Data=@HierarchicalIssuingAgencies
                             Class="w-100"/>
         </Blazorise.Column>
@@ -62,7 +62,7 @@
                             TextProperty="Name"
                             Change="OnChangeSelectedType"
                             ValueProperty="Id"
-                            Placeholder="Select Type"
+                            Placeholder="@L["SelectType"]"
                             Data=@FileTypes
                             Class="w-100"/>
         </Blazorise.Column>
@@ -110,7 +110,7 @@
                         Style="width: 100%">
             <Columns>
 
-                <RadzenDataGridColumn TItem="DocumentFileWithNavPropertiesDto" Property="SendingFile.Status" TextAlign="TextAlign.Center" Title="Is Read" Width="160px">
+                <RadzenDataGridColumn TItem="DocumentFileWithNavPropertiesDto" Property="SendingFile.Status" TextAlign="TextAlign.Center" Title="@L["IsRead"]" Width="160px">
                    
                     <Template Context="data">
                         <RadzenSwitch @bind-Value=@data.SendingFile.Status Disabled="true"/>
@@ -118,24 +118,24 @@
                     </Template>
                 </RadzenDataGridColumn>
 
-                <RadzenDataGridColumn TItem="DocumentFileWithNavPropertiesDto" Property="File.Name" TextAlign="TextAlign.Center" Title="Name" Width="160px"/>
-                <RadzenDataGridColumn TItem="DocumentFileWithNavPropertiesDto" Property="File.Code" TextAlign="TextAlign.Center" Title="Code" Width="160px"/>
-                <RadzenDataGridColumn TItem="DocumentFileWithNavPropertiesDto" Property="File.StorageCode" TextAlign="TextAlign.Center" Title="Storage Code" Width="160px"/>
-                <RadzenDataGridColumn TItem="DocumentFileWithNavPropertiesDto" Property="IssuingAgency.Name" TextAlign="TextAlign.Center" Title="Agency" Width="160px"/>
-                <RadzenDataGridColumn TItem="DocumentFileWithNavPropertiesDto" Property="FileType.Name" TextAlign="TextAlign.Center" Title="Type" Width="160px"/>
+                <RadzenDataGridColumn TItem="DocumentFileWithNavPropertiesDto" Property="File.Name" TextAlign="TextAlign.Center" Title="@L["Name"]" Width="160px"/>
+                <RadzenDataGridColumn TItem="DocumentFileWithNavPropertiesDto" Property="File.Code" TextAlign="TextAlign.Center" Title="@L["Code"]" Width="160px"/>
+                <RadzenDataGridColumn TItem="DocumentFileWithNavPropertiesDto" Property="File.StorageCode" TextAlign="TextAlign.Center" Title="@L["DocumentFile.StorageCode"]" Width="160px"/>
+                <RadzenDataGridColumn TItem="DocumentFileWithNavPropertiesDto" Property="IssuingAgency.Name" TextAlign="TextAlign.Center" Title="@L["DocumentFile.Agency"]" Width="160px"/>
+                <RadzenDataGridColumn TItem="DocumentFileWithNavPropertiesDto" Property="FileType.Name" TextAlign="TextAlign.Center" Title="@L["Type"]" Width="160px"/>
 
-                <RadzenDataGridColumn TItem="DocumentFileWithNavPropertiesDto" Property="File.PublicationDate" TextAlign="TextAlign.Center" Title="Publication Date" Width="160px">
+                <RadzenDataGridColumn TItem="DocumentFileWithNavPropertiesDto" Property="File.PublicationDate" TextAlign="TextAlign.Center" Title="@L["PublicationDate"]" Width="160px">
                     <Template Context="data">
                         @($"{data.File.PublicationDate:dd/MM/yyyy}")
                     </Template>
                 </RadzenDataGridColumn>
 
-                <RadzenDataGridColumn TItem="DocumentFileWithNavPropertiesDto" Property="SendingFile.SentDate" TextAlign="TextAlign.Center" Title="Received Date" Width="160px">
+                <RadzenDataGridColumn TItem="DocumentFileWithNavPropertiesDto" Property="SendingFile.SentDate" TextAlign="TextAlign.Center" Title="@L["SentDate"]" Width="160px">
                     <Template Context="data">
                         @($"{data.SendingFile.SentDate:dd/MM/yyyy}")
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="DocumentFileWithNavPropertiesDto" Property="File.Name" Title="Action" TextAlign="TextAlign.Center" Filterable="false">
+                <RadzenDataGridColumn TItem="DocumentFileWithNavPropertiesDto" Property="File.Name" Title="@L["Action"]" TextAlign="TextAlign.Center" Filterable="false">
                     <Template Context="data">
                         <RadzenButton ButtonStyle="ButtonStyle.Primary" Icon="send" Click="async () => { await ShowSendingFile(data.File); }" Variant="Variant.Flat" Shade="Shade.Lighter" Size="ButtonSize.Medium" Class="my-1 ms-1">
                         </RadzenButton>
@@ -156,7 +156,7 @@
     </RadzenAlert>
     <RadzenRow Gap="10">
         <RadzenColumn Size="4">
-            <RadzenText>Send By Department</RadzenText>
+            <RadzenText>@L["DocumentFile.SendByDepartment"]</RadzenText>
             <RadzenTree Data=@HierarchicalDepartments Style="width:100%"
                         AllowCheckBoxes="true"
                         @bind-CheckedValues="SelectedDepartments">
@@ -176,7 +176,7 @@
             </RadzenTree>
         </RadzenColumn>
         <RadzenColumn Size="8">
-            <RadzenText>Send By Identity</RadzenText>
+            <RadzenText>@L["DocumentFile.SendByIdentity"]</RadzenText>
             <RadzenDropDownDataGrid Multiple="true"
                                     Style="width: 100%"
                                     AllowClear="true" AllowFiltering="true"
@@ -194,12 +194,11 @@
                                             TValue="bool"/>
                         </Template>
                     </RadzenDropDownDataGridColumn>
-                    <RadzenDropDownDataGridColumn Property="FullName" Title="Full Name" Width="200px"/>
-                    <RadzenDropDownDataGridColumn Property="PhoneNumber" Title="Phone Number" Width="200px"/>
-                    <RadzenDropDownDataGridColumn Property="EmployeeCode" Title="Employee Code" Width="200px"/>
+                    <RadzenDropDownDataGridColumn Property="FullName" Title="@L["FullName"]" Width="200px"/>
+                    <RadzenDropDownDataGridColumn Property="PhoneNumber" Title="@L["PhoneNumber"]" Width="200px"/>
+                    <RadzenDropDownDataGridColumn Property="EmployeeCode" Title="@L["EmployeeCode"]" Width="200px"/>
                 </Columns>
-
-
+                
             </RadzenDropDownDataGrid>
 
         </RadzenColumn>
@@ -208,8 +207,8 @@
 
     <div class="Row" style="float: right">
         <div class="col">
-            <RadzenButton Text="Ok" Click="async () => { await CreateSendingFiles(DocumentFileDto.Id); }" Class="me-1" Style="width: 80px;" Disabled="IsDisable"/>
-            <RadzenButton Text="Cancel" Click="() => SendingFileModel.HideModel()" ButtonStyle="ButtonStyle.Light" Class="me-1" Disabled="IsDisable"/>
+            <RadzenButton Text="@L["OK"]" Click="async () => { await CreateSendingFiles(DocumentFileDto.Id); }" Class="me-1" Style="width: 80px;" Disabled="IsDisable"/>
+            <RadzenButton Text="@L["Cancel"]" Click="() => SendingFileModel.HideModel()" ButtonStyle="ButtonStyle.Light" Class="me-1" Disabled="IsDisable"/>
         </div>
     </div>
 </RZModel>

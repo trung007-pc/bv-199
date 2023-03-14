@@ -9,8 +9,10 @@ using Contract.SendingFiles;
 using Contract.WorkSchedules;
 using Core.Enum;
 using Core.Extension;
+using Microsoft.AspNetCore.Components;
 using Radzen;
 using WebClient.Components;
+using WebClient.LanguageResources;
 
 namespace WebClient.Pages.Admin
 {
@@ -34,7 +36,7 @@ namespace WebClient.Pages.Admin
         
         public MeetingContentDto SelectedContent { get; set; }
         public WorkScheduleDto  SelectedSchedule { get; set; }
-
+        
 
         protected override async Task OnInitializedAsync()
         {
@@ -43,7 +45,8 @@ namespace WebClient.Pages.Admin
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
             if (firstRender)
-            {            
+            {
+                HeaderTitle = L["MyDashboard"];
                 await Init();
                 await GetGlobalStatistics();
                 await GetMyStatistics();

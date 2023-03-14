@@ -5,6 +5,7 @@ using Blazorise;
 using Contract.Positions;
 using Core.Enum;
 using Microsoft.AspNetCore.Components;
+using WebClient.LanguageResources;
 
 namespace WebClient.Pages.Admin
 {
@@ -20,7 +21,6 @@ namespace WebClient.Pages.Admin
         public Modal CreateModal;
         public Modal EditingModal;
         public string HeaderTitle = "Position";
-
         public IEnumerable<string> Claims = new List<string>();
 
         public Position()
@@ -35,6 +35,7 @@ namespace WebClient.Pages.Admin
             {
                 await InvokeAsync(async () =>
                 {
+                    HeaderTitle = L["Position"];
                     await GetPositions();
                     StateHasChanged();
                 }, ActionType.GetList, false);
@@ -80,7 +81,7 @@ namespace WebClient.Pages.Admin
 
         public async Task ShowConfirmMessage(Guid id)
         {
-            if (await _messageService.Confirm("Are you sure you want to confirm?", "Confirmation"))
+            if (await _messageService.Confirm(L["Confirmation.Message"], L["Confirmation"]))
             {
                 await DeletePosition(id);
             }

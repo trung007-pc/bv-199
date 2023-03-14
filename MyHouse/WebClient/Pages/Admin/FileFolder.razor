@@ -8,7 +8,7 @@
 @using Contract.FileFolders;
 @using Variant = Radzen.Variant
 
-<h3>File Folder</h3>
+<h3>@L["Folders"]</h3>
 
 
 <div style="display: flex;justify-content: space-between;align-items: center;margin-bottom: 10px">
@@ -19,7 +19,7 @@
         </RadzenBreadCrumb>
     </div>
     <div>
-        <RadzenButton Text="Create" Click="@ShowNewModal" Icon="post_add" />
+        <RadzenButton Text="@L["Create"]" Click="@ShowNewModal" Icon="post_add" />
     </div>
 </div>
 
@@ -53,7 +53,7 @@
 <Modal @ref="CreateModal">
     <ModalContent Size="ModalSize.Large" Centered="true">
         <ModalHeader>
-            <ModalTitle>File Folder</ModalTitle>
+            <ModalTitle>@L["Folders"]</ModalTitle>
         </ModalHeader>
         <EditForm Model="NewFileFolder" OnValidSubmit="async () => { await CreateFileFolder(); }">
 
@@ -62,19 +62,18 @@
 
                 <RadzenTabs RenderMode="TabRenderMode.Client">
                     <Tabs>
-                        <RadzenTabsItem Text="Folder Information">
+                        <RadzenTabsItem Text="@L["Folder.Information"]">
                             <DataAnnotationsValidator/>
-                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Name</RadzenText>
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["Name"]</RadzenText>
                             <RadzenTextBox Class="w-100" @bind-Value="NewFileFolder.Name"/>
                             <ValidationMessage For="@(() => NewFileFolder.Name)"/>
 
-                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">File Folder Code</RadzenText>
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["Code"]</RadzenText>
                             <RadzenTextBox Class="w-100" @bind-Value="NewFileFolder.Code"/>
                             <ValidationMessage For="@(() => NewFileFolder.Code)"/>
-
                             <RZBR></RZBR>
                            <RZBR></RZBR>
-                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">ODX</RadzenText>
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["ODX"]</RadzenText>
                             <RadzenNumeric Class="w-100" @bind-Value="NewFileFolder.ODX"/>
                             <ValidationMessage For="@(() => NewFileFolder.ODX)"/>
                         </RadzenTabsItem>
@@ -104,8 +103,8 @@
 
             </ModalBody>
             <ModalFooter>
-                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Click="@HideNewModal" Text="Cancel" Disabled="IsDisable"/>
-                <RadzenButton Text="Save Changes" Icon="save" ButtonType="ButtonType.Submit" Disabled="IsDisable"/>
+                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Click="@HideNewModal" Text="@L["Cancel"]" Disabled="IsDisable"/>
+                <RadzenButton Text="@L["SaveChanges"]" Icon="save" ButtonType="ButtonType.Submit" Disabled="IsDisable"/>
             </ModalFooter>
         </EditForm>
     </ModalContent>
@@ -114,7 +113,7 @@
 <Modal @ref="EditModal">
     <ModalContent Size="ModalSize.Large" Centered="true">
         <ModalHeader>
-            <ModalTitle>Edit File Folder</ModalTitle>
+            <ModalTitle>@L["Folders"]</ModalTitle>
         </ModalHeader>
         <EditForm Model="EditingFileFolder" OnValidSubmit="async () => { await UpdateFileFolder(); }">
 
@@ -122,17 +121,17 @@
 
                 <RadzenTabs RenderMode="TabRenderMode.Client">
                     <Tabs>
-                        <RadzenTabsItem Text="Folder Information">
+                        <RadzenTabsItem Text="@L["Folder.Information"]">
                             <DataAnnotationsValidator/>
-                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Name</RadzenText>
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["Name"]</RadzenText>
                             <RadzenTextBox Class="w-100" @bind-Value="EditingFileFolder.Name"/>
                             <ValidationMessage For="@(() => EditingFileFolder.Name)"/>
 
-                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">File Folder Code</RadzenText>
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["Code"]</RadzenText>
                             <RadzenTextBox Class="w-100" @bind-Value="EditingFileFolder.Code"/>
                             <ValidationMessage For="@(() => EditingFileFolder.Code)"/>
                             <RZBR></RZBR>
-                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">ODX</RadzenText>
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["ODX"]</RadzenText>
                             <RadzenNumeric Class="w-100" @bind-Value="EditingFileFolder.ODX"/>
                             <ValidationMessage For="@(() => EditingFileFolder.ODX)"/>
 
@@ -159,8 +158,8 @@
                 </RadzenTabs>
             </ModalBody>
             <ModalFooter>
-                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Click="@HideEditModal" Text="Cancel" Disabled="IsDisable"/>
-                <RadzenButton Text="Save Changes" Icon="save" ButtonType="ButtonType.Submit" Disabled="IsDisable"/>
+                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Click="@HideEditModal" Text="@L["Cancel"]" Disabled="IsDisable"/>
+                <RadzenButton Text="@L["SaveChanges"]" Icon="save" ButtonType="ButtonType.Submit" Disabled="IsDisable"/>
             </ModalFooter>
         </EditForm>
     </ModalContent>

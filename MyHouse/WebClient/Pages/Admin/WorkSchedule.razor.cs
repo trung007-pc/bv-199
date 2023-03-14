@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Radzen;
 using WebClient.Exceptions;
+using WebClient.LanguageResources;
 using WebClient.Setting;
 
 namespace WebClient.Pages.Admin
@@ -26,14 +27,14 @@ namespace WebClient.Pages.Admin
         public Modal EditingModal;
         public IBrowserFile? NewFile { get; set; }
         public IBrowserFile? EditFile { get; set; }
-
-
+        
         public string HeaderTitle = "Work Schedule";
         public bool IsLoading { get; set; } = true;
 
 
         public WorkSchedule()
         {
+           
         }
 
 
@@ -43,6 +44,7 @@ namespace WebClient.Pages.Admin
             {
                 await InvokeAsync(async () =>
                 {
+                    HeaderTitle = L["WorkSchedule"];
                     await GetWorkSchedules();
                     StateHasChanged();
                 }, ActionType.GetList, false);
@@ -116,7 +118,7 @@ namespace WebClient.Pages.Admin
 
         public async Task ShowConfirmMessage(Guid id)
         {
-            if (await _messageService.Confirm("Are you sure you want to confirm?", "Confirmation"))
+            if (await _messageService.Confirm(L["Confirmation.Message"], L["Confirmation.Message"]))
             {
                 await DeleteWorkSchedule(id);
             }

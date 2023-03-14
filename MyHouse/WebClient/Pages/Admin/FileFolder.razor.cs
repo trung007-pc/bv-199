@@ -8,6 +8,7 @@ using Core.Enum;
 using Core.Extension;
 using Microsoft.AspNetCore.Components;
 using Radzen;
+using WebClient.LanguageResources;
 
 namespace WebClient.Pages.Admin
 {
@@ -26,7 +27,7 @@ namespace WebClient.Pages.Admin
         public Modal CreateModal;
         public Modal EditModal;
         public string HeaderTitle = "File Folder";
-        
+
 
 
 
@@ -43,6 +44,7 @@ namespace WebClient.Pages.Admin
             {
                 await InvokeAsync(async () =>
                 {
+                    HeaderTitle = L["Folder"];
                     await GetFileFolders();
                     StateHasChanged();
                 }, ActionType.GetList, false);
@@ -106,7 +108,7 @@ namespace WebClient.Pages.Admin
         {
             var department = (FileFolderDto)value;
 
-            if (await _messageService.Confirm("Are you sure you want to confirm?", "Confirmation"))
+            if (await _messageService.Confirm(L["Confirmation.Message"], L["Confirmation"]))
             {
                 await DeleteFileFolder(department.Id);
             }

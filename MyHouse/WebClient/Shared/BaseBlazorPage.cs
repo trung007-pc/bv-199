@@ -27,6 +27,7 @@ using Newtonsoft.Json.Linq;
 using Radzen;
 using Radzen.Blazor;
 using WebClient.Exceptions;
+using WebClient.LanguageResources;
 using WebClient.Setting;
 
 namespace WebClient.Shared
@@ -41,7 +42,9 @@ namespace WebClient.Shared
 
         [CascadingParameter]
         public Task<AuthenticationState> AuthState { get; set; }
-
+        
+        [CascadingParameter]
+        public JsonStringLocalizer  L { get; set; } 
         protected IMapper ObjectMapper { get;}
         public bool IsDisable  { get; set; }
 
