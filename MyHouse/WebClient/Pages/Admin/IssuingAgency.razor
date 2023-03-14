@@ -7,7 +7,7 @@
 @using Contract.IssuingAgencys;
 @using Variant = Radzen.Variant
 
-<h3>File Agency</h3>
+<h3>@L["IssuingAgency"]</h3>
 
 
 <div style="display: flex;justify-content: space-between;align-items: center;margin-bottom: 10px">
@@ -18,7 +18,7 @@
         </RadzenBreadCrumb>
     </div>
     <div>
-        <RadzenButton Text="Create" Click="@ShowNewModal" Icon="post_add" />
+        <RadzenButton Text="@L["Create"]" Click="@ShowNewModal" Icon="post_add" />
     </div>
 </div>
 
@@ -52,7 +52,7 @@
 <Modal @ref="CreateModal">
     <ModalContent Size="ModalSize.Large" Centered="true">
         <ModalHeader>
-            <ModalTitle>File Agency</ModalTitle>
+            <ModalTitle>@L["IssuingAgency"]</ModalTitle>
         </ModalHeader>
         <EditForm Model="NewIssuingAgency" OnValidSubmit="async () => { await CreateIssuingAgency(); }">
 
@@ -61,24 +61,24 @@
 
                 <RadzenTabs RenderMode="TabRenderMode.Client">
                     <Tabs>
-                        <RadzenTabsItem Text="Agency Information">
+                        <RadzenTabsItem Text="@L["IssuingAgency.Information"]">
                             <DataAnnotationsValidator/>
-                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Name</RadzenText>
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["Name"]</RadzenText>
                             <RadzenTextBox Class="w-100" @bind-Value="NewIssuingAgency.Name"/>
                             <ValidationMessage For="@(() => NewIssuingAgency.Name)"/>
 
-                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">File Agency Code</RadzenText>
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["Code"]</RadzenText>
                             <RadzenTextBox Class="w-100" @bind-Value="NewIssuingAgency.Code"/>
                             <ValidationMessage For="@(() => NewIssuingAgency.Code)"/>
 
                             <RZBR></RZBR>
                            <RZBR></RZBR>
-                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">ODX</RadzenText>
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["ODX"]</RadzenText>
                             <RadzenNumeric Class="w-100" @bind-Value="NewIssuingAgency.ODX"/>
                             <ValidationMessage For="@(() => NewIssuingAgency.ODX)"/>
                         </RadzenTabsItem>
 
-                        <RadzenTabsItem Text="Agencys">
+                        <RadzenTabsItem Text="@L["IssuingAgency"]">
                             <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Parent File Agency</RadzenText>
                             <RadzenTree Data=@HierarchicalAgencies Style="width:100%" Change="OnChangeNewIssuingAgency">
                                 <RadzenTreeLevel TextProperty="Name" ChildrenProperty="ChildAgencies"
@@ -103,8 +103,8 @@
 
             </ModalBody>
             <ModalFooter>
-                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Click="@HideNewModal" Text="Cancel" Disabled="IsDisable"/>
-                <RadzenButton Text="Save Changes" Icon="save" ButtonType="ButtonType.Submit" Disabled="IsDisable"/>
+                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Click="@HideNewModal" Text="@L["Cancel"]" Disabled="IsDisable"/>
+                <RadzenButton Text="@L["SaveChanges"]" Icon="save" ButtonType="ButtonType.Submit" Disabled="IsDisable"/>
             </ModalFooter>
         </EditForm>
     </ModalContent>
@@ -113,7 +113,7 @@
 <Modal @ref="EditModal">
     <ModalContent Size="ModalSize.Large" Centered="true">
         <ModalHeader>
-            <ModalTitle>Edit File Agency</ModalTitle>
+            <ModalTitle>@L["IssuingAgency"]</ModalTitle>
         </ModalHeader>
         <EditForm Model="EditingIssuingAgency" OnValidSubmit="async () => { await UpdateIssuingAgency(); }">
 
@@ -123,15 +123,15 @@
                     <Tabs>
                         <RadzenTabsItem Text="Agency Information">
                             <DataAnnotationsValidator/>
-                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Name</RadzenText>
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["Name"]</RadzenText>
                             <RadzenTextBox Class="w-100" @bind-Value="EditingIssuingAgency.Name"/>
                             <ValidationMessage For="@(() => EditingIssuingAgency.Name)"/>
 
-                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">File Agency Code</RadzenText>
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["Code"]</RadzenText>
                             <RadzenTextBox Class="w-100" @bind-Value="EditingIssuingAgency.Code"/>
                             <ValidationMessage For="@(() => EditingIssuingAgency.Code)"/>
                             <RZBR></RZBR>
-                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">ODX</RadzenText>
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["ODX"]</RadzenText>
                             <RadzenNumeric Class="w-100" @bind-Value="EditingIssuingAgency.ODX"/>
                             <ValidationMessage For="@(() => EditingIssuingAgency.ODX)"/>
 
@@ -158,8 +158,8 @@
                 </RadzenTabs>
             </ModalBody>
             <ModalFooter>
-                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Click="@HideEditModal" Text="Cancel" Disabled="IsDisable"/>
-                <RadzenButton Text="Save Changes" Icon="save" ButtonType="ButtonType.Submit" Disabled="IsDisable"/>
+                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Click="@HideEditModal" Text="@L["Cancel"]" Disabled="IsDisable"/>
+                <RadzenButton Text="@L["SaveChanges"]" Icon="save" ButtonType="ButtonType.Submit" Disabled="IsDisable"/>
             </ModalFooter>
         </EditForm>
     </ModalContent>

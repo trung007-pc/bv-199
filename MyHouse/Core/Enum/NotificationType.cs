@@ -5,9 +5,9 @@ namespace Core.Enum
 {
     public enum NotificationType
     {
-        Document,
-        Task,
-        Unknown
+        Document = 1,
+        Task = 2,
+        Unknown = 3
 
     }
 }

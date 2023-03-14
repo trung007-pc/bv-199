@@ -24,6 +24,7 @@ using Microsoft.JSInterop;
 using Radzen;
 using WebClient.Components;
 using WebClient.Exceptions;
+using WebClient.LanguageResources;
 using WebClient.Setting;
 
 namespace WebClient.Pages.Admin
@@ -79,7 +80,7 @@ namespace WebClient.Pages.Admin
         public IBrowserFile? EditingFile { get; set; }
         public bool IsLoading { get; set; } = true;
 
-        
+     
 
 
         bool sidebar1Expanded = true;
@@ -101,7 +102,7 @@ namespace WebClient.Pages.Admin
             {
                 await InvokeAsync(async () =>
                 {
-
+                    HeaderTitle = @L["DocumentFile"];
                     await InitTime();
                     await GetDocumentFiles();
                     await GetFileTypes();
@@ -276,7 +277,7 @@ namespace WebClient.Pages.Admin
                 NewFile = e.File;
                  
                 if (e.File.Size > BlazorSetting.Document_FILE_LENGTH_LIMIT)
-                    throw new FailedOperation("File size is too big. please choose file have less 10Mb");
+                    throw new FailedOperation(@L["FileSoBig"]);
                 
                 if (NewFile.ContentType.Contains("pdf"))
                 {
@@ -298,7 +299,7 @@ namespace WebClient.Pages.Admin
                 EditingFile = null;
                 EditingFile = e.File;
                 if (e.File.Size > BlazorSetting.Document_FILE_LENGTH_LIMIT)
-                    throw new FailedOperation("File size is too big. please choose file have less 10Mb");
+                    throw new FailedOperation(@L["FileSoBig"]);
                 if (EditingFile.ContentType.Contains("pdf"))
                 {
                     FileBytes = await GetByteDataAsync(EditingFile);
@@ -314,7 +315,7 @@ namespace WebClient.Pages.Admin
             {
                 if (NewFile is null)
                 {
-                    throw new FailedOperation("You've not import file yet");
+                    throw new FailedOperation(L["NotAnyImportFile"]);
                 }
 
                 var fileDto = await _uploadService.UploadDocumentFile(NewFile);
@@ -365,7 +366,7 @@ namespace WebClient.Pages.Admin
 
         public async Task ShowConfirmMessage(Guid id)
         {
-            if (await _messageService.Confirm("Are you sure you want to confirm?", "Confirmation"))
+            if (await _messageService.Confirm(L["Confirmation.Message"], L["Confirmation"]))
             {
                 await DeleteDocumentFile(id);
             }

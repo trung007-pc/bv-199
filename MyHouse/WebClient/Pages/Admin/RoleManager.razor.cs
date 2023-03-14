@@ -7,6 +7,8 @@ using Contract.Identity.UserManager;
 using Core.Const;
 using Core.Enum;
 using Microsoft.AspNetCore.Components;
+using Radzen;
+using WebClient.LanguageResources;
 
 
 namespace WebClient.Pages.Admin
@@ -22,6 +24,7 @@ namespace WebClient.Pages.Admin
 
         public Modal NewModal;
         public Modal EditingModal;
+        
         public string HeaderTitle = "Role";
 
         public IEnumerable<string> Claims = new List<string>();
@@ -38,6 +41,7 @@ namespace WebClient.Pages.Admin
             {
                 await InvokeAsync(async () =>
                 {
+                    HeaderTitle = L["Role"];
                     await GetRoles();
                     StateHasChanged();
                 }, ActionType.GetList, false);
@@ -83,7 +87,7 @@ namespace WebClient.Pages.Admin
 
         public async Task ShowConfirmMessage(Guid id)
         {
-            if (await _messageService.Confirm("Are you sure you want to confirm?", "Confirmation"))
+            if (await _messageService.Confirm(L["Confirmation.Message"], L["Confirmation"]))
             {
                 await DeleteRole(id);
             }
@@ -113,5 +117,6 @@ namespace WebClient.Pages.Admin
         {
             EditingModal.Hide();
         }
+
     }
 }

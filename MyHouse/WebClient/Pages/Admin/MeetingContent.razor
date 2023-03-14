@@ -15,7 +15,7 @@
 @inject NavigationManager _navigationManager;
 @inject UploadService _uploadService;
 
-<h3>MeetingContent</h3>
+<h3>@L["MeetingContent"]</h3>
 
 <div style="display: flex;justify-content: space-between;align-items: center">
     <div>
@@ -40,17 +40,17 @@
                     IsLoading="IsLoading"
                     Style="width: 100%">
         <Columns>
-            <RadzenDataGridColumn TItem="MeetingContentDto" TextAlign="TextAlign.Center" Property="Name" Title="Name" Width="160px"/>
-            <RadzenDataGridColumn TItem="MeetingContentDto" TextAlign="TextAlign.Center" Property="Node" Title="Node" Width="160px"/>
-            <RadzenDataGridColumn TItem="MeetingContentDto" TextAlign="TextAlign.Center" Property="IsPublic" Title="Is Publish" Width="160px"/>
+            <RadzenDataGridColumn TItem="MeetingContentDto" TextAlign="TextAlign.Center" Property="Name" Title="@L["Name"]" Width="160px"/>
+            <RadzenDataGridColumn TItem="MeetingContentDto" TextAlign="TextAlign.Center" Property="Node" Title="@L["Node"]" Width="160px"/>
+            <RadzenDataGridColumn TItem="MeetingContentDto" TextAlign="TextAlign.Center" Property="IsPublic" Title="@L["IsPublic"]" Width="160px"/>
 
-            <RadzenDataGridColumn TItem="MeetingContentDto" TextAlign="TextAlign.Center" Property="CreationTime" Title="Creation Time" Width="160px">
+            <RadzenDataGridColumn TItem="MeetingContentDto" TextAlign="TextAlign.Center" Property="CreationTime" Title="@L["CreationTime"]" Width="160px">
                 <Template Context="data">
                     @($"{data.CreationTime:dd/MM/yyyy}")
                 </Template>
 
             </RadzenDataGridColumn>
-            <RadzenDataGridColumn TItem="MeetingContentDto" Property="Name" TextAlign="TextAlign.Center" Title="Action" Width="160px" Filterable="false">
+            <RadzenDataGridColumn TItem="MeetingContentDto" Property="Name" TextAlign="TextAlign.Center" Title="@L["Action"]" Width="160px" Filterable="false">
                 <Template Context="data">
                     <RadzenButton Click="async () => { await ShowEditingModal(data); }" Icon="edit" ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat" Size="ButtonSize.Medium">
                     </RadzenButton>
@@ -66,43 +66,43 @@
 <Modal @ref="CreateModal">
     <ModalContent Size="ModalSize.Large" Centered="true">
         <ModalHeader>
-            <ModalTitle>Work Schedule</ModalTitle>
+            <ModalTitle>@L["MeetingContent"]</ModalTitle>
         </ModalHeader>
         <EditForm Model="NewMeetingContent" OnValidSubmit="async () => { await CreateMeetingContent(); }">
             <ModalBody>
 
                 <DataAnnotationsValidator/>
-                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Name</RadzenText>
+                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["Name"]</RadzenText>
                 <RadzenTextBox Class="w-100" @bind-Value="NewMeetingContent.Name"/>
                 <ValidationMessage For="@(() => NewMeetingContent.Name)"/>
 
-                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Node</RadzenText>
+                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["Node"]</RadzenText>
                 <RadzenTextArea Placeholder="Nhập vào đây..." @bind-Value="NewMeetingContent.Node" Rows="10" Cols="30" Class="w-100"/>
                 <ValidationMessage For="@(() => NewMeetingContent.Node)"/>
 
-                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Creation Time</RadzenText>
+                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["CreationTime"]</RadzenText>
                 <RadzenDatePicker Class="w-100" @bind-Value="NewMeetingContent.CreationTime" DateFormat="dd/MM/yyyy"/>
                 <ValidationMessage For="@(() => NewMeetingContent.CreationTime)"/>
                 
                 <RZBR></RZBR>
-                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3" Style="display: inline">Is Public</RadzenText>
+                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3" Style="display: inline">@L["IsPublic"]</RadzenText>
                 <RadzenSwitch @bind-Value=@NewMeetingContent.IsPublic />
                 <ValidationMessage For="@(() => NewMeetingContent.IsPublic)"/>
 
 
                 <RZBR></RZBR>
-                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Upload File</RadzenText>
+                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["UploadFile"]</RadzenText>
                 <RZInputFile Icon="upload_file"
                              Accept=".pdf, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
                                         , application / msword, application / vnd.openxmlformats - officedocument.wordprocessingml.document"
                              Style="display: flex;align-items: center;min-width:123px;max-width: 205px;margin: 0;cursor: pointer;background-color: #3e2cdd"
-                             Text="Upload File" Event="async (e) => { await OnChangeFileAtNewModal(e); }">
+                             Text="@L["UploadFile"]" Event="async (e) => { await OnChangeFileAtNewModal(e); }">
                 </RZInputFile>
 
             </ModalBody>
             <ModalFooter>
-                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Click="@HideNewModal" Text="Cancel" Disabled="IsDisable"/>
-                <RadzenButton Text="Save Changes" Icon="save" ButtonType="ButtonType.Submit" Disabled="IsDisable"/>
+                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Click="@HideNewModal" Text="@L["Cancel"]" Disabled="IsDisable"/>
+                <RadzenButton Text="@L["SaveChanges"]" Icon="save" ButtonType="ButtonType.Submit" Disabled="IsDisable"/>
             </ModalFooter>
         </EditForm>
     </ModalContent>
@@ -111,40 +111,40 @@
 <Modal @ref="EditingModal">
     <ModalContent Size="ModalSize.Large" Centered="true">
         <ModalHeader>
-            <ModalTitle>Work Schedule</ModalTitle>
+            <ModalTitle>@L["MeetingContent"]</ModalTitle>
         </ModalHeader>
         <EditForm Model="EditingMeetingContent" OnValidSubmit="async () => { await UpdateMeetingContent(); }">
             <ModalBody>
                 <DataAnnotationsValidator/>
-                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Name</RadzenText>
+                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["Name"]</RadzenText>
                 <RadzenTextBox Class="w-100" @bind-Value="EditingMeetingContent.Name"/>
                 <ValidationMessage For="@(() => EditingMeetingContent.Name)"/>
 
-                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Node</RadzenText>
+                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["Node"]</RadzenText>
                 <RadzenTextArea Placeholder="Nhập vào đây..." @bind-Value="EditingMeetingContent.Node" Rows="10" Cols="30" Class="w-100"/>
                 <ValidationMessage For="@(() => EditingMeetingContent.Node)"/>
-                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Start Day</RadzenText>
+                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["StartDay"]</RadzenText>
                 <RadzenDatePicker Class="w-100" @bind-Value="EditingMeetingContent.CreationTime" DateFormat="dd/MM/yyyy"/>
                 <ValidationMessage For="@(() => EditingMeetingContent.CreationTime)"/>
 
                 <RZBR></RZBR>
-                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3" Style="display: inline">Is Public</RadzenText>
+                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3" Style="display: inline">@L["IsPublic"]</RadzenText>
                 <RadzenSwitch @bind-Value=@EditingMeetingContent.IsPublic />
                 <ValidationMessage For="@(() => EditingMeetingContent.IsPublic)"/>
 
                 <RZBR></RZBR>
-                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Upload File</RadzenText>
+                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["UploadFile"]</RadzenText>
 
                 <RZInputFile Icon="upload_file"
                              Accept=".pdf, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
                                         , application / msword, application / vnd.openxmlformats - officedocument.wordprocessingml.document"
                              Style="display: flex;align-items: center;min-width:123px;max-width: 205px;margin: 0;cursor: pointer;background-color: #3e2cdd"
-                             Text="Upload File" Event="async (e) => { await OnChangeFileAtEditModal(e); }">
+                             Text="@L["UploadFile"]" Event="async (e) => { await OnChangeFileAtEditModal(e); }">
                 </RZInputFile>
             </ModalBody>
             <ModalFooter>
-                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Click="@HideEditModal" Text="Cancel" Disabled="IsDisable"/>
-                <RadzenButton Text="Save Changes" Icon="save" ButtonType="ButtonType.Submit" Disabled="IsDisable"/>
+                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Click="@HideEditModal" Text="@L["Cancel"]" Disabled="IsDisable"/>
+                <RadzenButton Text="@L["SaveChanges"]" Icon="save" ButtonType="ButtonType.Submit" Disabled="IsDisable"/>
             </ModalFooter>
         </EditForm>
     </ModalContent>

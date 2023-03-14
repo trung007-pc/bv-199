@@ -3,6 +3,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Contract.Notifications;
 using Core.Enum;
+using Microsoft.AspNetCore.Components;
+using WebClient.LanguageResources;
 
 namespace WebClient.Pages.Admin
 {
@@ -12,6 +14,7 @@ namespace WebClient.Pages.Admin
         public List<NotificationDto> Notifications { get; set; } = new List<NotificationDto>();
 
         public NotificationFilter Filter { get; set; } = new NotificationFilter();
+ 
 
         protected override void OnInitialized()
         {
@@ -66,6 +69,7 @@ namespace WebClient.Pages.Admin
                     ObjectMapper.Map<List<NotificationDto>, List<UpdateNotification>>(notifications);
                 await _notificationService.UpdateListWithReadingStatusAsync(updateNotifications);
                 await GetNotifications();
+                 _navigationManager.NavigateTo("notifications", true);
             },ActionType.Update,true);
 
         }

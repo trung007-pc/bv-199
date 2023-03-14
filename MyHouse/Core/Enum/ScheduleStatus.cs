@@ -2,9 +2,9 @@
 {
     public enum ScheduleStatus
     {
-        Cancel,
-        Anticipation,
-        Issuing,
-        Finish
+        Cancel = 1,
+        Anticipation = 2,
+        Issuing = 3 ,
+        Finish = 4
     }
 }

@@ -2,7 +2,7 @@
 {
     public enum MarkedCellType
     {
-        Valid,
+        Valid ,
         InValid,
         Duplicate
     }

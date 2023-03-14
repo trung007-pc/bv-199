@@ -19,7 +19,7 @@
         </RadzenBreadCrumb>
     </div>
     <div>
-        <RadzenButton Text="Create" Click="@ShowNewModal" Icon="post_add" Style="margin-bottom: 20px;"/>
+        <RadzenButton Text="@L["Create"]" Click="@ShowNewModal" Icon="post_add" Style="margin-bottom: 20px;"/>
     </div>
 </div>
 
@@ -35,11 +35,11 @@
                     Style="width: 100%">
         <Columns>
 
-            <RadzenDataGridColumn TItem="PositionDto" Property="Name" TextAlign="TextAlign.Center" Title="Name" Frozen="true" Width="160px"/>
-            <RadzenDataGridColumn TItem="PositionDto" Property="Code" TextAlign="TextAlign.Center" Title="Position Code" Frozen="true" Width="160px"/>
-            <RadzenDataGridColumn TItem="PositionDto" Property="ODX" TextAlign="TextAlign.Center" Title="Odx" Frozen="true" Width="160px"/>
+            <RadzenDataGridColumn TItem="PositionDto" Property="Name" TextAlign="TextAlign.Center" Title="@L["Name"]" Frozen="true" Width="160px"/>
+            <RadzenDataGridColumn TItem="PositionDto" Property="Code" TextAlign="TextAlign.Center" Title="@L["Code"]" Frozen="true" Width="160px"/>
+            <RadzenDataGridColumn TItem="PositionDto" Property="ODX" TextAlign="TextAlign.Center" Title="@L["ODX"]" Frozen="true" Width="160px"/>
 
-            <RadzenDataGridColumn TItem="PositionDto" Property="Name" Title="Action" TextAlign="TextAlign.Center" Frozen="true" Width="160px" Filterable="false">
+            <RadzenDataGridColumn TItem="PositionDto" Property="Name" Title="@L["Action"]" TextAlign="TextAlign.Center" Frozen="true" Width="160px" Filterable="false">
                 <Template Context="data">
                     <RadzenButton Click="async () => { await ShowEditingModal(data); }" Icon="edit" ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat" Size="ButtonSize.Medium">
                     </RadzenButton>
@@ -56,29 +56,28 @@
 <Modal @ref="CreateModal">
     <ModalContent Size="ModalSize.Large" Centered="true">
         <ModalHeader>
-            <ModalTitle>Position</ModalTitle>
+            <ModalTitle>@L["Position"]</ModalTitle>
         </ModalHeader>
         <EditForm Model="NewPosition" OnValidSubmit="async () => { await CreatePosition(); }">
             <ModalBody>
 
                 <DataAnnotationsValidator/>
-                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Name</RadzenText>
+                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["Name"]</RadzenText>
                 <RadzenTextBox Class="w-100" @bind-Value="NewPosition.Name"/>
                 <ValidationMessage For="@(() => NewPosition.Name)"/>
 
-                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Position Code</RadzenText>
+                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["Code"]</RadzenText>
                 <RadzenTextBox Class="w-100" @bind-Value="NewPosition.Code"/>
                 <ValidationMessage For="@(() => NewPosition.Code)"/>
 
-                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Odx</RadzenText>
+                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["ODX"]</RadzenText>
                 <RadzenNumeric Class="w-100" @bind-Value="NewPosition.ODX"/>
                 <ValidationMessage For="@(() => NewPosition.ODX)"/>
-
-               
+                
             </ModalBody>
             <ModalFooter>
-                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Click="@HideNewModal" Text="Cancel" Disabled="IsDisable"/>
-                <RadzenButton Text="Save Changes" Icon="save" ButtonType="ButtonType.Submit" Disabled="IsDisable"/>
+                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Click="@HideNewModal" Text="@L["Cancel"]" Disabled="IsDisable"/>
+                <RadzenButton Text="@L["SaveChanges"]" Icon="save" ButtonType="ButtonType.Submit" Disabled="IsDisable"/>
             </ModalFooter>
         </EditForm>
     </ModalContent>
@@ -87,29 +86,29 @@
 <Modal @ref="EditingModal">
     <ModalContent Size="ModalSize.Large" Centered="true">
         <ModalHeader>
-            <ModalTitle>User</ModalTitle>
+            <ModalTitle>@L["Position"]</ModalTitle>
         </ModalHeader>
         <EditForm Model="EditingPosition" OnValidSubmit="async () => { await UpdatePosition(); }">
 
             <ModalBody>
                 <DataAnnotationsValidator/>
-                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Name</RadzenText>
+                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["Name"]</RadzenText>
                 <RadzenTextBox Class="w-100" @bind-Value="EditingPosition.Name"/>
                 <ValidationMessage For="@(() => EditingPosition.Name)"/>
 
-                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Position Code</RadzenText>
+                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["Code"]</RadzenText>
                 <RadzenTextBox Class="w-100" @bind-Value="EditingPosition.Code"/>
                 <ValidationMessage For="@(() => EditingPosition.Code)"/>
 
-                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Odx</RadzenText>
+                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["ODX"]</RadzenText>
                 <RadzenNumeric Class="w-100" @bind-Value="EditingPosition.ODX"/>
                 <ValidationMessage For="@(() => EditingPosition.ODX)"/>
 
                 
             </ModalBody>
             <ModalFooter>
-                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Click="@HideEditModal" Text="Cancel" Disabled="IsDisable"/>
-                <RadzenButton Text="Save Changes" Icon="save" ButtonType="ButtonType.Submit" Disabled="IsDisable"/>
+                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Click="@HideEditModal" Text="@L["Cancel"]" Disabled="IsDisable"/>
+                <RadzenButton Text="@L["SaveChanges"]" Icon="save" ButtonType="ButtonType.Submit" Disabled="IsDisable"/>
             </ModalFooter>
         </EditForm>
     </ModalContent>

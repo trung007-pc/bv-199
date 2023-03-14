@@ -2,7 +2,7 @@
 {
     public enum FileType
     {
-        Excel,
+        Excel ,
         Csv,
         Img,
         Doc

@@ -5,7 +5,6 @@
 @using Core.Const
 @inject DashboardService _dashboardService;
 
-<h3>@HeaderTitle</h3>
 
 <div>
     <div>
@@ -48,7 +47,7 @@
 @if (!IsLoading)
 {
     <RadzenCard>
-        <Strong>Total Reviews : <span style="color:#b02a37">@Stat.TotalReview</span></Strong>
+        <Strong>@L["SurveyDashboard.TotalReviews"]<span style="color:#b02a37">@Stat.TotalReview</span></Strong>
         <RadzenChart SeriesClick=@OnSeriesClick Style="width: 500px;margin: 0 auto">
 
             <RadzenPieSeries Data="@DetailUnitReviewDataItems" Title="Total" CategoryProperty="LabelWithValue" ValueProperty="Value">
@@ -75,7 +74,7 @@
     <RadzenCard>
        
         <RadzenChart>
-            <RadzenColumnSeries Data="@UnitReviewDataItems" CategoryProperty="Label" Title="Rating"
+            <RadzenColumnSeries Data="@UnitReviewDataItems" CategoryProperty="Label" Title="@L["SurveyDashboard.Rating"]"
                                 Visible="true"
                                 LineType="LineType.Solid"
                                 ValueProperty="Value">
@@ -84,7 +83,7 @@
                     <div>
                         Unit:<strong>@data.Label</strong>
                         <br/>
-                        Rating:
+                       @L["SurveyDashboard.Rating"]
                         <strong>
                             @data.Value.ToString("0.0")<RadzenIcon Icon="star" Style="color:gold"/>
                         </strong>
@@ -102,7 +101,7 @@
             <RadzenColumnOptions Radius="5" Width="30"/>
             <RadzenValueAxis Max="5" Step="1"  Formatter="@FormatAsNumber">
                 <RadzenGridLines Visible="true"/>
-                <RadzenAxisTitle Text="Average Ratting"/>
+                <RadzenAxisTitle Text="@L["SurveyDashboard.AverageRatting"]"/>
             </RadzenValueAxis>
         </RadzenChart>
     </RadzenCard>

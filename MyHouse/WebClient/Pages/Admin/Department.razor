@@ -8,7 +8,7 @@
 @using Contract.Departments;
 @using Variant = Radzen.Variant
 
-<h3>Department</h3>
+<h3>@L["Department"]</h3>
 
 
 <div style="display: flex;justify-content: space-between;align-items: center">
@@ -19,7 +19,7 @@
         </RadzenBreadCrumb>
     </div>
     <div>
-        <RadzenButton Text="Create" Click="@ShowNewModal" Icon="post_add" Style="margin-bottom: 20px;"/>
+        <RadzenButton Text="@L["Create"]" Click="@ShowNewModal" Icon="post_add" Style="margin-bottom: 20px;"/>
     </div>
 </div>
 
@@ -63,23 +63,23 @@
 
                 <RadzenTabs RenderMode="TabRenderMode.Client">
                     <Tabs>
-                        <RadzenTabsItem Text="Department Information">
+                        <RadzenTabsItem Text="@L["Department.Information"]">
                             <DataAnnotationsValidator/>
-                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Name</RadzenText>
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["Name"]</RadzenText>
                             <RadzenTextBox Class="w-100" @bind-Value="NewDepartment.Name"/>
                             <ValidationMessage For="@(() => NewDepartment.Name)"/>
 
-                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Department Code</RadzenText>
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["Code"]</RadzenText>
                             <RadzenTextBox Class="w-100" @bind-Value="NewDepartment.Code"/>
                             <ValidationMessage For="@(() => NewDepartment.Code)"/>
 
                             <RZBR></RZBR>
-                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">ODX</RadzenText>
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["ODX"]</RadzenText>
                             <RadzenNumeric Class="w-100" @bind-Value="NewDepartment.ODX"/>
                             <ValidationMessage For="@(() => NewDepartment.ODX)"/>
                         </RadzenTabsItem>
 
-                        <RadzenTabsItem Text="Departments">
+                        <RadzenTabsItem Text="@L["Department"]">
                             <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Parent Department</RadzenText>
                             <RadzenTree Data=@HierarchicalDepartments Style="width:100%" Change="OnChangeNewDepartment">
                                 <RadzenTreeLevel TextProperty="Name" ChildrenProperty="ChildDepartment"
@@ -104,8 +104,8 @@
 
             </ModalBody>
             <ModalFooter>
-                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Click="@HideNewModal" Text="Cancel" Disabled="IsDisable"/>
-                <RadzenButton Text="Save Changes" Icon="save" ButtonType="ButtonType.Submit" Disabled="IsDisable"/>
+                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Click="@HideNewModal" Text="@L["Cancel"]" Disabled="IsDisable"/>
+                <RadzenButton Text="@L["SaveChanges"]" Icon="save" ButtonType="ButtonType.Submit" Disabled="IsDisable"/>
             </ModalFooter>
         </EditForm>
     </ModalContent>
@@ -114,7 +114,7 @@
 <Modal @ref="EditingModal">
     <ModalContent Size="ModalSize.Large" Centered="true">
         <ModalHeader>
-            <ModalTitle>Edit Department</ModalTitle>
+            <ModalTitle>@L["Department"]</ModalTitle>
         </ModalHeader>
         <EditForm Model="EditingDepartment" OnValidSubmit="async () => { await UpdateDepartment(); }">
 
@@ -122,23 +122,23 @@
 
                 <RadzenTabs RenderMode="TabRenderMode.Client">
                     <Tabs>
-                        <RadzenTabsItem Text="Department Information">
+                        <RadzenTabsItem Text="@L["Department.Information"]">
                             <DataAnnotationsValidator/>
-                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Name</RadzenText>
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["Name"]</RadzenText>
                             <RadzenTextBox Class="w-100" @bind-Value="EditingDepartment.Name"/>
                             <ValidationMessage For="@(() => EditingDepartment.Name)"/>
 
-                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Department Code</RadzenText>
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["Code"]</RadzenText>
                             <RadzenTextBox Class="w-100" @bind-Value="EditingDepartment.Code"/>
                             <ValidationMessage For="@(() => EditingDepartment.Code)"/>
                             <RZBR></RZBR>
 
-                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">ODX</RadzenText>
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["ODX"]</RadzenText>
                             <RadzenNumeric Class="w-100" @bind-Value="EditingDepartment.ODX"/>
                             <ValidationMessage For="@(() => EditingDepartment.ODX)"/>
                             <RZBR></RZBR>
                         </RadzenTabsItem>
-                        <RadzenTabsItem Text="Departments">
+                        <RadzenTabsItem Text="@L["Department"]">
                             <RadzenTree Data=@HierarchicalDepartments Style="width:100%" Change="OnChangeUpdateDepartment">
                                 <RadzenTreeLevel TextProperty="Name" ChildrenProperty="ChildDepartment"
                                                  HasChildren=@(e => (e as DepartmentDto).ChildDepartment.Any())
@@ -160,8 +160,8 @@
                 </RadzenTabs>
             </ModalBody>
             <ModalFooter>
-                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Click="@HideEditModal" Text="Cancel" Disabled="IsDisable"/>
-                <RadzenButton Text="Save Changes" Icon="save" ButtonType="ButtonType.Submit" Disabled="IsDisable"/>
+                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Click="@HideEditModal" Text="@L["Cancel"]" Disabled="IsDisable"/>
+                <RadzenButton Text="@L["SaveChange"]" Icon="save" ButtonType="ButtonType.Submit" Disabled="IsDisable"/>
             </ModalFooter>
         </EditForm>
     </ModalContent>

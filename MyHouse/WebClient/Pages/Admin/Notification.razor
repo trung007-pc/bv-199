@@ -28,7 +28,7 @@
             <RadzenLabel Text="Select All" Component="CheckBox2" Style="margin-left: 8px; vertical-align: middle;"/>
         </div>
         <div>
-            <RadzenButton Text="Confirm Read" Click="async () => { await ConfirmRead(); }" Style="float: right" Icon="check" Disabled="IsDisable"/>
+            <RadzenButton Text="@L["Notifications.ConfirmRead"]" Click="async () => { await ConfirmRead(); }" Style="float: right" Icon="check" Disabled="IsDisable"/>
         </div>
     </div>
 
@@ -44,9 +44,9 @@
                     }
                 </div>
                 <div>
-                    <MudListItem Text="@item.Title" Icon="@Icons.Material.Filled.Bookmark" OnClick="async () => { await ViewNotification(item); }" IconColor="(item.Status ? Color.Inherit : Color.Secondary)"/>
+                    <MudListItem Text="@L["Notification.Announcement",item.Title]" Icon="@Icons.Material.Filled.Bookmark" OnClick="async () => { await ViewNotification(item); }" IconColor="(item.Status ? Color.Inherit : Color.Secondary)"/>
                     <div>
-                        <span style="font-size: 11px;color: grey;margin-left: 15%">@item.SentDate</span>
+                        <span style="font-size: 11px;color: grey;margin-left: 21%">@item.SentDate</span>
                     </div>
                 </div>
             </div>

@@ -1,7 +1,10 @@
 ﻿@using System.Security.Claims
 @using AutoMapper.Internal.Mappers
 @using Contract.Notifications
+@using Core.Const
 @using Core.Enum
+@using Microsoft.AspNetCore.Components
+@using WebClient.LanguageResources
 @using WebClient.Service.Notications
 @using WebClient.Service.SendingFiles
 @using Color = MudBlazor.Color
@@ -12,6 +15,8 @@
 @inject NotificationnService _notificationService
 @inject NavigationManager _navigationManager;
 @inject SendingFileService _sendingFileService;
+@inject JsonStringLocalizer _localizer;
+
 <RadzenLayout class="rz-shadow-3">
     <RadzenHeader>
         <RadzenRow Gap="0">
@@ -27,8 +32,18 @@
                         {
                             <AuthorizeView>
                                 <Authorized>
-
                                     <div style="display: flex;justify-content: space-between;align-items: center;gap: 2vw">
+                                        <div>
+                                            <RadzenDropDown @bind-Value=@SelectedCulture.Value Data=@Cultures Style="width: 60px;" Change="OnChangeCulture">
+                                                <Template Context="data">
+                                                       <RadzenImage Path="@(SetCultureImage(data))" Style="width: 100%;" />
+                                                </Template>
+                                                <ValueTemplate Context="data">
+                                                    <Image src="@(SetCultureImage(data))" Style="width: 100%"> </Image>
+                                                   
+                                                </ValueTemplate>
+                                            </RadzenDropDown>
+                                        </div>
                                         <div @onclick="ToggleNotification" style="cursor: pointer">
                                             <MudBadge Content="NotificationCount" Color="Color.Error" Overlap="true" Class="d-flex ml-auto">
                                                 <MudIcon Icon="@Icons.Material.Filled.Notifications" Color="Color.Default"/>
@@ -59,7 +74,6 @@
                                                 </MudPopover>
                                             </MudBadge>
                                         </div>
-
 
                                         <RadzenProfileMenu Style="float: right">
                                             <Template>
@@ -98,7 +112,9 @@
             <AuthorizeView>
                 <Authorized>
                     <RadzenPanelMenu>
-                        <Menu></Menu>
+                         <CascadingValue Value="_localizer">
+                             <Menu></Menu>
+                             </CascadingValue>
                     </RadzenPanelMenu>
                 </Authorized>
                 <NotAuthorized>
@@ -109,12 +125,17 @@
     }
 
     <RadzenBody Style="transform: none !important;">
-        @Body
+        <CascadingValue Value="_localizer">
+                @Body
+        </CascadingValue>
+    
     </RadzenBody>
 
 
-    <RadzenFooter Style="height:20px">
-        V2.0.1 Copyright ©2022 BV199. All Rights Reserved
+    <RadzenFooter Style="height:20px;display: flex;align-items: center">
+        <div>
+            V2.0.1 Copyright ©2022 BV199. All Rights Reserved
+        </div>
     </RadzenFooter>
 </RadzenLayout>
 
@@ -140,9 +161,19 @@
     public int NotificationCount { get; set; }
     public bool IsLoading { get; set; } = true;
 
+    public List<string> Cultures = new List<string>()
+    {
+        CultureType.VI,
+        CultureType.EN
+    };
+
+    // public string SelectedCulture = CultureType.VI;
+
 
     [CascadingParameter]
     public Task<AuthenticationState> AuthState { get; set; }
+
+    
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -159,7 +190,12 @@
         }
     }
 
-
+    public string SetCultureImage(string value)
+    {
+        if (CultureType.VI == value) return "Images/Cultures/dong_lao.png";
+        if (CultureType.EN == value) return "Images/Cultures/mi_den.png";
+        return "";
+    }
     public async Task ToggleNotification()
     {
         ShowNotification = !ShowNotification;
@@ -192,6 +228,13 @@
         return user.Identity.Name;
     }
 
+    public  void OnChangeCulture()
+    {
+        _localizer.LoadResources(SelectedCulture.Value);
+        // StateHasChanged();
+        
+
+    }
     public async Task ViewNotification(NotificationDto dto)
     {
         if (dto.Type == NotificationType.Document)

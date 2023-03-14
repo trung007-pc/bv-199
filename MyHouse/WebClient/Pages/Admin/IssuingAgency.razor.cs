@@ -8,6 +8,7 @@ using Core.Enum;
 using Core.Extension;
 using Microsoft.AspNetCore.Components;
 using Radzen;
+using WebClient.LanguageResources;
 
 namespace WebClient.Pages.Admin
 {
@@ -31,6 +32,7 @@ namespace WebClient.Pages.Admin
 
 
 
+
         public IssuingAgency()
         {
             
@@ -44,6 +46,7 @@ namespace WebClient.Pages.Admin
             {
                 await InvokeAsync(async () =>
                 {
+                    HeaderTitle = L["IssuingAgency"];
                     await GetIssuingAgencies();
                     StateHasChanged();
                 }, ActionType.GetList, false);
@@ -107,7 +110,7 @@ namespace WebClient.Pages.Admin
         {
             var department = (IssuingAgencyDto)value;
 
-            if (await _messageService.Confirm("Are you sure you want to confirm?", "Confirmation"))
+            if (await _messageService.Confirm(L["Confirmation.Message"], L["Confirmation"]))
             {
                 await DeleteIssuingAgency(department.Id);
             }
